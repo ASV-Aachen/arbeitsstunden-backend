@@ -32,6 +32,11 @@ repositories {
 dependencies {
     compile 'org.springframework.boot:spring-boot-starter'
     compile 'org.springframework.boot:spring-boot-starter-web'
+    compile 'org.springframework.boot:spring-boot-starter-data-jpa'
+    compile 'org.liquibase:liquibase-groovy-dsl:1.2.2'
+    compile 'org.liquibase:liquibase-core:3.5.3'
+
+    runtime 'com.h2database:h2'
 
     testCompile 'org.springframework.boot:spring-boot-starter-test'
     testCompile 'org.spockframework:spock-spring:1.0-groovy-2.4'
