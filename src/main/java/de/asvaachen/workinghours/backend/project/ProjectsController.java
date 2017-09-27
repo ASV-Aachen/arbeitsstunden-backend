@@ -1,11 +1,11 @@
-package de.asvaachen.workinghours.backend;
+package de.asvaachen.workinghours.backend.project;
 
+import de.asvaachen.workinghours.backend.project.model.CurrentProjectsDto;
+import de.asvaachen.workinghours.backend.project.model.ProjectDto;
+import de.asvaachen.workinghours.backend.project.model.WorkingHoursSeasonDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,17 +18,34 @@ public class ProjectsController {
     @CrossOrigin
     @GetMapping("/current")
     public ResponseEntity<CurrentProjectsDto> getCurrentProjects() {
-
         return new ResponseEntity<CurrentProjectsDto>(createCurrentProjectsDto(), HttpStatus.OK);
 
+    }
+
+    @CrossOrigin
+    @GetMapping("/{year}")
+    public ResponseEntity<List<ProjectDto>> getCurrentProjects(@PathVariable String year) {
+        return new ResponseEntity<List<ProjectDto>>(createProjectsDto(), HttpStatus.OK);
+    }
+
+    private List<ProjectDto> createProjectsDto() {
+        List<ProjectDto> projects = new ArrayList<>();
+
+        Random random = new Random();
+        int upperBound = 5 + random.nextInt(10);
+        for (int i = 1; i < upperBound; i++) {
+            projects.add(createProjectDto(i));
+        }
+
+        return projects;
     }
 
     private CurrentProjectsDto createCurrentProjectsDto() {
         List<ProjectDto> projects = new ArrayList<>();
 
         Random random = new Random();
-        int upperBound = 5+random.nextInt(10);
-        for(int i=1; i < upperBound; i++) {
+        int upperBound = 5 + random.nextInt(10);
+        for (int i = 1; i < upperBound; i++) {
             projects.add(createProjectDto(i));
         }
 
@@ -53,6 +70,6 @@ public class ProjectsController {
 
     private ProjectDto createProjectDto(Integer id) {
         Random random = new Random();
-        return new ProjectDto(""+id, "project"+id, random.nextInt(10000));
+        return new ProjectDto("" + id, "project" + id, random.nextInt(10000));
     }
 }

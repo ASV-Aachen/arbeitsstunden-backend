@@ -1,4 +1,4 @@
-package de.asvaachen.workinghours.backend;
+package de.asvaachen.workinghours.backend.project;
 
 import org.hibernate.annotations.GenericGenerator;
 import org.springframework.data.annotation.Id;

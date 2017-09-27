@@ -1,4 +1,4 @@
-package de.asvaachen.workinghours.backend;
+package de.asvaachen.workinghours.backend.project.model;
 
 public class ProjectDto {
 
