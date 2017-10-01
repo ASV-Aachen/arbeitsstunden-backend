@@ -6,9 +6,9 @@ public class CurrentProjectsDto {
 
     String currentYear;
     List<WorkingHoursSeasonDto> seasons;
-    List<ProjectDto> projects;
+    List<ProjectOverviewDto> projects;
 
-    public CurrentProjectsDto(String currentYear, List<WorkingHoursSeasonDto> seasons, List<ProjectDto> projects) {
+    public CurrentProjectsDto(String currentYear, List<WorkingHoursSeasonDto> seasons, List<ProjectOverviewDto> projects) {
         this.currentYear = currentYear;
         this.seasons = seasons;
         this.projects = projects;
@@ -22,7 +22,7 @@ public class CurrentProjectsDto {
         return seasons;
     }
 
-    public List<ProjectDto> getProjects() {
+    public List<ProjectOverviewDto> getProjects() {
         return projects;
     }
 }

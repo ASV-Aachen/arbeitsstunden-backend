@@ -2,7 +2,7 @@ package de.asvaachen.workinghours.backend.project.model;
 
 import javax.validation.constraints.NotNull;
 
-public class ProjectDto {
+public class ProjectOverviewDto {
 
     String id;
 
@@ -11,6 +11,8 @@ public class ProjectDto {
 
     @NotNull
     String description;
+
+    Integer duration;
 
     public String getId() {
         return id;
@@ -34,5 +36,13 @@ public class ProjectDto {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public Integer getDuration() {
+        return duration;
+    }
+
+    public void setDuration(Integer duration) {
+        this.duration = duration;
     }
 }

@@ -1,12 +1,11 @@
 package de.asvaachen.workinghours.backend.project;
 
-import de.asvaachen.workinghours.backend.project.model.CurrentProjectsDto;
-import de.asvaachen.workinghours.backend.project.model.ProjectDto;
-import de.asvaachen.workinghours.backend.project.model.WorkingHoursSeasonDto;
+import de.asvaachen.workinghours.backend.project.model.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -14,6 +13,14 @@ import java.util.Random;
 @RestController
 @RequestMapping("/api/projects")
 public class ProjectsController {
+
+    ProjectService projectService;
+    CreateProjectDtoToProjectEntityConverter converter;
+
+    public ProjectsController(ProjectService projectService, CreateProjectDtoToProjectEntityConverter converter) {
+        this.projectService = projectService;
+        this.converter = converter;
+    }
 
     @CrossOrigin
     @GetMapping("/current")
@@ -24,12 +31,20 @@ public class ProjectsController {
 
     @CrossOrigin
     @GetMapping("/{year}")
-    public ResponseEntity<List<ProjectDto>> getCurrentProjects(@PathVariable String year) {
-        return new ResponseEntity<List<ProjectDto>>(createProjectsDto(), HttpStatus.OK);
+    public ResponseEntity<List<ProjectOverviewDto>> getCurrentProjects(@PathVariable String year) {
+        return new ResponseEntity<List<ProjectOverviewDto>>(createProjectsDto(), HttpStatus.OK);
     }
 
-    private List<ProjectDto> createProjectsDto() {
-        List<ProjectDto> projects = new ArrayList<>();
+    @CrossOrigin
+    @PostMapping("/create/{year}")
+    public ResponseEntity<ProjectDto> createProject(@PathVariable String year, @Valid @RequestBody CreateProjectDto projectDto) {
+        ProjectEntity projectEntity = converter.convert(projectDto);
+
+        return new ResponseEntity<ProjectDto>(projectService.createProject(projectEntity), HttpStatus.OK);
+    }
+
+    private List<ProjectOverviewDto> createProjectsDto() {
+        List<ProjectOverviewDto> projects = new ArrayList<>();
 
         Random random = new Random();
         int upperBound = 5 + random.nextInt(10);
@@ -41,7 +56,7 @@ public class ProjectsController {
     }
 
     private CurrentProjectsDto createCurrentProjectsDto() {
-        List<ProjectDto> projects = new ArrayList<>();
+        List<ProjectOverviewDto> projects = new ArrayList<>();
 
         Random random = new Random();
         int upperBound = 5 + random.nextInt(10);
@@ -68,8 +83,14 @@ public class ProjectsController {
         return availableSeasons;
     }
 
-    private ProjectDto createProjectDto(Integer id) {
+    private ProjectOverviewDto createProjectDto(Integer id) {
         Random random = new Random();
-        return new ProjectDto("" + id, "project" + id, random.nextInt(10000));
+
+
+        ProjectOverviewDto project = new ProjectOverviewDto();
+        project.setId(Integer.toString(id));
+        project.setName("project" + id);
+        project.setDuration(random.nextInt(10000));
+        return project;
     }
 }

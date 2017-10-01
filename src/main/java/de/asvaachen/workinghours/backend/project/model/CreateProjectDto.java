@@ -2,23 +2,13 @@ package de.asvaachen.workinghours.backend.project.model;
 
 import javax.validation.constraints.NotNull;
 
-public class ProjectDto {
-
-    String id;
+public class CreateProjectDto {
 
     @NotNull
     String name;
 
     @NotNull
     String description;
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
 
     public String getName() {
         return name;

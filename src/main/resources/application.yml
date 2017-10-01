@@ -3,17 +3,10 @@ server.port: 8081
 
 spring:
   datasource:
-    url: jdbc:h2:mem:test;MODE=PostgreSQL
-    tomcat:
-      test-on-borrow: true
-      validation-query: 'SELECT 1'
-      validation-interval: 10000
-      max-active: 5
-      max-idle: 5
-      min-idle: 2
-      initial-size: 2
-      remove-abandoned: true
-      remove-abandoned-timeout: 120 # seconds
+    url: "jdbc:postgresql://localhost:5432/workinghours"
+    username: "workinghours"
+    password: "workinghours"
+
   jpa:
     generate-ddl: false
     hibernate:
@@ -21,3 +14,6 @@ spring:
 
 spring:
   liquibase.change-log: 'classpath:db/changelog-master.groovy'
+
+
+#url: jdbc:h2:mem:test;MODE=PostgreSQL

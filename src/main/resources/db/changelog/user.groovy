@@ -11,7 +11,7 @@ databaseChangeLog {
                 constraints(nullable: 'false')
             }
             column(name: 'email', type: 'varchar(255)') {
-                constraints(nullable: 'false')
+                constraints(nullable: 'false', unique: 'true')
             }
         }
     }
