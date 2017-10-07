@@ -24,7 +24,7 @@ public class UsersController {
     }
 
     @CrossOrigin
-    @GetMapping()
+    @GetMapping
     public ResponseEntity<List<UserDto>> getUsers() {
         return new ResponseEntity<List<UserDto>>(usersService.getAllUsers(), HttpStatus.OK);
     }

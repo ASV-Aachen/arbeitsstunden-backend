@@ -1,6 +1,6 @@
 databaseChangeLog {
     changeSet(id: 'create-user-table', author: 'ralf.bettermann') {
-        createTable(tableName: 'user') {
+        createTable(tableName: 'user_') {
             column(name: 'id', type: 'UUID') {
                 constraints(primaryKey: 'true', nullable: 'false')
             }
