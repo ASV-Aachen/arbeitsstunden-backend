@@ -9,6 +9,7 @@ import javax.persistence.Id;
 import java.util.UUID;
 
 @Entity
+@Table(name="user")
 public class UserEntity {
 
     @Id

@@ -3,6 +3,7 @@ server.port: 8081
 
 spring:
   datasource:
+    #url: jdbc:h2:mem:test;MODE=PostgreSQL
     url: "jdbc:postgresql://localhost:5432/workinghours"
     username: "workinghours"
     password: "workinghours"
@@ -12,8 +13,6 @@ spring:
     hibernate:
       ddl-auto: none
 
-spring:
-  liquibase.change-log: 'classpath:db/changelog-master.groovy'
+liquibase.change-log: 'classpath:db/changelog-master.groovy'
 
 
-#url: jdbc:h2:mem:test;MODE=PostgreSQL

@@ -1,6 +1,6 @@
 databaseChangeLog {
     changeSet(id: 'create-projects-table', author: 'ralf.bettermann') {
-        createTable(tableName: 'project_entity') {
+        createTable(tableName: 'project') {
             column(name: 'id', type: 'UUID') {
                 constraints(primaryKey: 'true', nullable: 'false')
             }
