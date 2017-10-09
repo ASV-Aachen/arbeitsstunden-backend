@@ -1,14 +1,16 @@
 package de.asvaachen.workinghours.backend.project.model;
 
+import de.asvaachen.workinghours.backend.season.model.SeasonDto;
+
 import java.util.List;
 
 public class CurrentProjectsDto {
 
     String currentYear;
-    List<WorkingHoursSeasonDto> seasons;
+    List<SeasonDto> seasons;
     List<ProjectOverviewDto> projects;
 
-    public CurrentProjectsDto(String currentYear, List<WorkingHoursSeasonDto> seasons, List<ProjectOverviewDto> projects) {
+    public CurrentProjectsDto(String currentYear, List<SeasonDto> seasons, List<ProjectOverviewDto> projects) {
         this.currentYear = currentYear;
         this.seasons = seasons;
         this.projects = projects;
@@ -18,7 +20,7 @@ public class CurrentProjectsDto {
         return currentYear;
     }
 
-    public List<WorkingHoursSeasonDto> getSeasons() {
+    public List<SeasonDto> getSeasons() {
         return seasons;
     }
 

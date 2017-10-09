@@ -1,6 +1,7 @@
 package de.asvaachen.workinghours.backend.project;
 
 import de.asvaachen.workinghours.backend.project.model.*;
+import de.asvaachen.workinghours.backend.season.model.SeasonDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -68,17 +69,17 @@ public class ProjectsController {
         return currentProjectsDto;
     }
 
-    private List<WorkingHoursSeasonDto> createWorkingHoursSeasonDto() {
-        List<WorkingHoursSeasonDto> availableSeasons = new ArrayList<>();
+    private List<SeasonDto> createWorkingHoursSeasonDto() {
+        List<SeasonDto> availableSeasons = new ArrayList<>();
 
-        availableSeasons.add(new WorkingHoursSeasonDto("2010", "2010/2011"));
-        availableSeasons.add(new WorkingHoursSeasonDto("2011", "2011/2012"));
-        availableSeasons.add(new WorkingHoursSeasonDto("2012", "2012/2013"));
-        availableSeasons.add(new WorkingHoursSeasonDto("2013", "2013/2014"));
-        availableSeasons.add(new WorkingHoursSeasonDto("2015", "2015/2016"));
-        availableSeasons.add(new WorkingHoursSeasonDto("2016", "2016/2017"));
-        availableSeasons.add(new WorkingHoursSeasonDto("2014", "2014/2015"));
-        availableSeasons.add(new WorkingHoursSeasonDto("2017", "2017/2018"));
+        availableSeasons.add(new SeasonDto(2010, "2010/2011"));
+        availableSeasons.add(new SeasonDto(2011, "2011/2012"));
+        availableSeasons.add(new SeasonDto(2012, "2012/2013"));
+        availableSeasons.add(new SeasonDto(2013, "2013/2014"));
+        availableSeasons.add(new SeasonDto(2015, "2015/2016"));
+        availableSeasons.add(new SeasonDto(2016, "2016/2017"));
+        availableSeasons.add(new SeasonDto(2014, "2014/2015"));
+        availableSeasons.add(new SeasonDto(2017, "2017/2018"));
 
         return availableSeasons;
     }
