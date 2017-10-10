@@ -24,16 +24,21 @@ public class ProjectsController {
     }
 
     @CrossOrigin
+    @GetMapping
+    public ResponseEntity<List<ProjectDto>> getProjects() {
+        return new ResponseEntity<>(createProjectsDto(), HttpStatus.OK);
+    }
+
+    @CrossOrigin
     @GetMapping("/current")
     public ResponseEntity<CurrentProjectsDto> getCurrentProjects() {
         return new ResponseEntity<CurrentProjectsDto>(createCurrentProjectsDto(), HttpStatus.OK);
-
     }
 
     @CrossOrigin
     @GetMapping("/{year}")
     public ResponseEntity<List<ProjectOverviewDto>> getCurrentProjects(@PathVariable String year) {
-        return new ResponseEntity<List<ProjectOverviewDto>>(createProjectsDto(), HttpStatus.OK);
+        return new ResponseEntity<List<ProjectOverviewDto>>(createProjectsOverviewDto(), HttpStatus.OK);
     }
 
     @CrossOrigin
@@ -44,13 +49,23 @@ public class ProjectsController {
         return new ResponseEntity<ProjectDto>(projectService.createProject(projectEntity), HttpStatus.OK);
     }
 
-    private List<ProjectOverviewDto> createProjectsDto() {
+    private List<ProjectDto> createProjectsDto() {
+        List<ProjectDto> projects = new ArrayList<>();
+
+        for (int i = 1; i < 10; i++) {
+            projects.add(createProjectDto(i));
+        }
+
+        return projects;
+    }
+
+    private List<ProjectOverviewDto> createProjectsOverviewDto() {
         List<ProjectOverviewDto> projects = new ArrayList<>();
 
         Random random = new Random();
         int upperBound = 5 + random.nextInt(10);
         for (int i = 1; i < upperBound; i++) {
-            projects.add(createProjectDto(i));
+            projects.add(createProjectOverviewDto(i));
         }
 
         return projects;
@@ -62,7 +77,7 @@ public class ProjectsController {
         Random random = new Random();
         int upperBound = 5 + random.nextInt(10);
         for (int i = 1; i < upperBound; i++) {
-            projects.add(createProjectDto(i));
+            projects.add(createProjectOverviewDto(i));
         }
 
         CurrentProjectsDto currentProjectsDto = new CurrentProjectsDto("2016", createWorkingHoursSeasonDto(), projects);
@@ -84,14 +99,21 @@ public class ProjectsController {
         return availableSeasons;
     }
 
-    private ProjectOverviewDto createProjectDto(Integer id) {
+    private ProjectOverviewDto createProjectOverviewDto(Integer id) {
         Random random = new Random();
-
-
         ProjectOverviewDto project = new ProjectOverviewDto();
         project.setId(Integer.toString(id));
         project.setName("project" + id);
         project.setDuration(random.nextInt(10000));
+        return project;
+    }
+
+    private ProjectDto createProjectDto(Integer id) {
+        Random random = new Random();
+        ProjectDto project = new ProjectDto();
+        project.setId(Integer.toString(id));
+        project.setName("project" + id);
+        project.setDescription("description of project"+id);
         return project;
     }
 }
