@@ -33,18 +33,18 @@ public class SeasonsController {
     private List<SeasonDto> createWorkingHoursSeasonDto() {
         List<SeasonDto> availableSeasons = new ArrayList<>();
 
-        availableSeasons.add(new SeasonDto(2007, "2007/2008"));
-        availableSeasons.add(new SeasonDto(2008, "2008/2009"));
-        availableSeasons.add(new SeasonDto(2009, "2009/2010"));
-        availableSeasons.add(new SeasonDto(2010, "2010/2011"));
-        availableSeasons.add(new SeasonDto(2011, "2011/2012"));
-        availableSeasons.add(new SeasonDto(2012, "2012/2013"));
-        availableSeasons.add(new SeasonDto(2013, "2013/2014"));
-        availableSeasons.add(new SeasonDto(2014, "2014/2015"));
-        availableSeasons.add(new SeasonDto(2015, "2015/2016"));
-        availableSeasons.add(new SeasonDto(2016, "2016/2017"));
-        availableSeasons.add(new SeasonDto(2017, "2017/2018"));
-        availableSeasons.add(new SeasonDto(2018, "2018/2019"));
+        availableSeasons.add(new SeasonDto(2018, "2018 / 2019"));
+        availableSeasons.add(new SeasonDto(2017, "2017 / 2018"));
+        availableSeasons.add(new SeasonDto(2016, "2016 / 2017"));
+        availableSeasons.add(new SeasonDto(2015, "2015 / 2016"));
+        availableSeasons.add(new SeasonDto(2014, "2014 / 2015"));
+        availableSeasons.add(new SeasonDto(2013, "2013 / 2014"));
+        availableSeasons.add(new SeasonDto(2012, "2012 / 2013"));
+        availableSeasons.add(new SeasonDto(2011, "2011 / 2012"));
+        availableSeasons.add(new SeasonDto(2010, "2010 / 2011"));
+        availableSeasons.add(new SeasonDto(2009, "2009 / 2010"));
+        availableSeasons.add(new SeasonDto(2008, "2008 / 2009"));
+        availableSeasons.add(new SeasonDto(2007, "2007 / 2008"));
 
         return availableSeasons;
     }
