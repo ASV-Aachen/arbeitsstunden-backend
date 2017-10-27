@@ -3,16 +3,30 @@ package de.asvaachen.workinghours.backend.project;
 import de.asvaachen.workinghours.backend.project.model.ProjectDto;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 public class ProjectService {
 
     ProjectRepository projectRepository;
-
     ProjectEntityToProjectDtoConverter converter;
 
     public ProjectService(ProjectRepository projectRepository, ProjectEntityToProjectDtoConverter converter) {
         this.projectRepository = projectRepository;
         this.converter = converter;
+    }
+
+    public List<ProjectDto> getAllProjects() {
+        return projectRepository.findAll().stream()
+                .map(converter::convert)
+                .collect(Collectors.toList());
+    }
+
+    public List<ProjectDto> getActiveProjects() {
+        return projectRepository.findAllByLastSeasonNull().stream()
+                .map(converter::convert)
+                .collect(Collectors.toList());
     }
 
     /*public List<UserDto> getAllUsers() {
@@ -37,5 +51,4 @@ public class ProjectService {
         ProjectEntity savedProjectEntity = projectRepository.save(projectEntity);
         return converter.convert(savedProjectEntity);
     }
-
 }

@@ -1,12 +1,13 @@
 package de.asvaachen.workinghours.backend.project;
 
-import de.asvaachen.workinghours.backend.project.model.*;
+import de.asvaachen.workinghours.backend.project.model.CurrentProjectsDto;
+import de.asvaachen.workinghours.backend.project.model.ProjectDto;
+import de.asvaachen.workinghours.backend.project.model.ProjectOverviewDto;
 import de.asvaachen.workinghours.backend.season.model.SeasonDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -16,17 +17,31 @@ import java.util.Random;
 public class ProjectsController {
 
     ProjectService projectService;
-    CreateProjectDtoToProjectEntityConverter converter;
+    ProjectDtoToProjectEntityConverter converter;
 
-    public ProjectsController(ProjectService projectService, CreateProjectDtoToProjectEntityConverter converter) {
+    public ProjectsController(ProjectService projectService, ProjectDtoToProjectEntityConverter converter) {
         this.projectService = projectService;
         this.converter = converter;
     }
 
     @CrossOrigin
     @GetMapping
-    public ResponseEntity<List<ProjectDto>> getProjects() {
-        return new ResponseEntity<>(createProjectsDto(), HttpStatus.OK);
+    public ResponseEntity<List<ProjectDto>> getAllProjects() {
+        return new ResponseEntity<>(projectService.getAllProjects(), HttpStatus.OK);
+    }
+
+    @CrossOrigin
+    @GetMapping("active")
+    public ResponseEntity<List<ProjectDto>> getActiveProjects() {
+        return new ResponseEntity<>(projectService.getActiveProjects(), HttpStatus.OK);
+    }
+
+
+
+    @CrossOrigin
+    @PostMapping
+    public ResponseEntity<ProjectDto> createProject(@RequestBody ProjectDto project) {
+        return new ResponseEntity<>(projectService.createProject(converter.convert(project)), HttpStatus.CREATED);
     }
 
     @CrossOrigin
@@ -40,14 +55,14 @@ public class ProjectsController {
     public ResponseEntity<List<ProjectOverviewDto>> getCurrentProjects(@PathVariable String year) {
         return new ResponseEntity<List<ProjectOverviewDto>>(createProjectsOverviewDto(), HttpStatus.OK);
     }
-
+/*
     @CrossOrigin
     @PostMapping("/create/{year}")
     public ResponseEntity<ProjectDto> createProject(@PathVariable String year, @Valid @RequestBody CreateProjectDto projectDto) {
         ProjectEntity projectEntity = converter.convert(projectDto);
 
         return new ResponseEntity<ProjectDto>(projectService.createProject(projectEntity), HttpStatus.OK);
-    }
+    }*/
 
     private List<ProjectDto> createProjectsDto() {
         List<ProjectDto> projects = new ArrayList<>();
@@ -113,7 +128,7 @@ public class ProjectsController {
         ProjectDto project = new ProjectDto();
         project.setId(Integer.toString(id));
         project.setName("project" + id);
-        project.setDescription("description of project"+id);
+        project.setDescription("description of project" + id);
         return project;
     }
 }

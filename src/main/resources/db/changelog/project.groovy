@@ -8,6 +8,9 @@ databaseChangeLog {
                 constraints(nullable: 'false')
             }
             column(name: 'description', type: 'varchar(1024)')
+            column(name: 'first_season', type: 'int')
+            column(name: 'last_season', type: 'int')
+
         }
     }
 }

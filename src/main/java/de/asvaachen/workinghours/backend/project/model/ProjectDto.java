@@ -12,6 +12,11 @@ public class ProjectDto {
     @NotNull
     String description;
 
+    @NotNull
+    Integer firstSeason;
+
+    Integer lastSeason;
+
     public String getId() {
         return id;
     }
@@ -34,5 +39,21 @@ public class ProjectDto {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public Integer getFirstSeason() {
+        return firstSeason;
+    }
+
+    public void setFirstSeason(Integer firstSeason) {
+        this.firstSeason = firstSeason;
+    }
+
+    public Integer getLastSeason() {
+        return lastSeason;
+    }
+
+    public void setLastSeason(Integer lastSeason) {
+        this.lastSeason = lastSeason;
     }
 }
