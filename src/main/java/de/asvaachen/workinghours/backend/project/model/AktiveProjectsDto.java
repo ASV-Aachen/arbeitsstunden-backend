@@ -8,7 +8,7 @@ public class AktiveProjectsDto {
 
     Integer activeYear;
     List<SeasonDto> seasons;
-    List<ProjectDto> projects;
+    List<ProjectOverviewDto> projects;
 
     public Integer getActiveYear() {
         return activeYear;
@@ -26,11 +26,11 @@ public class AktiveProjectsDto {
         this.seasons = seasons;
     }
 
-    public List<ProjectDto> getProjects() {
+    public List<ProjectOverviewDto> getProjects() {
         return projects;
     }
 
-    public void setProjects(List<ProjectDto> projects) {
+    public void setProjects(List<ProjectOverviewDto> projects) {
         this.projects = projects;
     }
 }

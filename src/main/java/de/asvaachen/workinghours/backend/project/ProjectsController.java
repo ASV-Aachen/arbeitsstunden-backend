@@ -2,6 +2,7 @@ package de.asvaachen.workinghours.backend.project;
 
 import de.asvaachen.workinghours.backend.project.model.AktiveProjectsDto;
 import de.asvaachen.workinghours.backend.project.model.ProjectDto;
+import de.asvaachen.workinghours.backend.project.model.ProjectOverviewDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -27,8 +28,15 @@ public class ProjectsController {
     }
 
     @CrossOrigin
+    @PostMapping
+    public ResponseEntity<ProjectDto> createProject(@RequestBody ProjectDto project) {
+        return new ResponseEntity<>(projectService.createProject(converter.convert(project)), HttpStatus.CREATED);
+    }
+
+
+    @CrossOrigin
     @GetMapping("{year}")
-    public ResponseEntity<List<ProjectDto>> getActiveProjectsForYear(@PathVariable Integer year) {
+    public ResponseEntity<List<ProjectOverviewDto>> getActiveProjectsForYear(@PathVariable Integer year) {
         return new ResponseEntity<>(projectService.getActiveProjects(year), HttpStatus.OK);
     }
 
@@ -36,11 +44,5 @@ public class ProjectsController {
     @GetMapping("active")
     public ResponseEntity<AktiveProjectsDto> getActiveProjects() {
         return new ResponseEntity<>(projectService.getActiveProjects(), HttpStatus.OK);
-    }
-
-    @CrossOrigin
-    @PostMapping
-    public ResponseEntity<ProjectDto> createProject(@RequestBody ProjectDto project) {
-        return new ResponseEntity<>(projectService.createProject(converter.convert(project)), HttpStatus.CREATED);
     }
 }

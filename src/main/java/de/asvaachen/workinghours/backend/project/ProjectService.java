@@ -2,6 +2,7 @@ package de.asvaachen.workinghours.backend.project;
 
 import de.asvaachen.workinghours.backend.project.model.AktiveProjectsDto;
 import de.asvaachen.workinghours.backend.project.model.ProjectDto;
+import de.asvaachen.workinghours.backend.project.model.ProjectOverviewDto;
 import de.asvaachen.workinghours.backend.season.model.SeasonDto;
 import org.springframework.stereotype.Service;
 
@@ -13,28 +14,32 @@ import java.util.stream.Collectors;
 public class ProjectService {
 
     ProjectRepository projectRepository;
-    ProjectEntityToProjectDtoConverter converter;
+    ProjectEntityToProjectDtoConverter projectEntityToProjectDtoConverter;
+    ProjectEntityToProjectOverviewDtoConverter projectEntityToProjectOverviewDtoConverter;
 
-    public ProjectService(ProjectRepository projectRepository, ProjectEntityToProjectDtoConverter converter) {
+    public ProjectService(ProjectRepository projectRepository, ProjectEntityToProjectDtoConverter projectEntityToProjectDtoConverter, ProjectEntityToProjectOverviewDtoConverter projectEntityToProjectOverviewDtoConverter) {
         this.projectRepository = projectRepository;
-        this.converter = converter;
+        this.projectEntityToProjectDtoConverter = projectEntityToProjectDtoConverter;
+        this.projectEntityToProjectOverviewDtoConverter = projectEntityToProjectOverviewDtoConverter;
     }
 
     public List<ProjectDto> getAllProjects() {
         return projectRepository.findAllByOrderByNameAsc().stream()
-                .map(converter::convert)
+                .map(projectEntityToProjectDtoConverter::convert)
                 .collect(Collectors.toList());
     }
 
     public AktiveProjectsDto getActiveProjects() {
+        Integer activeYear = 2017;
+
         AktiveProjectsDto activeProjects = new AktiveProjectsDto();
 
-        List<ProjectDto> projects = projectRepository.findAllByLastSeasonNullOrderByNameAsc().stream()
-                .map(converter::convert)
+        List<ProjectOverviewDto> projects = projectRepository.findAllByLastSeasonNullOrderByNameAsc().stream()
+                .map(projectEntity -> projectEntityToProjectOverviewDtoConverter.convert(projectEntity, activeYear))
                 .collect(Collectors.toList());
 
         activeProjects.setProjects(projects);
-        activeProjects.setActiveYear(2017);
+        activeProjects.setActiveYear(activeYear);
         activeProjects.setSeasons(createWorkingHoursSeasonDto());
 
         return activeProjects;
@@ -51,16 +56,16 @@ public class ProjectService {
         return availableSeasons;
     }
 
-    public List<ProjectDto> getActiveProjects(Integer year) {
+    public List<ProjectOverviewDto> getActiveProjects(Integer year) {
         return projectRepository.findAllByOrderByNameAsc().stream()
                 .filter(projectEntity -> projectEntity.getFirstSeason() <= year)
                 .filter(projectEntity -> projectEntity.getLastSeason() == null || projectEntity.getLastSeason() >= year)
-                .map(converter::convert)
+                .map(projectEntity -> projectEntityToProjectOverviewDtoConverter.convert(projectEntity, year))
                 .collect(Collectors.toList());
     }
 
     public ProjectDto createProject(ProjectEntity projectEntity) {
         ProjectEntity savedProjectEntity = projectRepository.save(projectEntity);
-        return converter.convert(savedProjectEntity);
+        return projectEntityToProjectDtoConverter.convert(savedProjectEntity);
     }
 }

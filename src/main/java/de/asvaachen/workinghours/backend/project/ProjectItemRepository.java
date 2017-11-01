@@ -9,4 +9,6 @@ import java.util.UUID;
 @Repository
 public interface ProjectItemRepository extends CrudRepository<ProjectItemEntity, UUID> {
 
+    List<ProjectItemEntity> findAllByProjectIdAndSeason(UUID projectId, Integer season);
+
 }

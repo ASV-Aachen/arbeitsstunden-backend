@@ -4,18 +4,18 @@ import javax.validation.constraints.NotNull;
 
 public class ProjectDto {
 
-    String id;
+    private String id;
 
     @NotNull
-    String name;
+    private String name;
 
     @NotNull
-    String description;
+    private String description;
 
     @NotNull
-    Integer firstSeason;
+    private Integer firstSeason;
 
-    Integer lastSeason;
+    private Integer lastSeason;
 
     public String getId() {
         return id;
