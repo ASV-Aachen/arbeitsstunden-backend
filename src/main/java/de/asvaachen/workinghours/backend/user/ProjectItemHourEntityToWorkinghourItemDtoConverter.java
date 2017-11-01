@@ -10,6 +10,7 @@ public class ProjectItemHourEntityToWorkinghourItemDtoConverter implements Conve
     @Override
     public WorkinghourItemDto convert(ProjectItemHourEntity source) {
         WorkinghourItemDto workinghourItemDto = new WorkinghourItemDto();
+        workinghourItemDto.setId(source.getId().toString());
         //workinghourItemDto.setDate(source.getProjectItem().getDate());
         workinghourItemDto.setTitle(source.getProjectItem().getTitle());
         workinghourItemDto.setProject(source.getProjectItem().getProject().getName());
