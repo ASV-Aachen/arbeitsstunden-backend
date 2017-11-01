@@ -1,14 +1,14 @@
-package de.asvaachen.workinghours.backend.project.model;
+package de.asvaachen.workinghours.backend.user;
 
 import de.asvaachen.workinghours.backend.season.model.SeasonDto;
 
 import java.util.List;
 
-public class AktiveProjectsDto {
+public class ActiveMemberWorkinghoursDto {
 
-    Integer activeYear;
-    List<SeasonDto> seasons;
-    List<ProjectOverviewDto> projects;
+    private Integer activeYear;
+    private List<SeasonDto> seasons;
+    private List<WorkinghourItemDto> workinghours;
 
     public Integer getActiveYear() {
         return activeYear;
@@ -26,11 +26,11 @@ public class AktiveProjectsDto {
         this.seasons = seasons;
     }
 
-    public List<ProjectOverviewDto> getProjects() {
-        return projects;
+    public List<WorkinghourItemDto> getWorkinghours() {
+        return workinghours;
     }
 
-    public void setProjects(List<ProjectOverviewDto> projects) {
-        this.projects = projects;
+    public void setWorkinghours(List<WorkinghourItemDto> workinghours) {
+        this.workinghours = workinghours;
     }
 }

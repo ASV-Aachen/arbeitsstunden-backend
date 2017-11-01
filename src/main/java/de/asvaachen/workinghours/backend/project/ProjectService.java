@@ -1,6 +1,6 @@
 package de.asvaachen.workinghours.backend.project;
 
-import de.asvaachen.workinghours.backend.project.model.AktiveProjectsDto;
+import de.asvaachen.workinghours.backend.project.model.ActiveProjectsDto;
 import de.asvaachen.workinghours.backend.project.model.ProjectDto;
 import de.asvaachen.workinghours.backend.project.model.ProjectOverviewDto;
 import de.asvaachen.workinghours.backend.season.model.SeasonDto;
@@ -29,10 +29,10 @@ public class ProjectService {
                 .collect(Collectors.toList());
     }
 
-    public AktiveProjectsDto getActiveProjects() {
+    public ActiveProjectsDto getActiveProjects() {
         Integer activeYear = 2017;
 
-        AktiveProjectsDto activeProjects = new AktiveProjectsDto();
+        ActiveProjectsDto activeProjects = new ActiveProjectsDto();
 
         List<ProjectOverviewDto> projects = projectRepository.findAllByLastSeasonNullOrderByNameAsc().stream()
                 .map(projectEntity -> projectEntityToProjectOverviewDtoConverter.convert(projectEntity, activeYear))

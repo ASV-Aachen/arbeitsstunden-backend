@@ -1,6 +1,6 @@
 package de.asvaachen.workinghours.backend.project;
 
-import de.asvaachen.workinghours.backend.project.model.AktiveProjectsDto;
+import de.asvaachen.workinghours.backend.project.model.ActiveProjectsDto;
 import de.asvaachen.workinghours.backend.project.model.ProjectDto;
 import de.asvaachen.workinghours.backend.project.model.ProjectOverviewDto;
 import org.springframework.http.HttpStatus;
@@ -42,7 +42,7 @@ public class ProjectsController {
 
     @CrossOrigin
     @GetMapping("active")
-    public ResponseEntity<AktiveProjectsDto> getActiveProjects() {
+    public ResponseEntity<ActiveProjectsDto> getActiveProjects() {
         return new ResponseEntity<>(projectService.getActiveProjects(), HttpStatus.OK);
     }
 }

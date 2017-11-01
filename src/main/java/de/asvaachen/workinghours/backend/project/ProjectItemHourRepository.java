@@ -7,6 +7,6 @@ import java.util.List;
 import java.util.UUID;
 
 @Repository
-public interface ProjectItemRepository extends CrudRepository<ProjectItemEntity, UUID> {
-    List<ProjectItemEntity> findAllByProjectIdAndSeason(UUID projectId, Integer season);
+public interface ProjectItemHourRepository extends CrudRepository<ProjectItemHourEntity, UUID> {
+    List<ProjectItemHourEntity> findAllByMemberIdAndProjectItemSeason(UUID memberId, Integer season);
 }
