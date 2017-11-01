@@ -4,12 +4,7 @@ databaseChangeLog {
             column(name: 'id', type: 'UUID') {
                 constraints(primaryKey: 'true', nullable: 'false')
             }
-            column(name: 'first_name', type: 'varchar(255)') {
-                constraints(nullable: 'false')
-            }
-            column(name: 'last_name', type: 'varchar(255)') {
-                constraints(nullable: 'false')
-            }
+            column(name: 'member_id', type: 'UUID')
             column(name: 'email', type: 'varchar(255)') {
                 constraints(nullable: 'false', unique: 'true')
             }

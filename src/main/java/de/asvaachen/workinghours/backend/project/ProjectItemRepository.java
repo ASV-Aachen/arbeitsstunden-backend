@@ -7,9 +7,6 @@ import java.util.List;
 import java.util.UUID;
 
 @Repository
-public interface ProjectRepository extends CrudRepository<ProjectEntity, UUID> {
+public interface ProjectItemRepository extends CrudRepository<ProjectItemEntity, UUID> {
 
-    List<ProjectEntity> findAllByOrderByNameAsc();
-
-    List<ProjectEntity> findAllByLastSeasonNullOrderByNameAsc();
 }

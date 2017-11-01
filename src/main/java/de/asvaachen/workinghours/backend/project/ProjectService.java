@@ -1,8 +1,11 @@
 package de.asvaachen.workinghours.backend.project;
 
+import de.asvaachen.workinghours.backend.project.model.AktiveProjectsDto;
 import de.asvaachen.workinghours.backend.project.model.ProjectDto;
+import de.asvaachen.workinghours.backend.season.model.SeasonDto;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -18,34 +21,43 @@ public class ProjectService {
     }
 
     public List<ProjectDto> getAllProjects() {
-        return projectRepository.findAll().stream()
+        return projectRepository.findAllByOrderByNameAsc().stream()
                 .map(converter::convert)
                 .collect(Collectors.toList());
     }
 
-    public List<ProjectDto> getActiveProjects() {
-        return projectRepository.findAllByLastSeasonNull().stream()
+    public AktiveProjectsDto getActiveProjects() {
+        AktiveProjectsDto activeProjects = new AktiveProjectsDto();
+
+        List<ProjectDto> projects = projectRepository.findAllByLastSeasonNullOrderByNameAsc().stream()
                 .map(converter::convert)
                 .collect(Collectors.toList());
+
+        activeProjects.setProjects(projects);
+        activeProjects.setActiveYear(2017);
+        activeProjects.setSeasons(createWorkingHoursSeasonDto());
+
+        return activeProjects;
     }
 
-    /*public List<UserDto> getAllUsers() {
-        return userRepository.findAll().stream()
-                .map(converter::convert)
-                .collect(Collectors.toList());
-    }
+    private List<SeasonDto> createWorkingHoursSeasonDto() {
+        List<SeasonDto> availableSeasons = new ArrayList<>();
 
-    public UserDto updateUser(UserEntity userEntity) {
-        if (userEntity.getId() == null) {
-            return null;
+        for (int i = 0; i < 12; i++) {
+            int year = 2007 + i;
+            int nextYear = year + 1;
+            availableSeasons.add(new SeasonDto(year, String.format("%d/%d", year, nextYear)));
         }
+        return availableSeasons;
+    }
 
-        Optional<UserEntity> foundUserEntity = userRepository.findById(userEntity.getId());
-        if (foundUserEntity.isPresent()) {
-            return converter.convert(userRepository.save(userEntity));
-        }
-        return null;
-    }*/
+    public List<ProjectDto> getActiveProjects(Integer year) {
+        return projectRepository.findAllByOrderByNameAsc().stream()
+                .filter(projectEntity -> projectEntity.getFirstSeason() <= year)
+                .filter(projectEntity -> projectEntity.getLastSeason() == null || projectEntity.getLastSeason() >= year)
+                .map(converter::convert)
+                .collect(Collectors.toList());
+    }
 
     public ProjectDto createProject(ProjectEntity projectEntity) {
         ProjectEntity savedProjectEntity = projectRepository.save(projectEntity);

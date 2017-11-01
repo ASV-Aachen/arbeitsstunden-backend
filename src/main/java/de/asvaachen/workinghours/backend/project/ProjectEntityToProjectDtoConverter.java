@@ -13,6 +13,8 @@ public class ProjectEntityToProjectDtoConverter implements Converter<ProjectEnti
         projectDto.setId(source.getId().toString());
         projectDto.setName(source.getName());
         projectDto.setDescription(source.getDescription());
+        projectDto.setFirstSeason(source.getFirstSeason());
+        projectDto.setLastSeason(source.getLastSeason());
         return projectDto;
     }
 }

@@ -3,6 +3,7 @@ package de.asvaachen.workinghours.backend.project;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -11,8 +12,8 @@ import java.util.UUID;
 public class ProjectEntity {
 
     @Id
-    @GeneratedValue(generator = "uuid")
-    @GenericGenerator(name = "uuid", strategy = "uuid2")
+    //@GeneratedValue(generator = "uuid")
+    //@GenericGenerator(name = "uuid", strategy = "uuid2")
     private UUID id;
 
     private String name;
@@ -23,8 +24,8 @@ public class ProjectEntity {
 
     private Integer lastSeason;
 
-    @ManyToMany
-    private Map<Integer, ProjectItemEntity> seasons;
+    @OneToMany(mappedBy = "id")
+    private List<ProjectItemEntity> projectItems;
 
     public UUID getId() {
         return id;
@@ -66,11 +67,11 @@ public class ProjectEntity {
         this.lastSeason = lastSeason;
     }
 
-    public Map<Integer, ProjectItemEntity> getSeasons() {
-        return seasons;
+    public List<ProjectItemEntity> getProjectItems() {
+        return projectItems;
     }
 
-    public void setSeasons(Map<Integer, ProjectItemEntity> seasons) {
-        this.seasons = seasons;
+    public void setProjectItems(List<ProjectItemEntity> projectItems) {
+        this.projectItems = projectItems;
     }
 }
