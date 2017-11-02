@@ -21,7 +21,7 @@ public class MembersService {
     }
 
     public List<WorkinghourItemDto> getActiveMemberWorkinghours(Integer year) {
-        UUID uuidRalf = UUID.fromString("781f054a-9d9d-4a48-a2e6-b2b76ef58f85");
+        UUID uuidRalf = UUID.fromString("b63200d2-0091-42d0-908c-759f921a2f2c");
 
         return projectItemHourRepository.findAllByMemberIdAndProjectItemSeason(uuidRalf, year).stream()
                 .map(converter::convert)
@@ -34,7 +34,7 @@ public class MembersService {
         activeMemberWorkinghoursDto.setActiveYear(activeYear);
         activeMemberWorkinghoursDto.setSeasons(createWorkingHoursSeasonDto());
 
-        UUID uuidRalf = UUID.fromString("781f054a-9d9d-4a48-a2e6-b2b76ef58f85");
+        UUID uuidRalf = UUID.fromString("b63200d2-0091-42d0-908c-759f921a2f2c");
 
         activeMemberWorkinghoursDto.setWorkinghours(projectItemHourRepository.findAllByMemberIdAndProjectItemSeason(uuidRalf, activeYear).stream()
                 .map(converter::convert)

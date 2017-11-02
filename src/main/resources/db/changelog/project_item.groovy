@@ -10,6 +10,9 @@ databaseChangeLog {
             column(name: 'season', type: 'int') {
                 constraints(nullable: 'false')
             }
+            column(name: 'date', type: 'DATE') {
+                constraints(nullable: 'false')
+            }
             column(name: 'title', type: 'varchar(1024)') {
                 constraints(nullable: 'false')
             }

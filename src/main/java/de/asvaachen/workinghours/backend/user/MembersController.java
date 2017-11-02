@@ -23,7 +23,6 @@ public class MembersController {
         return new ResponseEntity(memberService.getActiveMemberWorkinghours(year), HttpStatus.OK);
     }
 
-
     @CrossOrigin
     @GetMapping("active")
     public ResponseEntity<ActiveMemberWorkinghoursDto> getActiveWorkinghours() {

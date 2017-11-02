@@ -1,8 +1,7 @@
 package de.asvaachen.workinghours.backend.project;
 
-import org.hibernate.annotations.GenericGenerator;
-
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
@@ -16,7 +15,7 @@ public class ProjectItemEntity {
     private UUID id;
 
     @ManyToOne
-    @JoinColumn(name="projectId", nullable=false)
+    @JoinColumn(name = "projectId", nullable = false)
     private ProjectEntity project;
 
     @OneToMany(mappedBy = "projectItem", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
@@ -27,6 +26,8 @@ public class ProjectItemEntity {
     private String description;
 
     private Integer season;
+
+    private LocalDate date;
 
     public UUID getId() {
         return id;
@@ -74,5 +75,13 @@ public class ProjectItemEntity {
 
     public void setSeason(Integer season) {
         this.season = season;
+    }
+
+    public LocalDate getDate() {
+        return date;
+    }
+
+    public void setDate(LocalDate date) {
+        this.date = date;
     }
 }

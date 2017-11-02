@@ -5,6 +5,8 @@ import de.asvaachen.workinghours.backend.project.model.ProjectItemHourDto;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -27,6 +29,9 @@ public class ProjectItemDtoToProjectItemEntityConverter implements Converter<Pro
         ProjectItemEntity entity = new ProjectItemEntity();
         entity.setId(id);
         entity.setSeason(source.getSeason());
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        entity.setDate(LocalDate.parse(source.getDate(), formatter));
         entity.setTitle(source.getTitle());
         entity.setDescription(source.getDescription());
         entity.setProject(projectRepository.findOne(UUID.fromString(source.getProjectId())));
