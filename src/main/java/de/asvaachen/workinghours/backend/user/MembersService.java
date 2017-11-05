@@ -1,10 +1,11 @@
 package de.asvaachen.workinghours.backend.user;
 
-import de.asvaachen.workinghours.backend.project.ProjectItemHourRepository;
+import de.asvaachen.workinghours.backend.project.*;
 import de.asvaachen.workinghours.backend.season.model.SeasonDto;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -13,15 +14,19 @@ import java.util.stream.Collectors;
 public class MembersService {
 
     ProjectItemHourRepository projectItemHourRepository;
+    SeasonService seasonService;
     ProjectItemHourEntityToWorkinghourItemDtoConverter converter;
 
-    public MembersService(ProjectItemHourRepository projectItemHourRepository, ProjectItemHourEntityToWorkinghourItemDtoConverter converter) {
+    UUID uuidRalf = UUID.fromString("e3d82ffe-9bdd-4381-94e8-6d329e868eab");
+    Integer activeYear = 2017;
+
+    public MembersService(ProjectItemHourRepository projectItemHourRepository, SeasonService seasonService, ProjectItemHourEntityToWorkinghourItemDtoConverter converter) {
         this.projectItemHourRepository = projectItemHourRepository;
+        this.seasonService = seasonService;
         this.converter = converter;
     }
 
     public List<WorkinghourItemDto> getActiveMemberWorkinghours(Integer year) {
-        UUID uuidRalf = UUID.fromString("b63200d2-0091-42d0-908c-759f921a2f2c");
 
         return projectItemHourRepository.findAllByMemberIdAndProjectItemSeason(uuidRalf, year).stream()
                 .map(converter::convert)
@@ -29,12 +34,11 @@ public class MembersService {
     }
 
     public ActiveMemberWorkinghoursDto getActiveMemberWorkinghours() {
-        Integer activeYear = 2017;
         ActiveMemberWorkinghoursDto activeMemberWorkinghoursDto = new ActiveMemberWorkinghoursDto();
         activeMemberWorkinghoursDto.setActiveYear(activeYear);
-        activeMemberWorkinghoursDto.setSeasons(createWorkingHoursSeasonDto());
 
-        UUID uuidRalf = UUID.fromString("b63200d2-0091-42d0-908c-759f921a2f2c");
+        List<Integer> seasons = projectItemHourRepository.findSeasonsByMemberId(uuidRalf);
+        activeMemberWorkinghoursDto.setSeasons(seasonService.getSeasonsIn(seasons));
 
         activeMemberWorkinghoursDto.setWorkinghours(projectItemHourRepository.findAllByMemberIdAndProjectItemSeason(uuidRalf, activeYear).stream()
                 .map(converter::convert)
@@ -42,13 +46,24 @@ public class MembersService {
         return activeMemberWorkinghoursDto;
     }
 
-    private List<SeasonDto> createWorkingHoursSeasonDto() {
-        List<SeasonDto> availableSeasons = new ArrayList<>();
-        for (int i = 0; i < 12; i++) {
-            int year = 2007 + i;
-            int nextYear = year + 1;
-            availableSeasons.add(new SeasonDto(year, String.format("%d/%d", year, nextYear)));
+    public List<OverviewSeasonDto> getMemberOverview() {
+        List<OverviewSeasonDto> overviewItems = new ArrayList<>();
+
+        List<Integer> seasons = projectItemHourRepository.findSeasonsByMemberId(uuidRalf);
+        Collections.sort(seasons);
+
+        for (Integer season : seasons) {
+            List<ProjectItemHourEntity> projectItems = projectItemHourRepository.findAllByMemberIdAndProjectItemSeason(uuidRalf, season);
+
+            OverviewSeasonDto overviewSeasonDto = new OverviewSeasonDto();
+
+            Integer sumMinutes = projectItems.stream().map(ProjectItemHourEntity::getDuration).mapToInt(Integer::intValue).sum();
+            SeasonDto seasonDto = seasonService.getSeason(season);
+
+            overviewSeasonDto.setSeason(seasonDto);
+            overviewSeasonDto.setMinutes(sumMinutes);
+            overviewItems.add(overviewSeasonDto);
         }
-        return availableSeasons;
+        return overviewItems;
     }
 }

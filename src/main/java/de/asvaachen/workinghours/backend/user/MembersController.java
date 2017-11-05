@@ -28,4 +28,10 @@ public class MembersController {
     public ResponseEntity<ActiveMemberWorkinghoursDto> getActiveWorkinghours() {
         return new ResponseEntity(memberService.getActiveMemberWorkinghours(), HttpStatus.OK);
     }
+
+    @CrossOrigin
+    @GetMapping("overview")
+    public ResponseEntity< List<OverviewSeasonDto>> getMemberOverview() {
+        return new ResponseEntity(memberService.getMemberOverview(), HttpStatus.OK);
+    }
 }

@@ -3,6 +3,7 @@ package de.asvaachen.workinghours.backend.cleanup;
 import de.asvaachen.workinghours.backend.project.MemberRepository;
 import de.asvaachen.workinghours.backend.project.ProjectItemRepository;
 import de.asvaachen.workinghours.backend.project.ProjectRepository;
+import de.asvaachen.workinghours.backend.project.SeasonRepository;
 import de.asvaachen.workinghours.backend.user.UserRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,12 +20,14 @@ public class CleanupController {
     UserRepository userRepository;
     ProjectRepository projectRepository;
     ProjectItemRepository projectItemRepository;
+    SeasonRepository seasonRepository;
 
-    public CleanupController(MemberRepository memberRepository, UserRepository userRepository, ProjectRepository projectRepository, ProjectItemRepository projectItemRepository) {
+    public CleanupController(MemberRepository memberRepository, UserRepository userRepository, ProjectRepository projectRepository, ProjectItemRepository projectItemRepository, SeasonRepository seasonRepository) {
         this.memberRepository = memberRepository;
         this.userRepository = userRepository;
         this.projectRepository = projectRepository;
         this.projectItemRepository = projectItemRepository;
+        this.seasonRepository = seasonRepository;
     }
 
     @CrossOrigin
@@ -33,6 +36,7 @@ public class CleanupController {
         projectItemRepository.deleteAll();
         projectRepository.deleteAll();
         memberRepository.deleteAll();
+        seasonRepository.deleteAll();
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }
