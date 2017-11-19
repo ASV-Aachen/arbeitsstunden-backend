@@ -12,17 +12,21 @@ public class MembersService {
 
     ProjectItemHourRepository projectItemHourRepository;
     MemberRepository memberRepository;
+    ReductionRepository reductionRepository;
     SeasonService seasonService;
     ProjectItemHourEntityToWorkinghourItemDtoConverter converter;
+    ReductionStatusEntityToSeasonReductionDtoConverter reductionStatusConverter;
 
-    UUID uuidRalf = UUID.fromString("e3d82ffe-9bdd-4381-94e8-6d329e868eab");
+    UUID uuidRalf = UUID.fromString("bf461fe5-3e65-44ef-a092-b6bc26e45edc");
     Integer activeYear = 2017;
 
-    public MembersService(ProjectItemHourRepository projectItemHourRepository, MemberRepository memberRepository, SeasonService seasonService, ProjectItemHourEntityToWorkinghourItemDtoConverter converter) {
+    public MembersService(ProjectItemHourRepository projectItemHourRepository, MemberRepository memberRepository, ReductionRepository reductionRepository, SeasonService seasonService, ProjectItemHourEntityToWorkinghourItemDtoConverter converter, ReductionStatusEntityToSeasonReductionDtoConverter reductionStatusConverter) {
         this.projectItemHourRepository = projectItemHourRepository;
         this.memberRepository = memberRepository;
+        this.reductionRepository = reductionRepository;
         this.seasonService = seasonService;
         this.converter = converter;
+        this.reductionStatusConverter = reductionStatusConverter;
     }
 
     public List<WorkinghourItemDto> getActiveMemberWorkinghours(Integer year) {
@@ -74,6 +78,10 @@ public class MembersService {
         memberDetailsDto.setFirstName(memberEntity.getFirstName());
         memberDetailsDto.setLastName(memberEntity.getLastName());
         memberDetailsDto.setEmail(Optional.of(memberEntity.getUser()).map(UserEntity::getEmail).orElse(null));
+
+        List<ReductionStatusEntity> reductions = reductionRepository.findAllByMember(memberEntity);
+
+        memberDetailsDto.setSeasonReduction(reductions.stream().map(reductionStatusConverter::convert).collect(Collectors.toList()));
 
         return memberDetailsDto;
     }
