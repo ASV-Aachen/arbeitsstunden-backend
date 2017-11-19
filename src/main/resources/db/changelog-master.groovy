@@ -5,4 +5,5 @@ databaseChangeLog {
     include(file: 'changelog/project_item.groovy', relativeToChangelogFile: true)
     include(file: 'changelog/project_item_hour.groovy', relativeToChangelogFile: true)
     include(file: 'changelog/season.groovy', relativeToChangelogFile: true)
+    include(file: 'changelog/reduction.groovy', relativeToChangelogFile: true)
 }

@@ -1,20 +1,30 @@
 package de.asvaachen.workinghours.backend.user;
 
-import de.asvaachen.workinghours.backend.project.model.ProjectOverviewDto;
+import de.asvaachen.workinghours.backend.project.MemberEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/members/")
 public class MembersController {
 
     MembersService memberService;
+    ReductionStatusService reductionStatusService;
 
-    public MembersController(MembersService memberService) {
+    public MembersController(MembersService memberService, ReductionStatusService reductionStatusService) {
         this.memberService = memberService;
+        this.reductionStatusService = reductionStatusService;
+    }
+
+    @CrossOrigin
+    @PostMapping("reduction")
+    public ResponseEntity<Void> createReductionStatus(@RequestBody ReductionStatusCreateDto reductionStatusCreateDto) {
+        reductionStatusService.create(reductionStatusCreateDto.getMemberId(), reductionStatusCreateDto.getYears());
+        return new ResponseEntity(HttpStatus.OK);
     }
 
     @CrossOrigin
@@ -31,7 +41,13 @@ public class MembersController {
 
     @CrossOrigin
     @GetMapping("overview")
-    public ResponseEntity< List<OverviewSeasonDto>> getMemberOverview() {
+    public ResponseEntity<List<OverviewSeasonDto>> getMemberOverview() {
         return new ResponseEntity(memberService.getMemberOverview(), HttpStatus.OK);
+    }
+
+    @CrossOrigin
+    @GetMapping("detail")
+    public ResponseEntity<MemberDetailsDto> getMemberDetails() {
+        return new ResponseEntity(memberService.getMemberDetails(), HttpStatus.OK);
     }
 }
