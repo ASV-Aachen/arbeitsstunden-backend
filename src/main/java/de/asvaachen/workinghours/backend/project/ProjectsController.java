@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/projects")
@@ -44,5 +45,11 @@ public class ProjectsController {
     @GetMapping("active")
     public ResponseEntity<ActiveProjectsDto> getActiveProjects() {
         return new ResponseEntity<>(projectService.getActiveProjects(), HttpStatus.OK);
+    }
+
+    @CrossOrigin
+    @GetMapping("details/{season}/{projectId}")
+    public ResponseEntity<ProjectDetailsDto> getProjectDetails(@PathVariable Integer season, @PathVariable UUID projectId) {
+        return new ResponseEntity<>(projectService.getProjectDetails(season, projectId),HttpStatus.OK);
     }
 }
