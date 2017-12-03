@@ -78,4 +78,16 @@ public class ProjectService {
     public List<ProjectDurationsForYearsDto> getProjectForYears(UUID projectId) {
         return projectItemRepository.accumlateYears(projectId).stream().map(objects -> new ProjectDurationsForYearsDto(((Integer) objects[0]), ((BigInteger) objects[1]).intValue())).collect(Collectors.toList());
     }
+
+    public ProjectSummaryDto getProjectSummary(Integer season, UUID projectId) {
+
+        ProjectSummaryDto projectSummaryDto = new ProjectSummaryDto();
+        projectSummaryDto.setDescription(projectRepository.findOne(projectId).getDescription());
+
+        Integer minutesProject = ((BigInteger) projectItemRepository.minutesForProjectAndSeason(projectId, season)[0]).intValue();
+        Integer minutesAllProjects = ((BigInteger) projectItemRepository.minutesForOtherProjectsAndSeason(season)[0]).intValue();
+
+        projectSummaryDto.setPercentage((float) minutesProject / minutesAllProjects);
+        return projectSummaryDto;
+    }
 }

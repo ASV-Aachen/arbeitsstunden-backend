@@ -48,6 +48,12 @@ public class ProjectsController {
     }
 
     @CrossOrigin
+    @GetMapping("summary/{season}/{projectId}")
+    public ResponseEntity<ProjectSummaryDto> getProjectSummary(@PathVariable Integer season, @PathVariable UUID projectId) {
+        return new ResponseEntity<>(projectService.getProjectSummary(season, projectId), HttpStatus.OK);
+    }
+
+    @CrossOrigin
     @GetMapping("details/{season}/{projectId}")
     public ResponseEntity<List<ProjectDetailsItemDto>> getProjectDetails(@PathVariable Integer season, @PathVariable UUID projectId) {
         return new ResponseEntity<>(projectService.getProjectDetails(season, projectId), HttpStatus.OK);
