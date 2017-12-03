@@ -49,7 +49,13 @@ public class ProjectsController {
 
     @CrossOrigin
     @GetMapping("details/{season}/{projectId}")
-    public ResponseEntity<ProjectDetailsDto> getProjectDetails(@PathVariable Integer season, @PathVariable UUID projectId) {
-        return new ResponseEntity<>(projectService.getProjectDetails(season, projectId),HttpStatus.OK);
+    public ResponseEntity<List<ProjectDetailsItemDto>> getProjectDetails(@PathVariable Integer season, @PathVariable UUID projectId) {
+        return new ResponseEntity<>(projectService.getProjectDetails(season, projectId), HttpStatus.OK);
+    }
+
+    @CrossOrigin
+    @GetMapping("years/{projectId}")
+    public ResponseEntity<List<ProjectDurationsForYearsDto>> getProjectYears(@PathVariable UUID projectId) {
+        return new ResponseEntity<>(projectService.getProjectForYears(projectId), HttpStatus.OK);
     }
 }

@@ -5,6 +5,7 @@ import de.asvaachen.workinghours.backend.project.model.ProjectDto;
 import de.asvaachen.workinghours.backend.project.model.ProjectOverviewDto;
 import org.springframework.stereotype.Service;
 
+import java.math.BigInteger;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -12,24 +13,24 @@ import java.util.stream.Collectors;
 @Service
 public class ProjectService {
 
-    ProjectRepository projectRepository;
-    ProjectItemRepository projectItemRepository;
+    private ProjectRepository projectRepository;
+    private ProjectItemRepository projectItemRepository;
 
-    SeasonService seasonService;
+    private SeasonService seasonService;
 
-    SeasonEntityToSeasonDtoConverter seasonEntityToSeasonDtoConverter;
-    ProjectEntityToProjectDtoConverter projectEntityToProjectDtoConverter;
-    ProjectEntityToProjectOverviewDtoConverter projectEntityToProjectOverviewDtoConverter;
-    ProjectDetailsDtoConverter projectDetailsDtoConverter;
+    private SeasonEntityToSeasonDtoConverter seasonEntityToSeasonDtoConverter;
+    private ProjectEntityToProjectDtoConverter projectEntityToProjectDtoConverter;
+    private ProjectEntityToProjectOverviewDtoConverter projectEntityToProjectOverviewDtoConverter;
+    private ProjectItemEntityToProjectDetailsItemDto projectItemEntityToProjectDetailsItemDto;
 
-    public ProjectService(ProjectRepository projectRepository, ProjectItemRepository projectItemRepository, SeasonService seasonService, SeasonEntityToSeasonDtoConverter seasonEntityToSeasonDtoConverter, ProjectEntityToProjectDtoConverter projectEntityToProjectDtoConverter, ProjectEntityToProjectOverviewDtoConverter projectEntityToProjectOverviewDtoConverter, ProjectDetailsDtoConverter projectDetailsDtoConverter) {
+    public ProjectService(ProjectRepository projectRepository, ProjectItemRepository projectItemRepository, SeasonService seasonService, SeasonEntityToSeasonDtoConverter seasonEntityToSeasonDtoConverter, ProjectEntityToProjectDtoConverter projectEntityToProjectDtoConverter, ProjectEntityToProjectOverviewDtoConverter projectEntityToProjectOverviewDtoConverter, ProjectItemEntityToProjectDetailsItemDto projectItemEntityToProjectDetailsItemDto) {
         this.projectRepository = projectRepository;
         this.projectItemRepository = projectItemRepository;
         this.seasonService = seasonService;
         this.seasonEntityToSeasonDtoConverter = seasonEntityToSeasonDtoConverter;
         this.projectEntityToProjectDtoConverter = projectEntityToProjectDtoConverter;
         this.projectEntityToProjectOverviewDtoConverter = projectEntityToProjectOverviewDtoConverter;
-        this.projectDetailsDtoConverter = projectDetailsDtoConverter;
+        this.projectItemEntityToProjectDetailsItemDto = projectItemEntityToProjectDetailsItemDto;
     }
 
     public List<ProjectDto> getAllProjects() {
@@ -67,12 +68,14 @@ public class ProjectService {
         return projectEntityToProjectDtoConverter.convert(savedProjectEntity);
     }
 
-    public ProjectDetailsDto getProjectDetails(Integer season, UUID projectId) {
+    public List<ProjectDetailsItemDto> getProjectDetails(Integer season, UUID projectId) {
 
-        ProjectEntity project = projectRepository.findOne(projectId);
         List<ProjectItemEntity> projectItems = projectItemRepository.findAllByProjectIdAndSeason(projectId, season);
 
+        return projectItems.stream().map(projectItemEntityToProjectDetailsItemDto::convert).collect(Collectors.toList());
+    }
 
-        return projectDetailsDtoConverter.convert(project, projectItems);
+    public List<ProjectDurationsForYearsDto> getProjectForYears(UUID projectId) {
+        return projectItemRepository.accumlateYears(projectId).stream().map(objects -> new ProjectDurationsForYearsDto(((Integer) objects[0]), ((BigInteger) objects[1]).intValue())).collect(Collectors.toList());
     }
 }

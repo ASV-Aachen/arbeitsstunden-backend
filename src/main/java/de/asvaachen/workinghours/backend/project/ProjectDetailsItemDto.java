@@ -9,8 +9,9 @@ public class ProjectDetailsItemDto {
     private String title;
     private String description;
     private String date;
+    private Integer duration;
 
-    private List<ItemDetailsMinutesDto> itemDetailsMinutes;
+    private List<ItemDetailsMinutesDto> minutes;
 
     public UUID getId() {
         return id;
@@ -44,11 +45,19 @@ public class ProjectDetailsItemDto {
         this.date = date;
     }
 
-    public List<ItemDetailsMinutesDto> getItemDetailsMinutes() {
-        return itemDetailsMinutes;
+    public Integer getDuration() {
+        return duration;
     }
 
-    public void setItemDetailsMinutes(List<ItemDetailsMinutesDto> itemDetailsMinutes) {
-        this.itemDetailsMinutes = itemDetailsMinutes;
+    public void setDuration(Integer duration) {
+        this.duration = duration;
+    }
+
+    public List<ItemDetailsMinutesDto> getMinutes() {
+        return minutes;
+    }
+
+    public void setMinutes(List<ItemDetailsMinutesDto> minutes) {
+        this.minutes = minutes;
     }
 }
