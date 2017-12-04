@@ -1,12 +1,10 @@
 package de.asvaachen.workinghours.backend.user;
 
-import de.asvaachen.workinghours.backend.project.MemberEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/api/members/")
@@ -49,5 +47,11 @@ public class MembersController {
     @GetMapping("detail")
     public ResponseEntity<MemberDetailsDto> getMemberDetails() {
         return new ResponseEntity(memberService.getMemberDetails(), HttpStatus.OK);
+    }
+
+    @CrossOrigin
+    @GetMapping("list/{season}")
+    public ResponseEntity<List<MemberListItemDto>> getMemberList(Integer season) {
+        return new ResponseEntity(memberService.getMemberList(season), HttpStatus.OK);
     }
 }

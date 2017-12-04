@@ -34,4 +34,8 @@ public class SeasonService {
     public SeasonDto getSeason(Integer season) {
         return converter.convert(seasonRepository.findOne(season));
     }
+
+    public Integer getObligatoryMinutes(Integer season) {
+        return seasonRepository.findByYear(season).getObligatoryMinutes();
+    }
 }

@@ -4,6 +4,7 @@ import de.asvaachen.workinghours.backend.project.*;
 import de.asvaachen.workinghours.backend.season.model.SeasonDto;
 import org.springframework.stereotype.Service;
 
+import java.math.BigInteger;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -17,7 +18,7 @@ public class MembersService {
     ProjectItemHourEntityToWorkinghourItemDtoConverter converter;
     ReductionStatusEntityToSeasonReductionDtoConverter reductionStatusConverter;
 
-    UUID uuidRalf = UUID.fromString("bf461fe5-3e65-44ef-a092-b6bc26e45edc");
+    UUID uuidRalf = UUID.fromString("6be07ad0-95f6-409e-8098-37e74df48d99");
     Integer activeYear = 2017;
 
     public MembersService(ProjectItemHourRepository projectItemHourRepository, MemberRepository memberRepository, ReductionRepository reductionRepository, SeasonService seasonService, ProjectItemHourEntityToWorkinghourItemDtoConverter converter, ReductionStatusEntityToSeasonReductionDtoConverter reductionStatusConverter) {
@@ -84,5 +85,41 @@ public class MembersService {
         memberDetailsDto.setSeasonReduction(reductions.stream().map(reductionStatusConverter::convert).collect(Collectors.toList()));
 
         return memberDetailsDto;
+    }
+
+    private Integer getObligatoryMinutes(Integer obligatoryMinutes, AsvStatus status) {
+
+        if (status == AsvStatus.INACTIVE || status == AsvStatus.OLD_MAN) {
+            return 0;
+        } else {
+            return obligatoryMinutes;
+        }
+    }
+
+    public List<MemberListItemDto> getMemberList(Integer season) {
+
+        Integer obligatoryForSeason = seasonService.getObligatoryMinutes(2017);
+
+        List<Object[]> memberOverviewItems = projectItemHourRepository.memberList();//season
+
+        return memberOverviewItems.stream().map(objects -> {
+
+
+            UUID memberId = UUID.fromString((String) objects[0]);
+            String firstName = (String) objects[1];
+            String lastName = (String) objects[2];
+            AsvStatus status = AsvStatus.valueOf((String) objects[3]);
+            Integer reduction = (Integer) objects[4];
+            Integer workedMinutes = ((BigInteger) objects[5]).intValue();
+
+            MemberListItemDto memberListItemDto = new MemberListItemDto();
+            memberListItemDto.setMemberId(memberId);
+            memberListItemDto.setFirstName(firstName);
+            memberListItemDto.setLastName(lastName);
+            memberListItemDto.setStatus(status);
+            memberListItemDto.setWorkedMinutes(workedMinutes);
+            memberListItemDto.setNeededMinutes(getObligatoryMinutes(obligatoryForSeason, status) - reduction);
+            return memberListItemDto;
+        }).collect(Collectors.toList());
     }
 }
