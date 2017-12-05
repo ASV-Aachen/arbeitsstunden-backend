@@ -10,6 +10,7 @@ public class MemberListItemDto {
     private AsvStatus status;
     private Integer workedMinutes;
     private Integer neededMinutes;
+    private Integer todoMinutes;
 
     public UUID getMemberId() {
         return memberId;
@@ -57,5 +58,13 @@ public class MemberListItemDto {
 
     public void setNeededMinutes(Integer neededMinutes) {
         this.neededMinutes = neededMinutes;
+    }
+
+    public Integer getTodoMinutes() {
+        return todoMinutes;
+    }
+
+    public void setTodoMinutes(Integer todoMinutes) {
+        this.todoMinutes = todoMinutes;
     }
 }

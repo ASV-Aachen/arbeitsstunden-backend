@@ -119,6 +119,7 @@ public class MembersService {
             memberListItemDto.setStatus(status);
             memberListItemDto.setWorkedMinutes(workedMinutes);
             memberListItemDto.setNeededMinutes(getObligatoryMinutes(obligatoryForSeason, status) - reduction);
+            memberListItemDto.setTodoMinutes(getObligatoryMinutes(obligatoryForSeason, status) - reduction - workedMinutes);
             return memberListItemDto;
         }).collect(Collectors.toList());
     }
