@@ -10,6 +10,9 @@ public class ActiveMemberWorkinghoursDto {
     private List<SeasonDto> seasons;
     private List<WorkinghourItemDto> workinghours;
 
+    private Integer neededMinutes;
+    private Integer workedMinutes;
+
     public Integer getActiveYear() {
         return activeYear;
     }
@@ -32,5 +35,21 @@ public class ActiveMemberWorkinghoursDto {
 
     public void setWorkinghours(List<WorkinghourItemDto> workinghours) {
         this.workinghours = workinghours;
+    }
+
+    public Integer getNeededMinutes() {
+        return neededMinutes;
+    }
+
+    public void setNeededMinutes(Integer neededMinutes) {
+        this.neededMinutes = neededMinutes;
+    }
+
+    public Integer getWorkedMinutes() {
+        return workedMinutes;
+    }
+
+    public void setWorkedMinutes(Integer workedMinutes) {
+        this.workedMinutes = workedMinutes;
     }
 }

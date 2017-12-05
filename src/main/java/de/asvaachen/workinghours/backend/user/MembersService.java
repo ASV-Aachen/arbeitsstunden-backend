@@ -32,23 +32,38 @@ public class MembersService {
         this.memberEntityToMemberDtoConverter = memberEntityToMemberDtoConverter;
     }
 
-    public List<WorkinghourItemDto> getActiveMemberWorkinghours(Integer year) {
+    public MemberWorkinghoursDto getActiveMemberWorkinghours(Integer year) {
+        Integer obligatoryForSeason = seasonService.getObligatoryMinutes(year);
 
-        return projectItemHourRepository.findAllByMemberIdAndProjectItemSeason(uuidRalf, year).stream()
+        MemberWorkinghoursDto memberWorkinghoursDto = new MemberWorkinghoursDto();
+
+        List<ProjectItemHourEntity> allByMemberIdAndProjectItemSeason = projectItemHourRepository.findAllByMemberIdAndProjectItemSeason(uuidRalf, year);
+        memberWorkinghoursDto.setWorkinghourItems(allByMemberIdAndProjectItemSeason.stream()
                 .map(converter::convert)
-                .collect(Collectors.toList());
+                .collect(Collectors.toList()));
+        memberWorkinghoursDto.setNeededMinutes(obligatoryForSeason);
+        memberWorkinghoursDto.setWorkedMinutes(allByMemberIdAndProjectItemSeason.stream().mapToInt(ProjectItemHourEntity::getDuration).sum());
+        
+        return memberWorkinghoursDto;
     }
 
     public ActiveMemberWorkinghoursDto getActiveMemberWorkinghours() {
+        Integer obligatoryForSeason = seasonService.getObligatoryMinutes(activeYear);
+
         ActiveMemberWorkinghoursDto activeMemberWorkinghoursDto = new ActiveMemberWorkinghoursDto();
         activeMemberWorkinghoursDto.setActiveYear(activeYear);
 
         List<Integer> seasons = projectItemHourRepository.findSeasonsByMemberId(uuidRalf);
         activeMemberWorkinghoursDto.setSeasons(seasonService.getSeasonsIn(seasons));
 
-        activeMemberWorkinghoursDto.setWorkinghours(projectItemHourRepository.findAllByMemberIdAndProjectItemSeason(uuidRalf, activeYear).stream()
+        List<ProjectItemHourEntity> allByMemberIdAndProjectItemSeason = projectItemHourRepository.findAllByMemberIdAndProjectItemSeason(uuidRalf, activeYear);
+        activeMemberWorkinghoursDto.setWorkinghours(allByMemberIdAndProjectItemSeason.stream()
                 .map(converter::convert)
                 .collect(Collectors.toList()));
+
+        activeMemberWorkinghoursDto.setNeededMinutes(obligatoryForSeason);
+        activeMemberWorkinghoursDto.setWorkedMinutes(allByMemberIdAndProjectItemSeason.stream().mapToInt(ProjectItemHourEntity::getDuration).sum());
+
         return activeMemberWorkinghoursDto;
     }
 

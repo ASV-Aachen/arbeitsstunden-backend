@@ -27,7 +27,7 @@ public class MembersController {
 
     @CrossOrigin
     @GetMapping("{year}")
-    public ResponseEntity<List<WorkinghourItemDto>> getWorkinghoursForYear(@PathVariable Integer year) {
+    public ResponseEntity<MemberWorkinghoursDto> getWorkinghoursForYear(@PathVariable Integer year) {
         return new ResponseEntity(memberService.getActiveMemberWorkinghours(year), HttpStatus.OK);
     }
 
