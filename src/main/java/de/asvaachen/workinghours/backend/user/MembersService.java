@@ -17,17 +17,19 @@ public class MembersService {
     SeasonService seasonService;
     ProjectItemHourEntityToWorkinghourItemDtoConverter converter;
     ReductionStatusEntityToSeasonReductionDtoConverter reductionStatusConverter;
+    MemberEntityToMemberDtoConverter memberEntityToMemberDtoConverter;
 
     UUID uuidRalf = UUID.fromString("6be07ad0-95f6-409e-8098-37e74df48d99");
     Integer activeYear = 2017;
 
-    public MembersService(ProjectItemHourRepository projectItemHourRepository, MemberRepository memberRepository, ReductionRepository reductionRepository, SeasonService seasonService, ProjectItemHourEntityToWorkinghourItemDtoConverter converter, ReductionStatusEntityToSeasonReductionDtoConverter reductionStatusConverter) {
+    public MembersService(ProjectItemHourRepository projectItemHourRepository, MemberRepository memberRepository, ReductionRepository reductionRepository, SeasonService seasonService, ProjectItemHourEntityToWorkinghourItemDtoConverter converter, ReductionStatusEntityToSeasonReductionDtoConverter reductionStatusConverter, MemberEntityToMemberDtoConverter memberEntityToMemberDtoConverter) {
         this.projectItemHourRepository = projectItemHourRepository;
         this.memberRepository = memberRepository;
         this.reductionRepository = reductionRepository;
         this.seasonService = seasonService;
         this.converter = converter;
         this.reductionStatusConverter = reductionStatusConverter;
+        this.memberEntityToMemberDtoConverter = memberEntityToMemberDtoConverter;
     }
 
     public List<WorkinghourItemDto> getActiveMemberWorkinghours(Integer year) {
@@ -122,5 +124,58 @@ public class MembersService {
             memberListItemDto.setTodoMinutes(getObligatoryMinutes(obligatoryForSeason, status) - reduction - workedMinutes);
             return memberListItemDto;
         }).collect(Collectors.toList());
+    }
+
+    public List<MemberDistributionItemDto> getMemberDistribution(Integer season) {
+        return projectItemHourRepository.memberDistribution().stream().map(objects -> {
+
+            AsvStatus status = AsvStatus.valueOf((String) objects[0]);
+            Integer minutes = ((BigInteger) objects[1]).intValue();
+
+            MemberDistributionItemDto memberDistributionItemDto = new MemberDistributionItemDto();
+            memberDistributionItemDto.setLabel(status.toString());
+            memberDistributionItemDto.setMinutes(minutes);
+            return memberDistributionItemDto;
+        }).collect(Collectors.toList());
+    }
+
+    public MembersSummaryDto getMembersSummary(Integer season) {
+        Integer obligatoryForSeason = seasonService.getObligatoryMinutes(2017);
+
+        MembersSummaryDto membersSummaryDto = new MembersSummaryDto();
+
+        membersSummaryDto.setWorkedMinutesTotal(projectItemHourRepository.allMinutesForSeason());
+
+        List<Object[]> objects = projectItemHourRepository.getKingForSeason();
+        UUID memberId = UUID.fromString((String) objects.get(0)[0]);
+        Integer workedMinutes = ((BigInteger) objects.get(0)[1]).intValue();
+        membersSummaryDto.setKingMember(memberEntityToMemberDtoConverter.convert(memberRepository.findOne(memberId)));
+        membersSummaryDto.setKingMinutes(workedMinutes);
+
+
+        List<Object[]> members = projectItemHourRepository.memberList();
+        Integer numSailingAllowed = 0;
+        Integer numSailingNotAllowed = 0;
+
+        for (Object[] obj : members) {
+
+            AsvStatus status = AsvStatus.valueOf((String) obj[3]);
+            Integer reduction = (Integer) obj[4];
+            Integer workedMins = ((BigInteger) obj[5]).intValue();
+
+            Integer neededMins = getObligatoryMinutes(obligatoryForSeason, status) - reduction - workedMins;
+
+            if (neededMins <= 0) {
+                numSailingAllowed++;
+            } else {
+                numSailingNotAllowed++;
+            }
+        }
+
+        membersSummaryDto.setNumMembersSailingAllowed(numSailingAllowed);
+        membersSummaryDto.setNumMembersSailingNotAllowed(numSailingNotAllowed);
+
+
+        return membersSummaryDto;
     }
 }

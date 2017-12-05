@@ -20,4 +20,18 @@ public interface ProjectItemHourRepository extends CrudRepository<ProjectItemHou
             "WHERE m.id=h.member_id AND h.project_item_id=i.id AND i.season=2017 AND i.season=r.season AND r.member_id=m.id " +
             "GROUP BY m.id, r.status, r.reduction", nativeQuery = true)
     List<Object[]> memberList();
+
+
+    @Query(value = "SELECT r.status, sum(h.duration) as workedMinutes FROM " +
+            "member m, project_item_hour h, project_item i, reduction r " +
+            "WHERE m.id=h.member_id AND h.project_item_id=i.id AND i.season=2017 AND i.season=r.season AND r.member_id=m.id " +
+            "GROUP BY r.status", nativeQuery = true)
+    List<Object[]> memberDistribution();
+
+    @Query(value = "SELECT sum(h.duration) as workedMinutes FROM project_item_hour h, project_item i WHERE h.project_item_id=i.id AND i.season=2017", nativeQuery = true)
+    Integer allMinutesForSeason();
+
+    @Query(value = "SELECT CAST(h.member_id as TEXT), sum(h.duration) as worked_minutes FROM project_item_hour h, project_item i WHERE h.project_item_id=i.id AND i.season=2017 GROUP BY h.member_id ORDER BY worked_minutes DESC Limit 1;", nativeQuery = true)
+    List<Object[]> getKingForSeason();
+
 }
