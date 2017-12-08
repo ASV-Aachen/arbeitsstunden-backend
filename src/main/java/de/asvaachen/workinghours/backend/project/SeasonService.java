@@ -25,7 +25,7 @@ public class SeasonService {
     }
 
     public List<SeasonDto> getAllSeasons() {
-        return seasonRepository.findAllByOrderByYearAsc().stream().map(converter::convert).collect(Collectors.toList());
+        return seasonRepository.findAllByOrderByYearDesc().stream().map(converter::convert).collect(Collectors.toList());
     }
 
     public List<SeasonDto> getSeasonsIn(List<Integer> seasons) {
