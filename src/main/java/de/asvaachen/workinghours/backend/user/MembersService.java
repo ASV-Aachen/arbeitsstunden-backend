@@ -19,7 +19,7 @@ public class MembersService {
     ReductionStatusEntityToSeasonReductionDtoConverter reductionStatusConverter;
     MemberEntityToMemberDtoConverter memberEntityToMemberDtoConverter;
 
-    UUID uuidRalf = UUID.fromString("6be07ad0-95f6-409e-8098-37e74df48d99");
+    UUID uuidRalf = UUID.fromString("9e507c3b-df7d-40b3-9dfe-267aa0e3bc24");
     Integer activeYear = 2017;
 
     public MembersService(ProjectItemHourRepository projectItemHourRepository, MemberRepository memberRepository, ReductionRepository reductionRepository, SeasonService seasonService, ProjectItemHourEntityToWorkinghourItemDtoConverter converter, ReductionStatusEntityToSeasonReductionDtoConverter reductionStatusConverter, MemberEntityToMemberDtoConverter memberEntityToMemberDtoConverter) {

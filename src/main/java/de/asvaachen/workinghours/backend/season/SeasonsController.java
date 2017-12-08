@@ -11,10 +11,6 @@ import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
 
-
-/**
- * Programmatically we switch to a new workinghour season at 01.11.X to 31.10.X+1.
- **/
 @RestController
 @RequestMapping("/api/seasons")
 public class SeasonsController {
@@ -35,16 +31,7 @@ public class SeasonsController {
 
     @CrossOrigin
     @GetMapping
-    public ResponseEntity<AvailableSeasonsDto> getCurrentSeasons() {
-        return new ResponseEntity<>(createAvailableSeasonsDto(), HttpStatus.OK);
-    }
-
-    private AvailableSeasonsDto createAvailableSeasonsDto() {
-        return new AvailableSeasonsDto(2017, createWorkingHoursSeasonDto());
-    }
-
-    private List<SeasonDto> createWorkingHoursSeasonDto() {
-        List<SeasonDto> availableSeasons = new ArrayList<>();
-        return availableSeasons;
+    public ResponseEntity<AvailableSeasonsDto> getAvailableSeasons() {
+        return new ResponseEntity<>(seasonService.getAvailableSeasons(), HttpStatus.OK);
     }
 }

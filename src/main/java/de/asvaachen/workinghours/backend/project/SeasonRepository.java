@@ -8,7 +8,7 @@ import java.util.UUID;
 
 @Repository
 public interface SeasonRepository extends CrudRepository<SeasonEntity, Integer> {
-    List<SeasonEntity> findAll();
+    List<SeasonEntity> findAllByOrderByYearAsc();
 
     SeasonEntity findByYear(Integer season);
 

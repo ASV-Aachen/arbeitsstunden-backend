@@ -1,6 +1,7 @@
 package de.asvaachen.workinghours.backend.project;
 
 import com.google.common.collect.Lists;
+import de.asvaachen.workinghours.backend.season.model.AvailableSeasonsDto;
 import de.asvaachen.workinghours.backend.season.model.SeasonDto;
 import org.springframework.stereotype.Service;
 
@@ -24,7 +25,7 @@ public class SeasonService {
     }
 
     public List<SeasonDto> getAllSeasons() {
-        return seasonRepository.findAll().stream().map(converter::convert).collect(Collectors.toList());
+        return seasonRepository.findAllByOrderByYearAsc().stream().map(converter::convert).collect(Collectors.toList());
     }
 
     public List<SeasonDto> getSeasonsIn(List<Integer> seasons) {
@@ -37,5 +38,16 @@ public class SeasonService {
 
     public Integer getObligatoryMinutes(Integer season) {
         return seasonRepository.findByYear(season).getObligatoryMinutes();
+    }
+
+    public AvailableSeasonsDto getAvailableSeasons() {
+        Integer activeYear = 2017; //TODO: Programmatically we switch to a new workinghour season at 01.11.X to 31.10.X+1.
+
+        AvailableSeasonsDto availableSeasonsDto = new AvailableSeasonsDto();
+
+        availableSeasonsDto.setActiveSeason(activeYear);
+        availableSeasonsDto.setSeasons(getAllSeasons());
+
+        return availableSeasonsDto;
     }
 }

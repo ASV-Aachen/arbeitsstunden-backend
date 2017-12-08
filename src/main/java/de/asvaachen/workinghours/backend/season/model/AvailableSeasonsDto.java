@@ -4,19 +4,22 @@ import java.util.List;
 
 public class AvailableSeasonsDto {
 
-    Integer current;
+    Integer activeSeason;
     List<SeasonDto> seasons;
 
-    public AvailableSeasonsDto(Integer current, List<SeasonDto> seasons) {
-        this.current = current;
-        this.seasons = seasons;
+    public Integer getActiveSeason() {
+        return activeSeason;
     }
 
-    public Integer getCurrent() {
-        return current;
+    public void setActiveSeason(Integer activeSeason) {
+        this.activeSeason = activeSeason;
     }
 
     public List<SeasonDto> getSeasons() {
         return seasons;
+    }
+
+    public void setSeasons(List<SeasonDto> seasons) {
+        this.seasons = seasons;
     }
 }
