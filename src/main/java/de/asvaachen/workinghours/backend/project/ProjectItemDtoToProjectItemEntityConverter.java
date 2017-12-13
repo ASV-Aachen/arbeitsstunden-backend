@@ -24,6 +24,10 @@ public class ProjectItemDtoToProjectItemEntityConverter implements Converter<Pro
     @Override
     public ProjectItemEntity convert(ProjectItemDto source) {
 
+        if(source.getId() == null) {
+            source.setId(UUID.randomUUID().toString());
+        }
+
         UUID id = UUID.fromString(source.getId());
 
         ProjectItemEntity entity = new ProjectItemEntity();
@@ -36,13 +40,17 @@ public class ProjectItemDtoToProjectItemEntityConverter implements Converter<Pro
         entity.setDescription(source.getDescription());
         entity.setProject(projectRepository.findOne(UUID.fromString(source.getProjectId())));
 
-        entity.setHours(source.getHours().stream()
+        entity.setHours(source.getItems().stream()
                 .map(projectItemHourDto -> convertProjectItemHour(projectItemHourDto, entity))
                 .collect(Collectors.toList()));
         return entity;
     }
 
     private ProjectItemHourEntity convertProjectItemHour(ProjectItemHourDto projectItemHourDto, ProjectItemEntity projectItemEntity) {
+        if (projectItemHourDto.getId() == null) {
+            projectItemHourDto.setId(UUID.randomUUID().toString());
+        }
+
         ProjectItemHourEntity hourEntity = new ProjectItemHourEntity();
         hourEntity.setId(UUID.fromString(projectItemHourDto.getId()));
         hourEntity.setDuration(projectItemHourDto.getDuration());

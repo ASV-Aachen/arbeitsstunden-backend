@@ -14,13 +14,13 @@ import java.util.stream.Collectors;
 @Service
 public class MembersService {
 
-    ProjectItemHourRepository projectItemHourRepository;
-    MemberRepository memberRepository;
-    ReductionRepository reductionRepository;
-    SeasonService seasonService;
-    ProjectItemHourEntityToWorkinghourItemDtoConverter converter;
-    ReductionStatusEntityToSeasonReductionDtoConverter reductionStatusConverter;
-    MemberEntityToMemberDtoConverter memberEntityToMemberDtoConverter;
+    private ProjectItemHourRepository projectItemHourRepository;
+    private MemberRepository memberRepository;
+    private ReductionRepository reductionRepository;
+    private SeasonService seasonService;
+    private ProjectItemHourEntityToWorkinghourItemDtoConverter converter;
+    private ReductionStatusEntityToSeasonReductionDtoConverter reductionStatusConverter;
+    private MemberEntityToMemberDtoConverter memberEntityToMemberDtoConverter;
 
     UUID uuidRalf = UUID.fromString("9e507c3b-df7d-40b3-9dfe-267aa0e3bc24");
     Integer activeYear = 2017;
@@ -201,5 +201,9 @@ public class MembersService {
 
 
         return membersSummaryDto;
+    }
+
+    public List<MemberDto> getAllMembers() {
+        return memberRepository.findAllByOrderByLastNameAsc().stream().map(memberEntityToMemberDtoConverter::convert).collect(Collectors.toList());
     }
 }

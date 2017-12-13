@@ -10,8 +10,6 @@ import java.util.UUID;
 @Repository
 public interface UserRepository extends CrudRepository<UserEntity, UUID> {
 
-    //List<UserEntity> findAllByOrderByLastNameAsc();
-
     Optional<UserEntity> findByEmail(String email);
 
     Optional<UserEntity> findById(UUID id);

@@ -22,26 +22,7 @@ public class UsersService {
         this.converter = converter;
     }
 
-   /* public List<UserDto> getAllUsers() {
-        return userRepository.findAllByOrderByLastNameAsc().stream()
-                .map(converter::convert)
-                .collect(Collectors.toList());
-    }*/
-
     public void updateUser(MemberEntity memberEntity) {
         memberRepository.save(memberEntity);
-    }
-
-    public UserDto UscreateUser(UserEntity userEntity) throws EmailExistsException {
-        userEntity.setId(null);
-
-        if (emailExists(userEntity.getEmail())) {
-            throw new EmailExistsException(userEntity.getEmail());
-        }
-        return converter.convert(userRepository.save(userEntity));
-    }
-
-    private boolean emailExists(String email) {
-        return userRepository.findByEmail(email).isPresent();
     }
 }

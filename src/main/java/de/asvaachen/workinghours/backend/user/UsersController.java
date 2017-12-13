@@ -25,12 +25,6 @@ public class UsersController {
         this.userCreateDtoconverter = userCreateDtoconverter;
     }
 
-    /*@CrossOrigin
-    @GetMapping
-    public ResponseEntity<List<UserDto>> getUsers() {
-        return new ResponseEntity<List<UserDto>>(usersService.getAllUsers(), HttpStatus.OK);
-    }*/
-
     @CrossOrigin
     @PostMapping
     public ResponseEntity updateUser(@Valid @RequestBody CreateUserDto createUserDto) {

@@ -1,6 +1,5 @@
 package de.asvaachen.workinghours.backend.project.model;
 
-import java.time.LocalDate;
 import java.util.List;
 
 public class ProjectItemDto {
@@ -13,7 +12,7 @@ public class ProjectItemDto {
     String description;
     String date;
 
-    List<ProjectItemHourDto> hours;
+    List<ProjectItemHourDto> items;
 
     public String getId() {
         return id;
@@ -63,11 +62,11 @@ public class ProjectItemDto {
         this.date = date;
     }
 
-    public List<ProjectItemHourDto> getHours() {
-        return hours;
+    public List<ProjectItemHourDto> getItems() {
+        return items;
     }
 
-    public void setHours(List<ProjectItemHourDto> hours) {
-        this.hours = hours;
+    public void setItems(List<ProjectItemHourDto> items) {
+        this.items = items;
     }
 }

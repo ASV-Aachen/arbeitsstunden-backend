@@ -1,5 +1,6 @@
 package de.asvaachen.workinghours.backend.user;
 
+import de.asvaachen.workinghours.backend.project.MemberDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -50,6 +51,11 @@ public class MembersController {
     }
 
 
+    @CrossOrigin
+    @GetMapping
+    public ResponseEntity<List<MemberDto>> getAllMembers() {
+        return new ResponseEntity<List<MemberDto>>(memberService.getAllMembers(), HttpStatus.OK);
+    }
 
     @CrossOrigin
     @GetMapping("active")

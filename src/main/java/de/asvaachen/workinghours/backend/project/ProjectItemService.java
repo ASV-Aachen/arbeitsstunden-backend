@@ -6,8 +6,8 @@ import org.springframework.stereotype.Service;
 @Service
 public class ProjectItemService {
 
-    ProjectItemRepository projectItemRepository;
-    ProjectItemDtoToProjectItemEntityConverter converter;
+    private ProjectItemRepository projectItemRepository;
+    private ProjectItemDtoToProjectItemEntityConverter converter;
 
     public ProjectItemService(ProjectItemRepository projectItemRepository, ProjectItemDtoToProjectItemEntityConverter converter) {
         this.projectItemRepository = projectItemRepository;
