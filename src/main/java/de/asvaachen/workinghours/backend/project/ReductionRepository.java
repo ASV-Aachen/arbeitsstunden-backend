@@ -11,4 +11,5 @@ public interface ReductionRepository extends CrudRepository<ReductionStatusEntit
 
     List<ReductionStatusEntity> findAllByMember(MemberEntity memberEntity);
 
+    List<ReductionStatusEntity> findAllBySeason(Integer season);
 }

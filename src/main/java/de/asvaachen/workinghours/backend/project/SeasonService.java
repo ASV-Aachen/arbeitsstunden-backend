@@ -1,6 +1,7 @@
 package de.asvaachen.workinghours.backend.project;
 
 import com.google.common.collect.Lists;
+import de.asvaachen.workinghours.backend.season.NextSeasonDto;
 import de.asvaachen.workinghours.backend.season.model.AvailableSeasonsDto;
 import de.asvaachen.workinghours.backend.season.model.SeasonDto;
 import org.springframework.stereotype.Service;
@@ -11,16 +12,25 @@ import java.util.stream.Collectors;
 @Service
 public class SeasonService {
 
-    SeasonRepository seasonRepository;
-    SeasonEntityToSeasonDtoConverter converter;
+    private SeasonRepository seasonRepository;
+    private ReductionRepository reductionRepository;
+    private SeasonEntityToSeasonDtoConverter converter;
 
-    public SeasonService(SeasonRepository seasonRepository, SeasonEntityToSeasonDtoConverter converter) {
+    public SeasonService(SeasonRepository seasonRepository, ReductionRepository reductionRepository, SeasonEntityToSeasonDtoConverter converter) {
         this.seasonRepository = seasonRepository;
+        this.reductionRepository = reductionRepository;
         this.converter = converter;
     }
 
     public SeasonDto createSeason(SeasonEntity seasonEntity) {
         SeasonEntity savedSeasonEntity = seasonRepository.save(seasonEntity);
+
+        reductionRepository.findAllBySeason(seasonEntity.getYear()-1).stream().forEach(entity -> {
+            entity.setId(null);
+            entity.setSeason(seasonEntity.getYear());
+            entity.setReduction(0);
+        });
+
         return converter.convert(savedSeasonEntity);
     }
 
@@ -49,5 +59,13 @@ public class SeasonService {
         availableSeasonsDto.setSeasons(getAllSeasons());
 
         return availableSeasonsDto;
+    }
+
+    public NextSeasonDto getNextSeason() {
+        NextSeasonDto nextSeasonDto = new NextSeasonDto();
+
+        nextSeasonDto.setNextSeason(seasonRepository.findTopByOrderByYearDesc().getYear() + 1);
+
+        return nextSeasonDto;
     }
 }

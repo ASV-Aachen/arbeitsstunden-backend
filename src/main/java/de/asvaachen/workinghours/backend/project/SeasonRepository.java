@@ -12,4 +12,5 @@ public interface SeasonRepository extends CrudRepository<SeasonEntity, Integer> 
 
     SeasonEntity findByYear(Integer season);
 
+    SeasonEntity findTopByOrderByYearDesc();
 }

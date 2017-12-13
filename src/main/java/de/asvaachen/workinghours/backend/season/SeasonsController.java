@@ -8,8 +8,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.ArrayList;
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/seasons")
@@ -25,7 +23,7 @@ public class SeasonsController {
 
     @CrossOrigin
     @PostMapping
-    public ResponseEntity<SeasonDto> createCurrentSeason(@RequestBody @Valid SeasonDto seasonDto) {
+    public ResponseEntity<SeasonDto> createSeason(@RequestBody @Valid SeasonDto seasonDto) {
         return new ResponseEntity<SeasonDto>(seasonService.createSeason(converter.convert(seasonDto)), HttpStatus.OK);
     }
 
@@ -33,5 +31,11 @@ public class SeasonsController {
     @GetMapping
     public ResponseEntity<AvailableSeasonsDto> getAvailableSeasons() {
         return new ResponseEntity<>(seasonService.getAvailableSeasons(), HttpStatus.OK);
+    }
+
+    @CrossOrigin
+    @GetMapping("next")
+    public ResponseEntity<NextSeasonDto> getNextSeason() {
+        return new ResponseEntity<>(seasonService.getNextSeason(), HttpStatus.OK);
     }
 }
