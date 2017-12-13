@@ -22,7 +22,6 @@ public class MembersService {
     private ReductionStatusEntityToSeasonReductionDtoConverter reductionStatusConverter;
     private MemberEntityToMemberDtoConverter memberEntityToMemberDtoConverter;
 
-    UUID uuidRalf = UUID.fromString("9e507c3b-df7d-40b3-9dfe-267aa0e3bc24");
     Integer activeYear = 2017;
 
     public MembersService(ProjectItemHourRepository projectItemHourRepository, MemberRepository memberRepository, ReductionRepository reductionRepository, SeasonService seasonService, ProjectItemHourEntityToWorkinghourItemDtoConverter converter, ReductionStatusEntityToSeasonReductionDtoConverter reductionStatusConverter, MemberEntityToMemberDtoConverter memberEntityToMemberDtoConverter) {
@@ -35,12 +34,12 @@ public class MembersService {
         this.memberEntityToMemberDtoConverter = memberEntityToMemberDtoConverter;
     }
 
-    public MemberWorkinghoursDto getActiveMemberWorkinghours(Integer year) {
+    public MemberWorkinghoursDto getActiveMemberWorkinghours(MemberEntity memberEntity, Integer year) {
         Integer obligatoryForSeason = seasonService.getObligatoryMinutes(year);
 
         MemberWorkinghoursDto memberWorkinghoursDto = new MemberWorkinghoursDto();
 
-        List<ProjectItemHourEntity> allByMemberIdAndProjectItemSeason = projectItemHourRepository.findAllByMemberIdAndProjectItemSeason(uuidRalf, year);
+        List<ProjectItemHourEntity> allByMemberIdAndProjectItemSeason = projectItemHourRepository.findAllByMemberIdAndProjectItemSeason(memberEntity.getId(), year);
         memberWorkinghoursDto.setWorkinghourItems(allByMemberIdAndProjectItemSeason.stream()
                 .map(converter::convert)
                 .collect(Collectors.toList()));
@@ -50,8 +49,7 @@ public class MembersService {
         return memberWorkinghoursDto;
     }
 
-    public ActiveMemberWorkinghoursDto getActiveMemberWorkinghours() {
-        MemberEntity memberEntity = memberRepository.findOne(uuidRalf);
+    public ActiveMemberWorkinghoursDto getActiveMemberWorkinghours(MemberEntity memberEntity) {
 
         Integer obligatoryForSeason = seasonService.getObligatoryMinutes(activeYear);
 
@@ -63,7 +61,7 @@ public class MembersService {
 
         activeMemberWorkinghoursDto.setSeasons(seasonService.getSeasonsIn(allSeasons));
 
-        List<ProjectItemHourEntity> allByMemberIdAndProjectItemSeason = projectItemHourRepository.findAllByMemberIdAndProjectItemSeason(uuidRalf, activeYear);
+        List<ProjectItemHourEntity> allByMemberIdAndProjectItemSeason = projectItemHourRepository.findAllByMemberIdAndProjectItemSeason(memberEntity.getId(), activeYear);
         activeMemberWorkinghoursDto.setWorkinghours(allByMemberIdAndProjectItemSeason.stream()
                 .map(converter::convert)
                 .collect(Collectors.toList()));
@@ -74,8 +72,7 @@ public class MembersService {
         return activeMemberWorkinghoursDto;
     }
 
-    public List<OverviewSeasonDto> getMemberOverview() {
-        MemberEntity memberEntity = memberRepository.findOne(uuidRalf);
+    public List<OverviewSeasonDto> getMemberOverview(MemberEntity memberEntity) {
 
         Integer firstSeason = seasonService.getFirstSeason(memberEntity);
         List<Integer> allSeasons = seasonService.getAllSeasons().stream().map(seasonDto -> seasonDto.getYear()).filter(season -> season >= firstSeason).collect(Collectors.toList());
@@ -83,7 +80,7 @@ public class MembersService {
         List<OverviewSeasonDto> overviewItems = new ArrayList<>();
         for (Integer season : allSeasons) {
 
-            List<ProjectItemHourEntity> projectItems = projectItemHourRepository.findAllByMemberIdAndProjectItemSeason(uuidRalf, season);
+            List<ProjectItemHourEntity> projectItems = projectItemHourRepository.findAllByMemberIdAndProjectItemSeason(memberEntity.getId(), season);
 
             OverviewSeasonDto overviewSeasonDto = new OverviewSeasonDto();
 
@@ -97,10 +94,8 @@ public class MembersService {
         return overviewItems;
     }
 
-    public MemberDetailsDto getMemberDetails() {
+    public MemberDetailsDto getMemberDetails(MemberEntity memberEntity) {
         MemberDetailsDto memberDetailsDto = new MemberDetailsDto();
-
-        MemberEntity memberEntity = memberRepository.findOne(uuidRalf);
 
         memberDetailsDto.setFirstName(memberEntity.getFirstName());
         memberDetailsDto.setLastName(memberEntity.getLastName());

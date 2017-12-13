@@ -25,4 +25,8 @@ public class UsersService {
     public void updateUser(MemberEntity memberEntity) {
         memberRepository.save(memberEntity);
     }
+
+    public UserEntity getUserByEmail(String email) {
+        return userRepository.findByEmail(email).get();
+    }
 }
