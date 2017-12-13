@@ -32,24 +32,6 @@ public class MembersController {
     }
 
     @CrossOrigin
-    @GetMapping("active")
-    public ResponseEntity<ActiveMemberWorkinghoursDto> getActiveWorkinghours() {
-        return new ResponseEntity(memberService.getActiveMemberWorkinghours(), HttpStatus.OK);
-    }
-
-    @CrossOrigin
-    @GetMapping("overview")
-    public ResponseEntity<List<OverviewSeasonDto>> getMemberOverview() {
-        return new ResponseEntity(memberService.getMemberOverview(), HttpStatus.OK);
-    }
-
-    @CrossOrigin
-    @GetMapping("detail")
-    public ResponseEntity<MemberDetailsDto> getMemberDetails() {
-        return new ResponseEntity(memberService.getMemberDetails(), HttpStatus.OK);
-    }
-
-    @CrossOrigin
     @GetMapping("list/{season}")
     public ResponseEntity<List<MemberListItemDto>> getMemberList(Integer season) {
         return new ResponseEntity(memberService.getMemberList(season), HttpStatus.OK);
@@ -65,5 +47,25 @@ public class MembersController {
     @GetMapping("summary/{season}")
     public ResponseEntity<MembersSummaryDto> getSummary(Integer season) {
         return new ResponseEntity(memberService.getMembersSummary(season), HttpStatus.OK);
+    }
+
+
+
+    @CrossOrigin
+    @GetMapping("active")
+    public ResponseEntity<ActiveMemberWorkinghoursDto> getActiveWorkinghours() {
+        return new ResponseEntity(memberService.getActiveMemberWorkinghours(), HttpStatus.OK);
+    }
+
+    @CrossOrigin
+    @GetMapping("overview")
+    public ResponseEntity<List<OverviewSeasonDto>> getMemberOverview() {
+        return new ResponseEntity(memberService.getMemberOverview(), HttpStatus.OK);
+    }
+
+    @CrossOrigin
+    @GetMapping("detail")
+    public ResponseEntity<MemberDetailsDto> getMemberDetails() {
+        return new ResponseEntity(memberService.getMemberDetails(), HttpStatus.OK);
     }
 }

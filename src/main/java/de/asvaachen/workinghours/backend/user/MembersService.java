@@ -5,7 +5,10 @@ import de.asvaachen.workinghours.backend.season.model.SeasonDto;
 import org.springframework.stereotype.Service;
 
 import java.math.BigInteger;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -43,18 +46,22 @@ public class MembersService {
                 .collect(Collectors.toList()));
         memberWorkinghoursDto.setNeededMinutes(obligatoryForSeason);
         memberWorkinghoursDto.setWorkedMinutes(allByMemberIdAndProjectItemSeason.stream().mapToInt(ProjectItemHourEntity::getDuration).sum());
-        
+
         return memberWorkinghoursDto;
     }
 
     public ActiveMemberWorkinghoursDto getActiveMemberWorkinghours() {
+        MemberEntity memberEntity = memberRepository.findOne(uuidRalf);
+
         Integer obligatoryForSeason = seasonService.getObligatoryMinutes(activeYear);
 
         ActiveMemberWorkinghoursDto activeMemberWorkinghoursDto = new ActiveMemberWorkinghoursDto();
         activeMemberWorkinghoursDto.setActiveYear(activeYear);
 
-        List<Integer> seasons = projectItemHourRepository.findSeasonsByMemberId(uuidRalf);
-        activeMemberWorkinghoursDto.setSeasons(seasonService.getSeasonsIn(seasons));
+        Integer firstSeason = seasonService.getFirstSeason(memberEntity);
+        List<Integer> allSeasons = seasonService.getAllSeasons().stream().map(seasonDto -> seasonDto.getYear()).filter(season -> season >= firstSeason).collect(Collectors.toList());
+
+        activeMemberWorkinghoursDto.setSeasons(seasonService.getSeasonsIn(allSeasons));
 
         List<ProjectItemHourEntity> allByMemberIdAndProjectItemSeason = projectItemHourRepository.findAllByMemberIdAndProjectItemSeason(uuidRalf, activeYear);
         activeMemberWorkinghoursDto.setWorkinghours(allByMemberIdAndProjectItemSeason.stream()
@@ -68,12 +75,14 @@ public class MembersService {
     }
 
     public List<OverviewSeasonDto> getMemberOverview() {
+        MemberEntity memberEntity = memberRepository.findOne(uuidRalf);
+
+        Integer firstSeason = seasonService.getFirstSeason(memberEntity);
+        List<Integer> allSeasons = seasonService.getAllSeasons().stream().map(seasonDto -> seasonDto.getYear()).filter(season -> season >= firstSeason).collect(Collectors.toList());
+
         List<OverviewSeasonDto> overviewItems = new ArrayList<>();
+        for (Integer season : allSeasons) {
 
-        List<Integer> seasons = projectItemHourRepository.findSeasonsByMemberId(uuidRalf);
-        Collections.sort(seasons);
-
-        for (Integer season : seasons) {
             List<ProjectItemHourEntity> projectItems = projectItemHourRepository.findAllByMemberIdAndProjectItemSeason(uuidRalf, season);
 
             OverviewSeasonDto overviewSeasonDto = new OverviewSeasonDto();

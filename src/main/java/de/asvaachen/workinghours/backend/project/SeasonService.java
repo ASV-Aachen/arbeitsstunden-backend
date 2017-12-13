@@ -25,11 +25,18 @@ public class SeasonService {
     public SeasonDto createSeason(SeasonEntity seasonEntity) {
         SeasonEntity savedSeasonEntity = seasonRepository.save(seasonEntity);
 
-        reductionRepository.findAllBySeason(seasonEntity.getYear()-1).stream().forEach(entity -> {
-            entity.setId(null);
-            entity.setSeason(seasonEntity.getYear());
-            entity.setReduction(0);
-        });
+        List<ReductionStatusEntity> newReductions = reductionRepository.findAllBySeason(seasonEntity.getYear()-1).stream().map(entity -> {
+            ReductionStatusEntity reductionStatusEntity = new ReductionStatusEntity();
+
+            reductionStatusEntity.setReduction(0);
+            reductionStatusEntity.setSeason(seasonEntity.getYear());
+            reductionStatusEntity.setStatus(entity.getStatus());
+            reductionStatusEntity.setMember(entity.getMember());
+
+            return reductionStatusEntity;
+        }).collect(Collectors.toList());
+
+        reductionRepository.save(newReductions);
 
         return converter.convert(savedSeasonEntity);
     }
@@ -67,5 +74,9 @@ public class SeasonService {
         nextSeasonDto.setNextSeason(seasonRepository.findTopByOrderByYearDesc().getYear() + 1);
 
         return nextSeasonDto;
+    }
+
+    public Integer getFirstSeason(MemberEntity member) {
+        return reductionRepository.findTopByMemberOrderBySeasonAsc(member).getSeason();
     }
 }
