@@ -6,6 +6,8 @@ import de.asvaachen.workinghours.backend.season.model.AvailableSeasonsDto;
 import de.asvaachen.workinghours.backend.season.model.SeasonDto;
 import org.springframework.stereotype.Service;
 
+import java.time.Month;
+import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -25,7 +27,7 @@ public class SeasonService {
     public SeasonDto createSeason(SeasonEntity seasonEntity) {
         SeasonEntity savedSeasonEntity = seasonRepository.save(seasonEntity);
 
-        List<ReductionStatusEntity> newReductions = reductionRepository.findAllBySeason(seasonEntity.getYear()-1).stream().map(entity -> {
+        List<ReductionStatusEntity> newReductions = reductionRepository.findAllBySeason(seasonEntity.getYear() - 1).stream().map(entity -> {
             ReductionStatusEntity reductionStatusEntity = new ReductionStatusEntity();
 
             reductionStatusEntity.setReduction(0);
@@ -58,11 +60,9 @@ public class SeasonService {
     }
 
     public AvailableSeasonsDto getAvailableSeasons() {
-        Integer activeYear = 2017; //TODO: Programmatically we switch to a new workinghour season at 01.11.X to 31.10.X+1.
-
         AvailableSeasonsDto availableSeasonsDto = new AvailableSeasonsDto();
 
-        availableSeasonsDto.setActiveSeason(activeYear);
+        availableSeasonsDto.setActiveSeason(getActiveSeason());
         availableSeasonsDto.setSeasons(getAllSeasons());
 
         return availableSeasonsDto;
@@ -78,5 +78,18 @@ public class SeasonService {
 
     public Integer getFirstSeason(MemberEntity member) {
         return reductionRepository.findTopByMemberOrderBySeasonAsc(member).getSeason();
+    }
+
+    public Integer getActiveSeason() {
+        ZonedDateTime now = ZonedDateTime.now();
+
+        Integer currentYear = now.getYear();
+
+        ZonedDateTime barrier = ZonedDateTime.now().withDayOfMonth(1).withMonth(Month.NOVEMBER.getValue());
+        if (now.isAfter(barrier)) {
+            return currentYear + 1;
+        } else {
+            return currentYear;
+        }
     }
 }

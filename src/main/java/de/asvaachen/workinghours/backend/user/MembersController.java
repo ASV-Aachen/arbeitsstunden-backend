@@ -38,19 +38,19 @@ public class MembersController {
 
     @CrossOrigin
     @GetMapping("list/{season}")
-    public ResponseEntity<List<MemberListItemDto>> getMemberList(Integer season) {
+    public ResponseEntity<List<MemberListItemDto>> getMemberList(@PathVariable("season") Integer season) {
         return new ResponseEntity(memberService.getMemberList(season), HttpStatus.OK);
     }
 
     @CrossOrigin
     @GetMapping("distribution/{season}")
-    public ResponseEntity<List<MemberDistributionItemDto>> getDistribution(Integer season) {
+    public ResponseEntity<List<MemberDistributionItemDto>> getDistribution(@PathVariable("season") Integer season) {
         return new ResponseEntity(memberService.getMemberDistribution(season), HttpStatus.OK);
     }
 
     @CrossOrigin
     @GetMapping("summary/{season}")
-    public ResponseEntity<MembersSummaryDto> getSummary(Integer season) {
+    public ResponseEntity<MembersSummaryDto> getSummary(@PathVariable("season") Integer season) {
         return new ResponseEntity(memberService.getMembersSummary(season), HttpStatus.OK);
     }
 

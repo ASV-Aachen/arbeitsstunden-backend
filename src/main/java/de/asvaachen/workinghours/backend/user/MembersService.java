@@ -22,8 +22,6 @@ public class MembersService {
     private ReductionStatusEntityToSeasonReductionDtoConverter reductionStatusConverter;
     private MemberEntityToMemberDtoConverter memberEntityToMemberDtoConverter;
 
-    Integer activeYear = 2017;
-
     public MembersService(ProjectItemHourRepository projectItemHourRepository, MemberRepository memberRepository, ReductionRepository reductionRepository, SeasonService seasonService, ProjectItemHourEntityToWorkinghourItemDtoConverter converter, ReductionStatusEntityToSeasonReductionDtoConverter reductionStatusConverter, MemberEntityToMemberDtoConverter memberEntityToMemberDtoConverter) {
         this.projectItemHourRepository = projectItemHourRepository;
         this.memberRepository = memberRepository;
@@ -50,18 +48,19 @@ public class MembersService {
     }
 
     public ActiveMemberWorkinghoursDto getActiveMemberWorkinghours(MemberEntity memberEntity) {
+        Integer activeSeason = seasonService.getActiveSeason();
 
-        Integer obligatoryForSeason = seasonService.getObligatoryMinutes(activeYear);
+        Integer obligatoryForSeason = seasonService.getObligatoryMinutes(activeSeason);
 
         ActiveMemberWorkinghoursDto activeMemberWorkinghoursDto = new ActiveMemberWorkinghoursDto();
-        activeMemberWorkinghoursDto.setActiveYear(activeYear);
+        activeMemberWorkinghoursDto.setActiveYear(activeSeason);
 
         Integer firstSeason = seasonService.getFirstSeason(memberEntity);
         List<Integer> allSeasons = seasonService.getAllSeasons().stream().map(seasonDto -> seasonDto.getYear()).filter(season -> season >= firstSeason).collect(Collectors.toList());
 
         activeMemberWorkinghoursDto.setSeasons(seasonService.getSeasonsIn(allSeasons));
 
-        List<ProjectItemHourEntity> allByMemberIdAndProjectItemSeason = projectItemHourRepository.findAllByMemberIdAndProjectItemSeason(memberEntity.getId(), activeYear);
+        List<ProjectItemHourEntity> allByMemberIdAndProjectItemSeason = projectItemHourRepository.findAllByMemberIdAndProjectItemSeason(memberEntity.getId(), seasonService.getActiveSeason());
         activeMemberWorkinghoursDto.setWorkinghours(allByMemberIdAndProjectItemSeason.stream()
                 .map(converter::convert)
                 .collect(Collectors.toList()));
@@ -119,9 +118,9 @@ public class MembersService {
 
     public List<MemberListItemDto> getMemberList(Integer season) {
 
-        Integer obligatoryForSeason = seasonService.getObligatoryMinutes(2017);
+        Integer obligatoryForSeason = seasonService.getObligatoryMinutes(seasonService.getActiveSeason());
 
-        List<Object[]> memberOverviewItems = projectItemHourRepository.memberList();//season
+        List<Object[]> memberOverviewItems = projectItemHourRepository.memberList(season);
 
         return memberOverviewItems.stream().map(objects -> {
 
@@ -146,7 +145,7 @@ public class MembersService {
     }
 
     public List<MemberDistributionItemDto> getMemberDistribution(Integer season) {
-        return projectItemHourRepository.memberDistribution().stream().map(objects -> {
+        return projectItemHourRepository.memberDistribution(season).stream().map(objects -> {
 
             AsvStatus status = AsvStatus.valueOf((String) objects[0]);
             Integer minutes = ((BigInteger) objects[1]).intValue();
@@ -159,20 +158,20 @@ public class MembersService {
     }
 
     public MembersSummaryDto getMembersSummary(Integer season) {
-        Integer obligatoryForSeason = seasonService.getObligatoryMinutes(2017);
+        Integer obligatoryForSeason = seasonService.getObligatoryMinutes(season);
 
         MembersSummaryDto membersSummaryDto = new MembersSummaryDto();
 
-        membersSummaryDto.setWorkedMinutesTotal(projectItemHourRepository.allMinutesForSeason());
+        membersSummaryDto.setWorkedMinutesTotal(projectItemHourRepository.allMinutesForSeason(season));
 
-        List<Object[]> objects = projectItemHourRepository.getKingForSeason();
+        List<Object[]> objects = projectItemHourRepository.getKingForSeason(season);
         UUID memberId = UUID.fromString((String) objects.get(0)[0]);
         Integer workedMinutes = ((BigInteger) objects.get(0)[1]).intValue();
         membersSummaryDto.setKingMember(memberEntityToMemberDtoConverter.convert(memberRepository.findOne(memberId)));
         membersSummaryDto.setKingMinutes(workedMinutes);
 
 
-        List<Object[]> members = projectItemHourRepository.memberList();
+        List<Object[]> members = projectItemHourRepository.memberList(season);
         Integer numSailingAllowed = 0;
         Integer numSailingNotAllowed = 0;
 

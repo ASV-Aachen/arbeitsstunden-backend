@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigInteger;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -40,7 +41,7 @@ public class ProjectService {
     }
 
     public ActiveProjectsDto getActiveProjects() {
-        Integer activeYear = 2017;
+        Integer activeYear = seasonService.getActiveSeason();
 
         ActiveProjectsDto activeProjects = new ActiveProjectsDto();
 
@@ -84,8 +85,8 @@ public class ProjectService {
         ProjectSummaryDto projectSummaryDto = new ProjectSummaryDto();
         projectSummaryDto.setDescription(projectRepository.findOne(projectId).getDescription());
 
-        Integer minutesProject = ((BigInteger) projectItemRepository.minutesForProjectAndSeason(projectId, season)[0]).intValue();
-        Integer minutesAllProjects = ((BigInteger) projectItemRepository.minutesForOtherProjectsAndSeason(season)[0]).intValue();
+        Integer minutesProject = (Optional.ofNullable((BigInteger) projectItemRepository.minutesForProjectAndSeason(projectId, season)[0])).map(BigInteger::intValue).orElse(0);
+        Integer minutesAllProjects = (Optional.ofNullable((BigInteger) projectItemRepository.minutesForOtherProjectsAndSeason(season)[0])).map(BigInteger::intValue).orElse(0);
 
         projectSummaryDto.setPercentage((float) minutesProject / minutesAllProjects);
         return projectSummaryDto;
