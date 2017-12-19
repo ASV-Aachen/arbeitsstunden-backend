@@ -1,6 +1,7 @@
 package de.asvaachen.workinghours.backend.project;
 
 import de.asvaachen.workinghours.backend.user.UserEntity;
+import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.util.UUID;
@@ -10,8 +11,8 @@ import java.util.UUID;
 public class MemberEntity {
 
     @Id
-    //@GeneratedValue(generator = "uuid")
-    //@GenericGenerator(name = "uuid", strategy = "uuid2")
+    @GeneratedValue(generator = "uuid")
+    @GenericGenerator(name = "uuid", strategy = "uuid2")
     @Column(name = "id")
     private UUID id;
 

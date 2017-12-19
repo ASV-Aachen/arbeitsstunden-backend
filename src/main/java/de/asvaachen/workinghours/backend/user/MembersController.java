@@ -1,10 +1,13 @@
 package de.asvaachen.workinghours.backend.user;
 
 import de.asvaachen.workinghours.backend.project.MemberDto;
+import de.asvaachen.workinghours.backend.user.model.CreateMemberDto;
+import de.asvaachen.workinghours.backend.user.model.ErrorMessageDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.security.Principal;
 import java.util.List;
 
@@ -15,11 +18,23 @@ public class MembersController {
     private MembersService memberService;
     private UsersService usersService;
     private ReductionStatusService reductionStatusService;
+    private UserCreateDtoToMemberEntityConverter userCreateDtoToMemberEntityConverter;
 
-    public MembersController(MembersService memberService, UsersService usersService, ReductionStatusService reductionStatusService) {
+    public MembersController(MembersService memberService, UsersService usersService, ReductionStatusService reductionStatusService, UserCreateDtoToMemberEntityConverter userCreateDtoToMemberEntityConverter) {
         this.memberService = memberService;
         this.usersService = usersService;
         this.reductionStatusService = reductionStatusService;
+        this.userCreateDtoToMemberEntityConverter = userCreateDtoToMemberEntityConverter;
+    }
+
+    @CrossOrigin
+    @PostMapping("create")
+    public ResponseEntity updateUser(@Valid @RequestBody CreateMemberDto createMemberDto) {
+        if (usersService.createUser(userCreateDtoToMemberEntityConverter.convert(createMemberDto), createMemberDto.getFirstSeason(), createMemberDto.getStatus())) {
+            return new ResponseEntity(HttpStatus.CREATED);
+        } else {
+            return new ResponseEntity(new ErrorMessageDto(HttpStatus.BAD_REQUEST.value(), "EMAIL_EXISTING", "email", "Email bereits vorhanden"), HttpStatus.BAD_REQUEST);
+        }
     }
 
     @CrossOrigin

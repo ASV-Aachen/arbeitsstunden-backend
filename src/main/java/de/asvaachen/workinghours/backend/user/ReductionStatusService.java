@@ -1,23 +1,23 @@
 package de.asvaachen.workinghours.backend.user;
 
-import de.asvaachen.workinghours.backend.project.MemberEntity;
-import de.asvaachen.workinghours.backend.project.MemberRepository;
-import de.asvaachen.workinghours.backend.project.ReductionRepository;
-import de.asvaachen.workinghours.backend.project.ReductionStatusEntity;
+import de.asvaachen.workinghours.backend.project.*;
 import org.springframework.stereotype.Service;
 
 import java.util.Map;
 import java.util.UUID;
+import java.util.stream.IntStream;
 
 @Service
 public class ReductionStatusService {
 
-    ReductionRepository reductionRepository;
-    MemberRepository memberRepository;
+    private ReductionRepository reductionRepository;
+    private MemberRepository memberRepository;
+    private SeasonService seasonService;
 
-    public ReductionStatusService(ReductionRepository reductionRepository, MemberRepository memberRepository) {
+    public ReductionStatusService(ReductionRepository reductionRepository, MemberRepository memberRepository, SeasonService seasonService) {
         this.reductionRepository = reductionRepository;
         this.memberRepository = memberRepository;
+        this.seasonService = seasonService;
     }
 
     public void create(String memberId, Map<Integer, ReductionStatusDto> years) {
@@ -35,6 +35,21 @@ public class ReductionStatusService {
                     reductionStatus.setStatus(reductionStatusDto.getStatus());
 
                     reductionRepository.save(reductionStatus);
+                }
+        );
+    }
+
+    public void createInitial(MemberEntity member, Integer firstSeason, AsvStatus asvStatus) {
+        Integer currentSeason = seasonService.getMaxSeason();
+
+        IntStream.range(firstSeason, currentSeason + 1).forEach(
+                season -> {
+                    ReductionStatusEntity reductionStatusEntity = new ReductionStatusEntity();
+                    reductionStatusEntity.setMember(member);
+                    reductionStatusEntity.setSeason(season);
+                    reductionStatusEntity.setStatus(asvStatus);
+                    reductionStatusEntity.setReduction(0);
+                    reductionRepository.save(reductionStatusEntity);
                 }
         );
     }

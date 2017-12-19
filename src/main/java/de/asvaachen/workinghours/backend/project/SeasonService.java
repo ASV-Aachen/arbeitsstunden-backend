@@ -68,6 +68,10 @@ public class SeasonService {
         return availableSeasonsDto;
     }
 
+    public Integer getMaxSeason() {
+        return seasonRepository.findTopByOrderByYearDesc().getYear();
+    }
+
     public NextSeasonDto getNextSeason() {
         NextSeasonDto nextSeasonDto = new NextSeasonDto();
 

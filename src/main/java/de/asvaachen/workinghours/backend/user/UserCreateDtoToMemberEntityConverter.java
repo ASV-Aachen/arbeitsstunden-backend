@@ -1,19 +1,17 @@
 package de.asvaachen.workinghours.backend.user;
 
 import de.asvaachen.workinghours.backend.project.MemberEntity;
-import de.asvaachen.workinghours.backend.user.model.CreateUserDto;
+import de.asvaachen.workinghours.backend.user.model.CreateMemberDto;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 
 import java.util.UUID;
 
 @Component
-public class UserCreateDtoToMemberEntityConverter implements Converter<CreateUserDto, MemberEntity> {
+public class UserCreateDtoToMemberEntityConverter implements Converter<CreateMemberDto, MemberEntity> {
     @Override
-    public MemberEntity convert(CreateUserDto source) {
-
+    public MemberEntity convert(CreateMemberDto source) {
         MemberEntity memberEntity = new MemberEntity();
-        memberEntity.setId(source.getId());
         memberEntity.setUser(createUserEntity(memberEntity, source.getEmail()));
         memberEntity.setFirstName(source.getFirstName());
         memberEntity.setLastName(source.getLastName());

@@ -19,16 +19,14 @@ public class ProjectService {
 
     private SeasonService seasonService;
 
-    private SeasonEntityToSeasonDtoConverter seasonEntityToSeasonDtoConverter;
     private ProjectEntityToProjectDtoConverter projectEntityToProjectDtoConverter;
     private ProjectEntityToProjectOverviewDtoConverter projectEntityToProjectOverviewDtoConverter;
     private ProjectItemEntityToProjectDetailsItemDto projectItemEntityToProjectDetailsItemDto;
 
-    public ProjectService(ProjectRepository projectRepository, ProjectItemRepository projectItemRepository, SeasonService seasonService, SeasonEntityToSeasonDtoConverter seasonEntityToSeasonDtoConverter, ProjectEntityToProjectDtoConverter projectEntityToProjectDtoConverter, ProjectEntityToProjectOverviewDtoConverter projectEntityToProjectOverviewDtoConverter, ProjectItemEntityToProjectDetailsItemDto projectItemEntityToProjectDetailsItemDto) {
+    public ProjectService(ProjectRepository projectRepository, ProjectItemRepository projectItemRepository, SeasonService seasonService, ProjectEntityToProjectDtoConverter projectEntityToProjectDtoConverter, ProjectEntityToProjectOverviewDtoConverter projectEntityToProjectOverviewDtoConverter, ProjectItemEntityToProjectDetailsItemDto projectItemEntityToProjectDetailsItemDto) {
         this.projectRepository = projectRepository;
         this.projectItemRepository = projectItemRepository;
         this.seasonService = seasonService;
-        this.seasonEntityToSeasonDtoConverter = seasonEntityToSeasonDtoConverter;
         this.projectEntityToProjectDtoConverter = projectEntityToProjectDtoConverter;
         this.projectEntityToProjectOverviewDtoConverter = projectEntityToProjectOverviewDtoConverter;
         this.projectItemEntityToProjectDetailsItemDto = projectItemEntityToProjectDetailsItemDto;
