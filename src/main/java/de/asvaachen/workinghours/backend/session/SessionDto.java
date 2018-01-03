@@ -4,7 +4,9 @@ import java.util.UUID;
 
 public class SessionDto {
 
-    UUID token;
+    private UUID token;
+
+    private String role;
 
     public UUID getToken() {
         return token;
@@ -12,5 +14,13 @@ public class SessionDto {
 
     public void setToken(UUID token) {
         this.token = token;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
     }
 }
