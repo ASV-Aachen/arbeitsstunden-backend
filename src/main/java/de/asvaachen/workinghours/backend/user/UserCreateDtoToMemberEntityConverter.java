@@ -7,6 +7,8 @@ import org.springframework.stereotype.Component;
 
 import java.util.UUID;
 
+import static de.asvaachen.workinghours.backend.configuration.SecurityConfiguration.ROLE_USER;
+
 @Component
 public class UserCreateDtoToMemberEntityConverter implements Converter<CreateMemberDto, MemberEntity> {
     @Override
@@ -27,6 +29,8 @@ public class UserCreateDtoToMemberEntityConverter implements Converter<CreateMem
             userEntity.setId(UUID.randomUUID());
             userEntity.setMember(memberEntity);
             userEntity.setEmail(email);
+            userEntity.setRole(ROLE_USER);
+            userEntity.setPassword("$2a$10$ljHyydV.cFZAZJCsWWbmFOuvjiKnj1lOw.3ynYkl6GOTOF8OTxoaG");
             return userEntity;
         }
     }

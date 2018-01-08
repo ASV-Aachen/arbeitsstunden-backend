@@ -19,6 +19,10 @@ public class UserEntity {
     @Column(name = "email")
     private String email;
 
+    private String role;
+
+    private String password;
+
     @OneToOne
     @JoinColumn(name = "memberId", nullable = false)
     private MemberEntity member;
@@ -37,6 +41,22 @@ public class UserEntity {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public MemberEntity getMember() {
