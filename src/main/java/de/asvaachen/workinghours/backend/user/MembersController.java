@@ -38,6 +38,13 @@ public class MembersController {
     }
 
     @CrossOrigin
+    @PostMapping("update")
+    public ResponseEntity editUser(Principal user, @RequestBody UpdateMemberDto updateMemberDto) {
+        usersService.updatePassword(user.getName(), updateMemberDto.getNewPassword());
+        return new ResponseEntity(HttpStatus.OK);
+    }
+
+    @CrossOrigin
     @PostMapping("reduction")
     public ResponseEntity<Void> createReductionStatus(@RequestBody ReductionStatusCreateDto reductionStatusCreateDto) {
         reductionStatusService.create(reductionStatusCreateDto.getMemberId(), reductionStatusCreateDto.getYears());

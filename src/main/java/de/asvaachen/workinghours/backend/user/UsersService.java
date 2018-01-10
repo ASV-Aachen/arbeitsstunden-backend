@@ -7,6 +7,8 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 
+import static de.asvaachen.workinghours.backend.configuration.SecurityConfiguration.PASSWORD_ENCODER;
+
 @Service
 public class UsersService {
 
@@ -41,5 +43,13 @@ public class UsersService {
         } else {
             return false;
         }
+    }
+
+    public void updatePassword(String email, String newPassword) {
+        userRepository.findByEmail(email).ifPresent(userEntity -> {
+                    userEntity.setPassword(PASSWORD_ENCODER.encode(newPassword));
+                    userRepository.save(userEntity);
+                }
+        );
     }
 }

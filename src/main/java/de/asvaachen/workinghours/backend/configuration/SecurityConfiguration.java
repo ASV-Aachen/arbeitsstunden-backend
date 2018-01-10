@@ -20,7 +20,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     public static final String ROLE_USER = "USER";
     public static final String ROLE_TAKEL = "TAKEL";
 
-    private static final PasswordEncoder PASSWORD_ENCODER = new BCryptPasswordEncoder();
+    public static final PasswordEncoder PASSWORD_ENCODER = new BCryptPasswordEncoder();
 
     /*@Autowired
     public void configureGlobalSecurity(AuthenticationManagerBuilder auth) throws Exception {
