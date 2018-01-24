@@ -1,7 +1,7 @@
 package de.asvaachen.workinghours.backend.user.converter;
 
-import de.asvaachen.workinghours.backend.user.UserEntity;
 import de.asvaachen.workinghours.backend.user.model.UserDto;
+import de.asvaachen.workinghours.backend.user.persistence.UserEntity;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 

@@ -1,6 +1,5 @@
 package de.asvaachen.workinghours.backend.configuration;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -22,14 +21,11 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     public static final PasswordEncoder PASSWORD_ENCODER = new BCryptPasswordEncoder();
 
-    /*@Autowired
-    public void configureGlobalSecurity(AuthenticationManagerBuilder auth) throws Exception {
-        auth.inMemoryAuthentication().withUser("maximilian.mohr@rwth-aachen.de").password("asv").roles(ROLE_USER);
-        auth.inMemoryAuthentication().withUser("ralf.bettermann@rwth-aachen.de").password("asv").roles(ROLE_USER);
-    }*/
-
-    @Autowired
     private DataSource dataSource;
+
+    public SecurityConfiguration(DataSource dataSource) {
+        this.dataSource = dataSource;
+    }
 
     @Bean
     public static PasswordEncoder passwordEncoder() {

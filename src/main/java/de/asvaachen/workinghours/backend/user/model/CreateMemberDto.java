@@ -1,7 +1,5 @@
 package de.asvaachen.workinghours.backend.user.model;
 
-import de.asvaachen.workinghours.backend.user.AsvStatus;
-
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
