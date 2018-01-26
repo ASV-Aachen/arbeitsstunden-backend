@@ -1,6 +1,6 @@
 package de.asvaachen.workinghours.backend.project.persistence;
 
-import de.asvaachen.workinghours.backend.user.model.AsvStatus;
+import de.asvaachen.workinghours.backend.member.model.AsvStatus;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;

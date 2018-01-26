@@ -1,6 +1,6 @@
 package de.asvaachen.workinghours.backend.project.persistence;
 
-import de.asvaachen.workinghours.backend.user.persistence.UserEntity;
+import de.asvaachen.workinghours.backend.member.persistence.UserEntity;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
