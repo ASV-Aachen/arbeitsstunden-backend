@@ -4,7 +4,7 @@ import de.asvaachen.workinghours.backend.project.persistence.MemberEntity;
 import de.asvaachen.workinghours.backend.project.persistence.MemberRepository;
 import de.asvaachen.workinghours.backend.project.persistence.ReductionRepository;
 import de.asvaachen.workinghours.backend.project.persistence.ReductionStatusEntity;
-import de.asvaachen.workinghours.backend.project.service.SeasonService;
+import de.asvaachen.workinghours.backend.season.SeasonService;
 import de.asvaachen.workinghours.backend.member.model.AsvStatus;
 import de.asvaachen.workinghours.backend.member.model.ReductionStatusDto;
 import org.springframework.stereotype.Service;

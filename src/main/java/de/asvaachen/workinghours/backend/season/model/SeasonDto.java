@@ -2,9 +2,11 @@ package de.asvaachen.workinghours.backend.season.model;
 
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
 
 public class SeasonDto {
 
+    @NotNull
     @Min(2000)
     @Max(3000)
     Integer year;

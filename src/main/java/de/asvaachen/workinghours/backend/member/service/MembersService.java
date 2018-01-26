@@ -3,7 +3,7 @@ package de.asvaachen.workinghours.backend.member.service;
 import de.asvaachen.workinghours.backend.project.converter.MemberEntityToMemberDtoConverter;
 import de.asvaachen.workinghours.backend.project.model.MemberDto;
 import de.asvaachen.workinghours.backend.project.persistence.*;
-import de.asvaachen.workinghours.backend.project.service.SeasonService;
+import de.asvaachen.workinghours.backend.season.SeasonService;
 import de.asvaachen.workinghours.backend.season.model.SeasonDto;
 import de.asvaachen.workinghours.backend.member.converter.ProjectItemHourEntityToWorkinghourItemDtoConverter;
 import de.asvaachen.workinghours.backend.member.converter.ReductionStatusEntityToSeasonReductionDtoConverter;

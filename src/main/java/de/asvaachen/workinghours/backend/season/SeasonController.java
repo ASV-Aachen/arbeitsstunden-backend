@@ -1,6 +1,5 @@
-package de.asvaachen.workinghours.backend.season.controller;
+package de.asvaachen.workinghours.backend.season;
 
-import de.asvaachen.workinghours.backend.project.service.SeasonService;
 import de.asvaachen.workinghours.backend.season.converter.SeasonDtoToSeasonEntityConverter;
 import de.asvaachen.workinghours.backend.season.model.AvailableSeasonsDto;
 import de.asvaachen.workinghours.backend.season.model.NextSeasonDto;
@@ -13,12 +12,13 @@ import javax.validation.Valid;
 
 @RestController
 @RequestMapping("/api/seasons")
-public class SeasonsController {
+public class SeasonController {
 
-    SeasonService seasonService;
-    SeasonDtoToSeasonEntityConverter converter;
+    private final SeasonService seasonService;
+    private final SeasonDtoToSeasonEntityConverter converter;
 
-    public SeasonsController(SeasonService seasonService, SeasonDtoToSeasonEntityConverter converter) {
+    public SeasonController(SeasonService seasonService,
+                            SeasonDtoToSeasonEntityConverter converter) {
         this.seasonService = seasonService;
         this.converter = converter;
     }
@@ -26,7 +26,7 @@ public class SeasonsController {
     @CrossOrigin
     @PostMapping
     public ResponseEntity<SeasonDto> createSeason(@RequestBody @Valid SeasonDto seasonDto) {
-        return new ResponseEntity<SeasonDto>(seasonService.createSeason(converter.convert(seasonDto)), HttpStatus.OK);
+        return new ResponseEntity<>(seasonService.createSeason(converter.convert(seasonDto)), HttpStatus.OK);
     }
 
     @CrossOrigin

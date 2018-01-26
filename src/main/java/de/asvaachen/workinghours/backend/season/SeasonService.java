@@ -1,8 +1,9 @@
-package de.asvaachen.workinghours.backend.project.service;
+package de.asvaachen.workinghours.backend.season;
 
 import com.google.common.collect.Lists;
-import de.asvaachen.workinghours.backend.project.converter.SeasonEntityToSeasonDtoConverter;
 import de.asvaachen.workinghours.backend.project.persistence.*;
+import de.asvaachen.workinghours.backend.season.converter.SeasonEntityToNextSeasonDtoConverter;
+import de.asvaachen.workinghours.backend.season.converter.SeasonEntityToSeasonDtoConverter;
 import de.asvaachen.workinghours.backend.season.model.AvailableSeasonsDto;
 import de.asvaachen.workinghours.backend.season.model.NextSeasonDto;
 import de.asvaachen.workinghours.backend.season.model.SeasonDto;
@@ -16,14 +17,16 @@ import java.util.stream.Collectors;
 @Service
 public class SeasonService {
 
-    private SeasonRepository seasonRepository;
-    private ReductionRepository reductionRepository;
-    private SeasonEntityToSeasonDtoConverter converter;
+    private final SeasonRepository seasonRepository;
+    private final ReductionRepository reductionRepository;
+    private final SeasonEntityToSeasonDtoConverter seasonEntityConverter;
+    private final SeasonEntityToNextSeasonDtoConverter seasonEntityToNextSeasonDtoConverter;
 
-    public SeasonService(SeasonRepository seasonRepository, ReductionRepository reductionRepository, SeasonEntityToSeasonDtoConverter converter) {
+    public SeasonService(SeasonRepository seasonRepository, ReductionRepository reductionRepository, SeasonEntityToSeasonDtoConverter seasonEntityConverter, SeasonEntityToNextSeasonDtoConverter seasonEntityToNextSeasonDtoConverter) {
         this.seasonRepository = seasonRepository;
         this.reductionRepository = reductionRepository;
-        this.converter = converter;
+        this.seasonEntityConverter = seasonEntityConverter;
+        this.seasonEntityToNextSeasonDtoConverter = seasonEntityToNextSeasonDtoConverter;
     }
 
     public SeasonDto createSeason(SeasonEntity seasonEntity) {
@@ -39,22 +42,21 @@ public class SeasonService {
 
             return reductionStatusEntity;
         }).collect(Collectors.toList());
-
         reductionRepository.save(newReductions);
 
-        return converter.convert(savedSeasonEntity);
+        return seasonEntityConverter.convert(savedSeasonEntity);
     }
 
     public List<SeasonDto> getAllSeasons() {
-        return seasonRepository.findAllByOrderByYearDesc().stream().map(converter::convert).collect(Collectors.toList());
+        return seasonRepository.findAllByOrderByYearDesc().stream().map(seasonEntityConverter::convert).collect(Collectors.toList());
     }
 
     public List<SeasonDto> getSeasonsIn(List<Integer> seasons) {
-        return Lists.newArrayList(seasonRepository.findAll(seasons)).stream().map(converter::convert).collect(Collectors.toList());
+        return Lists.newArrayList(seasonRepository.findAll(seasons)).stream().map(seasonEntityConverter::convert).collect(Collectors.toList());
     }
 
     public SeasonDto getSeason(Integer season) {
-        return converter.convert(seasonRepository.findOne(season));
+        return seasonEntityConverter.convert(seasonRepository.findOne(season));
     }
 
     public Integer getObligatoryMinutes(Integer season) {
@@ -75,11 +77,7 @@ public class SeasonService {
     }
 
     public NextSeasonDto getNextSeason() {
-        NextSeasonDto nextSeasonDto = new NextSeasonDto();
-
-        nextSeasonDto.setNextSeason(seasonRepository.findTopByOrderByYearDesc().getYear() + 1);
-
-        return nextSeasonDto;
+        return seasonEntityToNextSeasonDtoConverter.convert(seasonRepository.findTopByOrderByYearDesc());
     }
 
     public Integer getFirstSeason(MemberEntity member) {
@@ -88,7 +86,6 @@ public class SeasonService {
 
     public Integer getActiveSeason() {
         ZonedDateTime now = ZonedDateTime.now();
-
         Integer currentYear = now.getYear();
 
         ZonedDateTime barrier = ZonedDateTime.now().withDayOfMonth(1).withMonth(Month.NOVEMBER.getValue());

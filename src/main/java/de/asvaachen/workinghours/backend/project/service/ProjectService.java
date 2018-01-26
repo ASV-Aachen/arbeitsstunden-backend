@@ -7,6 +7,7 @@ import de.asvaachen.workinghours.backend.project.persistence.ProjectEntity;
 import de.asvaachen.workinghours.backend.project.persistence.ProjectItemEntity;
 import de.asvaachen.workinghours.backend.project.persistence.ProjectItemRepository;
 import de.asvaachen.workinghours.backend.project.persistence.ProjectRepository;
+import de.asvaachen.workinghours.backend.season.SeasonService;
 import org.springframework.stereotype.Service;
 
 import java.math.BigInteger;
