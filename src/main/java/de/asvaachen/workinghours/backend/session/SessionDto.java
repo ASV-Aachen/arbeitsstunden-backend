@@ -1,4 +1,4 @@
-package de.asvaachen.workinghours.backend.session.model;
+package de.asvaachen.workinghours.backend.session;
 
 import java.util.UUID;
 
