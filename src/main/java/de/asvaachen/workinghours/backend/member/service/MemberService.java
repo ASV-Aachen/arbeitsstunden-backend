@@ -19,7 +19,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
-public class MembersService {
+public class MemberService {
 
     private ProjectItemHourRepository projectItemHourRepository;
     private MemberRepository memberRepository;
@@ -29,7 +29,7 @@ public class MembersService {
     private ReductionStatusEntityToSeasonReductionDtoConverter reductionStatusConverter;
     private MemberEntityToMemberDtoConverter memberEntityToMemberDtoConverter;
 
-    public MembersService(ProjectItemHourRepository projectItemHourRepository, MemberRepository memberRepository, ReductionRepository reductionRepository, SeasonService seasonService, ProjectItemHourEntityToWorkinghourItemDtoConverter converter, ReductionStatusEntityToSeasonReductionDtoConverter reductionStatusConverter, MemberEntityToMemberDtoConverter memberEntityToMemberDtoConverter) {
+    public MemberService(ProjectItemHourRepository projectItemHourRepository, MemberRepository memberRepository, ReductionRepository reductionRepository, SeasonService seasonService, ProjectItemHourEntityToWorkinghourItemDtoConverter converter, ReductionStatusEntityToSeasonReductionDtoConverter reductionStatusConverter, MemberEntityToMemberDtoConverter memberEntityToMemberDtoConverter) {
         this.projectItemHourRepository = projectItemHourRepository;
         this.memberRepository = memberRepository;
         this.reductionRepository = reductionRepository;

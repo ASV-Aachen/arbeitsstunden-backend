@@ -13,14 +13,14 @@ import javax.transaction.Transactional;
 import static de.asvaachen.workinghours.backend.configuration.SecurityConfiguration.PASSWORD_ENCODER;
 
 @Service
-public class UsersService {
+public class UserService {
 
     private UserRepository userRepository;
     private MemberRepository memberRepository;
     private UserEntityToUserDtoConverter converter;
     private ReductionStatusService reductionStatusService;
 
-    public UsersService(UserRepository userRepository, MemberRepository memberRepository, UserEntityToUserDtoConverter converter, ReductionStatusService reductionStatusService) {
+    public UserService(UserRepository userRepository, MemberRepository memberRepository, UserEntityToUserDtoConverter converter, ReductionStatusService reductionStatusService) {
         this.userRepository = userRepository;
         this.memberRepository = memberRepository;
         this.converter = converter;

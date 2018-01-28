@@ -1,11 +1,11 @@
 package de.asvaachen.workinghours.backend.member.controller;
 
-import de.asvaachen.workinghours.backend.project.model.MemberDto;
 import de.asvaachen.workinghours.backend.member.converter.UserCreateDtoToMemberEntityConverter;
 import de.asvaachen.workinghours.backend.member.model.*;
-import de.asvaachen.workinghours.backend.member.service.MembersService;
+import de.asvaachen.workinghours.backend.member.service.MemberService;
 import de.asvaachen.workinghours.backend.member.service.ReductionStatusService;
-import de.asvaachen.workinghours.backend.member.service.UsersService;
+import de.asvaachen.workinghours.backend.member.service.UserService;
+import de.asvaachen.workinghours.backend.project.model.MemberDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -18,22 +18,22 @@ import java.util.List;
 @RequestMapping("/api/members/")
 public class MembersController {
 
-    private MembersService memberService;
-    private UsersService usersService;
+    private MemberService memberService;
+    private UserService userService;
     private ReductionStatusService reductionStatusService;
     private UserCreateDtoToMemberEntityConverter userCreateDtoToMemberEntityConverter;
 
-    public MembersController(MembersService memberService, UsersService usersService, ReductionStatusService reductionStatusService, UserCreateDtoToMemberEntityConverter userCreateDtoToMemberEntityConverter) {
+    public MembersController(MemberService memberService, UserService userService, ReductionStatusService reductionStatusService, UserCreateDtoToMemberEntityConverter userCreateDtoToMemberEntityConverter) {
         this.memberService = memberService;
-        this.usersService = usersService;
+        this.userService = userService;
         this.reductionStatusService = reductionStatusService;
         this.userCreateDtoToMemberEntityConverter = userCreateDtoToMemberEntityConverter;
     }
 
     @CrossOrigin
     @PostMapping("create")
-    public ResponseEntity updateUser(@Valid @RequestBody CreateMemberDto createMemberDto) {
-        if (usersService.createUser(userCreateDtoToMemberEntityConverter.convert(createMemberDto), createMemberDto.getFirstSeason(), createMemberDto.getStatus())) {
+    public ResponseEntity createUser(@Valid @RequestBody CreateMemberDto createMemberDto) {
+        if (userService.createUser(userCreateDtoToMemberEntityConverter.convert(createMemberDto), createMemberDto.getFirstSeason(), createMemberDto.getStatus())) {
             return new ResponseEntity(HttpStatus.CREATED);
         } else {
             return new ResponseEntity(new ErrorMessageDto(HttpStatus.BAD_REQUEST.value(), "EMAIL_EXISTING", "email", "Email bereits vorhanden"), HttpStatus.BAD_REQUEST);
@@ -43,7 +43,7 @@ public class MembersController {
     @CrossOrigin
     @PostMapping("update")
     public ResponseEntity editUser(Principal user, @RequestBody UpdateMemberDto updateMemberDto) {
-        usersService.updatePassword(user.getName(), updateMemberDto.getNewPassword());
+        userService.updatePassword(user.getName(), updateMemberDto.getNewPassword());
         return new ResponseEntity(HttpStatus.OK);
     }
 
@@ -58,7 +58,7 @@ public class MembersController {
     @GetMapping("{year}")
     public ResponseEntity<MemberWorkinghoursDto> getWorkinghoursForYear(Principal principal, @PathVariable Integer year) {
 
-        return new ResponseEntity(memberService.getActiveMemberWorkinghours(usersService.getUserByEmail(principal.getName()).getMember(), year), HttpStatus.OK);
+        return new ResponseEntity(memberService.getActiveMemberWorkinghours(userService.getUserByEmail(principal.getName()).getMember(), year), HttpStatus.OK);
     }
 
     @CrossOrigin
@@ -89,18 +89,18 @@ public class MembersController {
     @CrossOrigin
     @GetMapping("active")
     public ResponseEntity<ActiveMemberWorkinghoursDto> getActiveWorkinghours(Principal principal) {
-        return new ResponseEntity(memberService.getActiveMemberWorkinghours(usersService.getUserByEmail(principal.getName()).getMember()), HttpStatus.OK);
+        return new ResponseEntity(memberService.getActiveMemberWorkinghours(userService.getUserByEmail(principal.getName()).getMember()), HttpStatus.OK);
     }
 
     @CrossOrigin
     @GetMapping("overview")
     public ResponseEntity<List<OverviewSeasonDto>> getMemberOverview(Principal principal) {
-        return new ResponseEntity(memberService.getMemberOverview(usersService.getUserByEmail(principal.getName()).getMember()), HttpStatus.OK);
+        return new ResponseEntity(memberService.getMemberOverview(userService.getUserByEmail(principal.getName()).getMember()), HttpStatus.OK);
     }
 
     @CrossOrigin
     @GetMapping("detail")
     public ResponseEntity<MemberDetailsDto> getMemberDetails(Principal principal) {
-        return new ResponseEntity(memberService.getMemberDetails(usersService.getUserByEmail(principal.getName()).getMember()), HttpStatus.OK);
+        return new ResponseEntity(memberService.getMemberDetails(userService.getUserByEmail(principal.getName()).getMember()), HttpStatus.OK);
     }
 }
