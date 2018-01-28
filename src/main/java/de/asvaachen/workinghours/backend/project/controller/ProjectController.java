@@ -12,12 +12,12 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/projects")
-public class ProjectsController {
+public class ProjectController {
 
     ProjectService projectService;
     ProjectDtoToProjectEntityConverter converter;
 
-    public ProjectsController(ProjectService projectService, ProjectDtoToProjectEntityConverter converter) {
+    public ProjectController(ProjectService projectService, ProjectDtoToProjectEntityConverter converter) {
         this.projectService = projectService;
         this.converter = converter;
     }
