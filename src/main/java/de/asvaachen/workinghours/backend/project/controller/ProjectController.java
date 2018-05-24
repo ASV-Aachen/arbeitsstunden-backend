@@ -1,7 +1,10 @@
 package de.asvaachen.workinghours.backend.project.controller;
 
-import de.asvaachen.workinghours.backend.project.converter.ProjectDtoToProjectEntityConverter;
-import de.asvaachen.workinghours.backend.project.model.*;
+import de.asvaachen.workinghours.backend.project.model.ProjectDetailsDto;
+import de.asvaachen.workinghours.backend.project.model.ProjectDetailsItemDto;
+import de.asvaachen.workinghours.backend.project.model.ProjectDurationsForYearsDto;
+import de.asvaachen.workinghours.backend.project.model.ProjectItemDto;
+import de.asvaachen.workinghours.backend.project.service.ProjectItemService;
 import de.asvaachen.workinghours.backend.project.service.ProjectService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,56 +14,38 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/api/projects")
+@RequestMapping("/api/project")
 public class ProjectController {
 
-    ProjectService projectService;
-    ProjectDtoToProjectEntityConverter converter;
+    private final ProjectItemService projectItemService;
+    private final ProjectService projectService;
 
-    public ProjectController(ProjectService projectService, ProjectDtoToProjectEntityConverter converter) {
+    public ProjectController(ProjectItemService projectItemService, ProjectService projectService) {
+        this.projectItemService = projectItemService;
         this.projectService = projectService;
-        this.converter = converter;
     }
 
     @CrossOrigin
-    @GetMapping
-    public ResponseEntity<List<ProjectDto>> getAllProjects() {
-        return new ResponseEntity<>(projectService.getAllProjects(), HttpStatus.OK);
+    @PostMapping //XXX Secured and used
+    public ResponseEntity<Void> createProjectItem(@RequestBody ProjectItemDto projectItemDto) {
+        projectItemService.saveProjectItem(projectItemDto);
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @CrossOrigin
-    @PostMapping
-    public ResponseEntity<ProjectDto> createProject(@RequestBody ProjectDto project) {
-        return new ResponseEntity<>(projectService.createProject(converter.convert(project)), HttpStatus.CREATED);
-    }
-
-
-    @CrossOrigin
-    @GetMapping("{year}")
-    public ResponseEntity<List<ProjectOverviewDto>> getActiveProjectsForYear(@PathVariable Integer year) {
-        return new ResponseEntity<>(projectService.getActiveProjects(year), HttpStatus.OK);
-    }
-
-    @CrossOrigin
-    @GetMapping("active")
-    public ResponseEntity<ActiveProjectsDto> getActiveProjects() {
-        return new ResponseEntity<>(projectService.getActiveProjects(), HttpStatus.OK);
-    }
-
-    @CrossOrigin
-    @GetMapping("summary/{season}/{projectId}")
-    public ResponseEntity<ProjectSummaryDto> getProjectSummary(@PathVariable Integer season, @PathVariable UUID projectId) {
-        return new ResponseEntity<>(projectService.getProjectSummary(season, projectId), HttpStatus.OK);
-    }
-
-    @CrossOrigin
-    @GetMapping("details/{season}/{projectId}")
-    public ResponseEntity<List<ProjectDetailsItemDto>> getProjectDetails(@PathVariable Integer season, @PathVariable UUID projectId) {
+    @GetMapping("{projectId}/{season}")  //XXX Secured and used
+    public ResponseEntity<List<ProjectDetailsItemDto>> getProject(@PathVariable UUID projectId, @PathVariable Integer season) {
         return new ResponseEntity<>(projectService.getProjectDetails(season, projectId), HttpStatus.OK);
     }
 
     @CrossOrigin
-    @GetMapping("years/{projectId}")
+    @GetMapping("{projectId}/{season}/details")  //XXX Secured and used
+    public ResponseEntity<ProjectDetailsDto> getProjectDetails(@PathVariable UUID projectId, @PathVariable Integer season) {
+        return new ResponseEntity<>(projectService.getProjectSummary(season, projectId), HttpStatus.OK);
+    }
+
+    @CrossOrigin
+    @GetMapping("{projectId}/distribution")  //XXX Secured and used
     public ResponseEntity<List<ProjectDurationsForYearsDto>> getProjectYears(@PathVariable UUID projectId) {
         return new ResponseEntity<>(projectService.getProjectForYears(projectId), HttpStatus.OK);
     }

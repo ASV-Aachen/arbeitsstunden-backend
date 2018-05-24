@@ -1,16 +1,28 @@
-package de.asvaachen.workinghours.backend.member.model;
+package de.asvaachen.workinghours.backend.members.model;
 
-import de.asvaachen.workinghours.backend.members.model.SeasonReductionDto;
+import javax.validation.constraints.NotNull;
+import java.util.UUID;
 
-import java.util.List;
+public class UserDto {
 
-public class MemberDetailsDto {
+    private UUID id;
 
+    @NotNull
     private String firstName;
+
+    @NotNull
     private String lastName;
+
+    @NotNull
     private String email;
 
-    private List<SeasonReductionDto> seasonReduction;
+    public UUID getId() {
+        return id;
+    }
+
+    public void setId(UUID id) {
+        this.id = id;
+    }
 
     public String getFirstName() {
         return firstName;
@@ -34,13 +46,5 @@ public class MemberDetailsDto {
 
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    public List<SeasonReductionDto> getSeasonReduction() {
-        return seasonReduction;
-    }
-
-    public void setSeasonReduction(List<SeasonReductionDto> seasonReduction) {
-        this.seasonReduction = seasonReduction;
     }
 }

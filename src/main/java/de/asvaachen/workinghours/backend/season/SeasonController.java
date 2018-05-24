@@ -24,19 +24,19 @@ public class SeasonController {
     }
 
     @CrossOrigin
-    @PostMapping
+    @PostMapping  //XXX Secured and used
     public ResponseEntity<SeasonDto> createSeason(@RequestBody @Valid SeasonDto seasonDto) {
         return new ResponseEntity<>(seasonService.createSeason(converter.convert(seasonDto)), HttpStatus.OK);
     }
 
     @CrossOrigin
-    @GetMapping
+    @GetMapping  //XXX Secured and used
     public ResponseEntity<AvailableSeasonsDto> getAvailableSeasons() {
         return new ResponseEntity<>(seasonService.getAvailableSeasons(), HttpStatus.OK);
     }
 
     @CrossOrigin
-    @GetMapping("next")
+    @GetMapping("next") //XXX Secured and used
     public ResponseEntity<NextSeasonDto> getNextSeason() {
         return new ResponseEntity<>(seasonService.getNextSeason(), HttpStatus.OK);
     }

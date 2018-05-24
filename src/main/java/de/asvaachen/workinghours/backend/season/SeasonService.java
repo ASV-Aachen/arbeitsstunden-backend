@@ -9,9 +9,11 @@ import de.asvaachen.workinghours.backend.season.model.NextSeasonDto;
 import de.asvaachen.workinghours.backend.season.model.SeasonDto;
 import org.springframework.stereotype.Service;
 
+import javax.crypto.SealedObject;
 import java.time.Month;
 import java.time.ZonedDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -60,7 +62,12 @@ public class SeasonService {
     }
 
     public Integer getObligatoryMinutes(Integer season) {
-        return seasonRepository.findByYear(season).getObligatoryMinutes();
+        Optional<SeasonEntity> seasonEntity = seasonRepository.findByYear(season);
+        if (seasonEntity.isPresent()) {
+            return seasonEntity.get().getObligatoryMinutes();
+        } else {
+            return -1;
+        }
     }
 
     public AvailableSeasonsDto getAvailableSeasons() {

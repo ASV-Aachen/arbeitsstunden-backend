@@ -7,11 +7,15 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.savedrequest.NullRequestCache;
 
 import javax.sql.DataSource;
+import java.security.Principal;
+import java.util.Collection;
 
 @Configuration
 @EnableWebSecurity
@@ -49,10 +53,11 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         http.csrf().disable().cors().and()
                 .authorizeRequests()
                 .antMatchers(HttpMethod.POST, "/api/seasons").hasRole(ROLE_TAKEL)
-                .antMatchers(HttpMethod.POST, "/api/members/create").hasRole(ROLE_TAKEL)
-                .antMatchers(HttpMethod.POST, "/api/members/reduction").hasRole(ROLE_TAKEL)
+                .antMatchers(HttpMethod.POST, "/api/members").hasRole(ROLE_TAKEL)
+                .antMatchers(HttpMethod.POST, "/api/member/reduction").hasRole(ROLE_TAKEL)
                 .antMatchers(HttpMethod.POST, "/api/projectItems").hasRole(ROLE_TAKEL)
                 .antMatchers(HttpMethod.POST, "/api/projects").hasRole(ROLE_TAKEL)
+                .antMatchers(HttpMethod.POST, "/api/project").hasRole(ROLE_TAKEL)
                 .antMatchers(HttpMethod.POST, "/api/seasons").hasRole(ROLE_TAKEL)
                 .anyRequest().authenticated()
                 .and()
@@ -60,5 +65,11 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .requestCache(new NullRequestCache())
                 .and()
                 .httpBasic();
+    }
+
+    public boolean isTakel(Principal principal) {
+        Collection<SimpleGrantedAuthority> authorities = (Collection<SimpleGrantedAuthority>) SecurityContextHolder.getContext().getAuthentication().getAuthorities();
+        return authorities.stream().findFirst().map(SimpleGrantedAuthority::getAuthority).get().equals(ROLE_TAKEL);
+
     }
 }
