@@ -17,6 +17,6 @@ databaseChangeLog {
                 constraints(nullable: 'false')
             }
         }
-        addUniqueConstraint(tableName:'reduction', columnNames: 'season, member_id')
+        addUniqueConstraint(tableName: 'reduction', columnNames: 'season, member_id')
     }
 }

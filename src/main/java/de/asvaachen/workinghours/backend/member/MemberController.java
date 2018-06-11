@@ -4,13 +4,21 @@ import de.asvaachen.workinghours.backend.configuration.SecurityConfiguration;
 import de.asvaachen.workinghours.backend.member.model.MemberDetailsDto;
 import de.asvaachen.workinghours.backend.member.model.MemberOverviewDto;
 import de.asvaachen.workinghours.backend.member.model.MemberWorkinghoursDto;
+import de.asvaachen.workinghours.backend.members.model.SeasonReductionDto;
 import de.asvaachen.workinghours.backend.members.service.MemberService;
 import de.asvaachen.workinghours.backend.members.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.security.Principal;
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -54,6 +62,27 @@ public class MemberController {
             return new ResponseEntity(memberService.getMemberWorkinghours(memberService.getMember(UUID.fromString(memberId)), season), HttpStatus.OK);
         } else {
             return new ResponseEntity(memberService.getMemberWorkinghours(userService.getUserByEmail(principal.getName()).getMember(), season), HttpStatus.OK);
+        }
+    }
+
+    @CrossOrigin
+    @GetMapping("/api/member/{memberId}/seasons") //XXX Secured and used (takel)
+    public ResponseEntity<List<SeasonReductionDto>> getStatusAndReduction(@PathVariable("memberId") String memberId, Principal principal) {
+        if (securityConfiguration.isTakel(principal)) {
+            return new ResponseEntity(memberService.getSeasonsAndReductions(memberService.getMember(UUID.fromString(memberId))), HttpStatus.OK);
+        } else {
+            return new ResponseEntity(HttpStatus.FORBIDDEN);
+        }
+    }
+
+    @CrossOrigin
+    @PostMapping("/api/member/{memberId}/seasons") //XXX Secured and used (takel)
+    public ResponseEntity<List<SeasonReductionDto>> updateStatusAndReduction(@PathVariable("memberId") String memberId, @RequestBody List<SeasonReductionDto> seasonsAndReductions, Principal principal) {
+        if (securityConfiguration.isTakel(principal)) {
+            memberService.updateSeasonsAndReductions(memberService.getMember(UUID.fromString(memberId)), seasonsAndReductions);
+            return new ResponseEntity(HttpStatus.OK);
+        } else {
+            return new ResponseEntity(HttpStatus.FORBIDDEN);
         }
     }
 }

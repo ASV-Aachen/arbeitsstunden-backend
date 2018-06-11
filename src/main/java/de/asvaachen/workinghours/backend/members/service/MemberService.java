@@ -9,10 +9,16 @@ import de.asvaachen.workinghours.backend.members.model.AsvStatus;
 import de.asvaachen.workinghours.backend.members.model.MemberDistributionItemDto;
 import de.asvaachen.workinghours.backend.members.model.MemberListItemDto;
 import de.asvaachen.workinghours.backend.members.model.MembersSummaryDto;
+import de.asvaachen.workinghours.backend.members.model.SeasonReductionDto;
 import de.asvaachen.workinghours.backend.members.persistence.UserEntity;
 import de.asvaachen.workinghours.backend.project.converter.MemberEntityToMemberDtoConverter;
 import de.asvaachen.workinghours.backend.project.model.MemberDto;
-import de.asvaachen.workinghours.backend.project.persistence.*;
+import de.asvaachen.workinghours.backend.project.persistence.MemberEntity;
+import de.asvaachen.workinghours.backend.project.persistence.MemberRepository;
+import de.asvaachen.workinghours.backend.project.persistence.ProjectItemHourEntity;
+import de.asvaachen.workinghours.backend.project.persistence.ProjectItemHourRepository;
+import de.asvaachen.workinghours.backend.project.persistence.ReductionRepository;
+import de.asvaachen.workinghours.backend.project.persistence.ReductionStatusEntity;
 import de.asvaachen.workinghours.backend.projects.model.CurrentSeasonsDto;
 import de.asvaachen.workinghours.backend.season.SeasonService;
 import de.asvaachen.workinghours.backend.season.model.SeasonDto;
@@ -20,9 +26,12 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Service
@@ -219,5 +228,30 @@ public class MemberService {
         currentSeasons.setSeasons(seasonService.getAllSeasons());
 
         return currentSeasons;
+    }
+
+    public List<SeasonReductionDto> getSeasonsAndReductions(MemberEntity member) {
+        List<ReductionStatusEntity> reductions = reductionRepository.findAllByMember(member);
+        return reductions.stream()
+                .map(reductionStatusConverter::convert)
+                .sorted(Comparator.comparingInt(SeasonReductionDto::getYear))
+                .collect(Collectors.toList());
+    }
+
+    public void updateSeasonsAndReductions(MemberEntity member, List<SeasonReductionDto> updatedSeasonsAndReductions) {
+        List<ReductionStatusEntity> reductions = reductionRepository.findAllByMember(member);
+
+        Map<Integer, SeasonReductionDto> seasonToReductionDto = updatedSeasonsAndReductions.stream()
+                .collect(Collectors.toMap(SeasonReductionDto::getYear, Function.identity()));
+
+        List<ReductionStatusEntity> updatedReductionEntities = reductions.stream()
+                .peek(reductionStatusEntity -> {
+                    SeasonReductionDto updatedSeasonReduction = seasonToReductionDto.get(reductionStatusEntity.getSeason());
+                    reductionStatusEntity.setReduction(updatedSeasonReduction.getReduction());
+                    reductionStatusEntity.setStatus(updatedSeasonReduction.getAsvStatus());
+                })
+                .collect(Collectors.toList());
+
+        reductionRepository.save(updatedReductionEntities);
     }
 }

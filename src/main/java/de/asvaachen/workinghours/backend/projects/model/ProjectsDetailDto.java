@@ -1,7 +1,5 @@
 package de.asvaachen.workinghours.backend.projects.model;
 
-import de.asvaachen.workinghours.backend.project.model.ProjectDetailsItemDto;
-
 import java.util.List;
 
 public class ProjectsDetailDto {

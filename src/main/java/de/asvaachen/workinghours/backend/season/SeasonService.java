@@ -1,7 +1,11 @@
 package de.asvaachen.workinghours.backend.season;
 
 import com.google.common.collect.Lists;
-import de.asvaachen.workinghours.backend.project.persistence.*;
+import de.asvaachen.workinghours.backend.project.persistence.MemberEntity;
+import de.asvaachen.workinghours.backend.project.persistence.ReductionRepository;
+import de.asvaachen.workinghours.backend.project.persistence.ReductionStatusEntity;
+import de.asvaachen.workinghours.backend.project.persistence.SeasonEntity;
+import de.asvaachen.workinghours.backend.project.persistence.SeasonRepository;
 import de.asvaachen.workinghours.backend.season.converter.SeasonEntityToNextSeasonDtoConverter;
 import de.asvaachen.workinghours.backend.season.converter.SeasonEntityToSeasonDtoConverter;
 import de.asvaachen.workinghours.backend.season.model.AvailableSeasonsDto;
@@ -9,7 +13,6 @@ import de.asvaachen.workinghours.backend.season.model.NextSeasonDto;
 import de.asvaachen.workinghours.backend.season.model.SeasonDto;
 import org.springframework.stereotype.Service;
 
-import javax.crypto.SealedObject;
 import java.time.Month;
 import java.time.ZonedDateTime;
 import java.util.List;

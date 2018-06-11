@@ -7,6 +7,8 @@ public class MemberDto {
     private UUID id;
     private String firstName;
     private String lastName;
+    private String email;
+
 
     public UUID getId() {
         return id;
@@ -30,5 +32,13 @@ public class MemberDto {
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 }

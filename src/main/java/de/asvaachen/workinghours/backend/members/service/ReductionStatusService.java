@@ -1,12 +1,12 @@
 package de.asvaachen.workinghours.backend.members.service;
 
+import de.asvaachen.workinghours.backend.members.model.AsvStatus;
+import de.asvaachen.workinghours.backend.members.model.ReductionStatusDto;
 import de.asvaachen.workinghours.backend.project.persistence.MemberEntity;
 import de.asvaachen.workinghours.backend.project.persistence.MemberRepository;
 import de.asvaachen.workinghours.backend.project.persistence.ReductionRepository;
 import de.asvaachen.workinghours.backend.project.persistence.ReductionStatusEntity;
 import de.asvaachen.workinghours.backend.season.SeasonService;
-import de.asvaachen.workinghours.backend.members.model.AsvStatus;
-import de.asvaachen.workinghours.backend.members.model.ReductionStatusDto;
 import org.springframework.stereotype.Service;
 
 import java.util.Map;

@@ -54,6 +54,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers(HttpMethod.POST, "/api/seasons").hasRole(ROLE_TAKEL)
                 .antMatchers(HttpMethod.POST, "/api/members").hasRole(ROLE_TAKEL)
+                .antMatchers(HttpMethod.GET, "/api/members").hasRole(ROLE_TAKEL)
                 .antMatchers(HttpMethod.POST, "/api/member/reduction").hasRole(ROLE_TAKEL)
                 .antMatchers(HttpMethod.POST, "/api/projectItems").hasRole(ROLE_TAKEL)
                 .antMatchers(HttpMethod.POST, "/api/projects").hasRole(ROLE_TAKEL)
@@ -69,7 +70,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     public boolean isTakel(Principal principal) {
         Collection<SimpleGrantedAuthority> authorities = (Collection<SimpleGrantedAuthority>) SecurityContextHolder.getContext().getAuthentication().getAuthorities();
-        return authorities.stream().findFirst().map(SimpleGrantedAuthority::getAuthority).get().equals(ROLE_TAKEL);
+        return authorities.stream().findFirst().map(SimpleGrantedAuthority::getAuthority).get().equals("ROLE_" + ROLE_TAKEL);
 
     }
 }

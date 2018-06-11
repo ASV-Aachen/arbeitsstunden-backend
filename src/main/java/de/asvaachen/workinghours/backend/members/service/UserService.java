@@ -1,11 +1,11 @@
 package de.asvaachen.workinghours.backend.members.service;
 
-import de.asvaachen.workinghours.backend.project.persistence.MemberEntity;
-import de.asvaachen.workinghours.backend.project.persistence.MemberRepository;
 import de.asvaachen.workinghours.backend.members.converter.UserEntityToUserDtoConverter;
 import de.asvaachen.workinghours.backend.members.model.AsvStatus;
 import de.asvaachen.workinghours.backend.members.persistence.UserEntity;
 import de.asvaachen.workinghours.backend.members.persistence.UserRepository;
+import de.asvaachen.workinghours.backend.project.persistence.MemberEntity;
+import de.asvaachen.workinghours.backend.project.persistence.MemberRepository;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;

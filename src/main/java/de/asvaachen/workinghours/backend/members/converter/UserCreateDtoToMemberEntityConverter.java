@@ -1,8 +1,8 @@
 package de.asvaachen.workinghours.backend.members.converter;
 
-import de.asvaachen.workinghours.backend.project.persistence.MemberEntity;
 import de.asvaachen.workinghours.backend.members.model.CreateMemberDto;
 import de.asvaachen.workinghours.backend.members.persistence.UserEntity;
+import de.asvaachen.workinghours.backend.project.persistence.MemberEntity;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 

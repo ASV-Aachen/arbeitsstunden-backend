@@ -1,6 +1,5 @@
 package de.asvaachen.workinghours.backend.login;
 
-import de.asvaachen.workinghours.backend.members.service.MemberService;
 import de.asvaachen.workinghours.backend.members.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

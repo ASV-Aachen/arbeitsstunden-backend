@@ -2,7 +2,12 @@ package de.asvaachen.workinghours.backend.members.persistence;
 
 import de.asvaachen.workinghours.backend.project.persistence.MemberEntity;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
 import java.util.UUID;
 
 @Entity

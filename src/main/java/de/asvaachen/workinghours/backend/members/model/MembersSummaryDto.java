@@ -1,7 +1,5 @@
 package de.asvaachen.workinghours.backend.members.model;
 
-import de.asvaachen.workinghours.backend.project.model.MemberDto;
-
 public class MembersSummaryDto {
 
     private Integer workedMinutesTotal;

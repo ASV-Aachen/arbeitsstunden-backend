@@ -1,7 +1,6 @@
 package de.asvaachen.workinghours.backend.season.converter
 
 import de.asvaachen.workinghours.backend.project.persistence.SeasonEntity
-import de.asvaachen.workinghours.backend.season.converter.SeasonDtoToSeasonEntityConverter
 import de.asvaachen.workinghours.backend.season.model.SeasonDto
 import spock.lang.Specification
 import spock.lang.Subject

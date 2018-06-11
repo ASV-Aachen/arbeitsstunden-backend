@@ -2,8 +2,19 @@ package de.asvaachen.workinghours.backend.project.service;
 
 import de.asvaachen.workinghours.backend.project.converter.ProjectEntityToProjectDtoConverter;
 import de.asvaachen.workinghours.backend.project.converter.ProjectEntityToProjectOverviewDtoConverter;
-import de.asvaachen.workinghours.backend.project.model.*;
-import de.asvaachen.workinghours.backend.project.persistence.*;
+import de.asvaachen.workinghours.backend.project.model.ProjectDetailsDto;
+import de.asvaachen.workinghours.backend.project.model.ProjectDetailsItemDto;
+import de.asvaachen.workinghours.backend.project.model.ProjectDto;
+import de.asvaachen.workinghours.backend.project.model.ProjectDurationsForYearsDto;
+import de.asvaachen.workinghours.backend.project.model.ProjectItemEntityToProjectDetailsItemDto;
+import de.asvaachen.workinghours.backend.project.model.ProjectOverviewDto;
+import de.asvaachen.workinghours.backend.project.model.ProjectsTakelSummaryDto;
+import de.asvaachen.workinghours.backend.project.persistence.MemberEntity;
+import de.asvaachen.workinghours.backend.project.persistence.MemberRepository;
+import de.asvaachen.workinghours.backend.project.persistence.ProjectEntity;
+import de.asvaachen.workinghours.backend.project.persistence.ProjectItemEntity;
+import de.asvaachen.workinghours.backend.project.persistence.ProjectItemRepository;
+import de.asvaachen.workinghours.backend.project.persistence.ProjectRepository;
 import de.asvaachen.workinghours.backend.projects.model.CurrentSeasonsDto;
 import de.asvaachen.workinghours.backend.projects.model.ProjectDetailItemDto;
 import de.asvaachen.workinghours.backend.projects.model.ProjectsDetailDto;
@@ -12,7 +23,11 @@ import de.asvaachen.workinghours.backend.season.SeasonService;
 import org.springframework.stereotype.Service;
 
 import java.math.BigInteger;
-import java.util.*;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -97,14 +112,14 @@ public class ProjectService {
 
         List<Object[]> maxMember = projectItemRepository.minutesForSeasonAndProject(season, projectId);
         if (maxMember.size() > 0) {
-            MemberEntity member = memberRepository.findOne(UUID.fromString((String)maxMember.get(0)[0]));
+            MemberEntity member = memberRepository.findOne(UUID.fromString((String) maxMember.get(0)[0]));
             projectDetailsDto.setMaxSeasonMember(member.getFirstName() + " " + member.getLastName());
             projectDetailsDto.setMaxSeasonMinutes(((BigInteger) maxMember.get(0)[1]).intValue());
         }
 
         List<Object[]> maxOverall = projectItemRepository.minutesForProject(projectId);
         if (maxOverall.size() > 0) {
-            MemberEntity member = memberRepository.findOne(UUID.fromString((String)maxOverall.get(0)[0]));
+            MemberEntity member = memberRepository.findOne(UUID.fromString((String) maxOverall.get(0)[0]));
             projectDetailsDto.setMaxOverallMember(member.getFirstName() + " " + member.getLastName());
             projectDetailsDto.setMaxOverallMinutes(((BigInteger) maxOverall.get(0)[1]).intValue());
         }

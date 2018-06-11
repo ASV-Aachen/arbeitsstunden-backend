@@ -1,7 +1,7 @@
 package de.asvaachen.workinghours.backend.members.converter;
 
-import de.asvaachen.workinghours.backend.project.persistence.ReductionStatusEntity;
 import de.asvaachen.workinghours.backend.members.model.SeasonReductionDto;
+import de.asvaachen.workinghours.backend.project.persistence.ReductionStatusEntity;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 

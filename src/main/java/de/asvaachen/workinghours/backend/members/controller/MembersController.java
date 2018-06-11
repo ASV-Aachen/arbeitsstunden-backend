@@ -1,7 +1,11 @@
 package de.asvaachen.workinghours.backend.members.controller;
 
 import de.asvaachen.workinghours.backend.members.converter.UserCreateDtoToMemberEntityConverter;
-import de.asvaachen.workinghours.backend.members.model.*;
+import de.asvaachen.workinghours.backend.members.model.CreateMemberDto;
+import de.asvaachen.workinghours.backend.members.model.ErrorMessageDto;
+import de.asvaachen.workinghours.backend.members.model.MemberDistributionItemDto;
+import de.asvaachen.workinghours.backend.members.model.MemberListItemDto;
+import de.asvaachen.workinghours.backend.members.model.MembersSummaryDto;
 import de.asvaachen.workinghours.backend.members.service.MemberService;
 import de.asvaachen.workinghours.backend.members.service.ReductionStatusService;
 import de.asvaachen.workinghours.backend.members.service.UserService;
@@ -9,10 +13,15 @@ import de.asvaachen.workinghours.backend.project.model.MemberDto;
 import de.asvaachen.workinghours.backend.projects.model.CurrentSeasonsDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
-import java.security.Principal;
 import java.util.List;
 
 @RestController
@@ -32,7 +41,7 @@ public class MembersController {
     }
 
     @CrossOrigin
-    @GetMapping //XXX Secured and used
+    @GetMapping //XXX Secured and used (takel)
     public ResponseEntity<List<MemberDto>> getAllMembers() {
         return new ResponseEntity<>(memberService.getAllMembers(), HttpStatus.OK);
     }

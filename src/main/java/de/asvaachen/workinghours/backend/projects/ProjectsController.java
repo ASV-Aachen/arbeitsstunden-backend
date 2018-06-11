@@ -1,18 +1,21 @@
 package de.asvaachen.workinghours.backend.projects;
 
 import de.asvaachen.workinghours.backend.project.converter.ProjectDtoToProjectEntityConverter;
-import de.asvaachen.workinghours.backend.project.model.*;
+import de.asvaachen.workinghours.backend.project.model.ProjectDto;
+import de.asvaachen.workinghours.backend.project.model.ProjectOverviewDto;
 import de.asvaachen.workinghours.backend.project.service.ProjectService;
 import de.asvaachen.workinghours.backend.projects.model.CurrentSeasonsDto;
-import de.asvaachen.workinghours.backend.project.model.ProjectOverviewDto;
 import de.asvaachen.workinghours.backend.projects.model.ProjectsDetailDto;
 import de.asvaachen.workinghours.backend.projects.model.ProjectsOverviewDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
-import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/projects")
