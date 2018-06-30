@@ -10,7 +10,11 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import static de.asvaachen.workinghours.backend.configuration.SecurityConfiguration.PASSWORD_ENCODER;
+import static de.asvaachen.workinghours.backend.configuration.SecurityConfiguration.ROLE_TAKEL;
 
 @Service
 public class UserService {
@@ -33,6 +37,12 @@ public class UserService {
 
     public UserEntity getUserByEmail(String email) {
         return userRepository.findByEmail(email).get();
+    }
+
+    public List<MemberEntity> getAllTakelMembers() {
+        return userRepository.findAllByRole("ROLE_TAKEL").stream()
+                .map(UserEntity::getMember)
+                .collect(Collectors.toList());
     }
 
     @Transactional

@@ -41,15 +41,17 @@ public class MemberService {
     private MemberRepository memberRepository;
     private ReductionRepository reductionRepository;
     private SeasonService seasonService;
+    private UserService userService;
     private ProjectItemHourEntityToWorkinghourItemDtoConverter converter;
     private ReductionStatusEntityToSeasonReductionDtoConverter reductionStatusConverter;
     private MemberEntityToMemberDtoConverter memberEntityToMemberDtoConverter;
 
-    public MemberService(ProjectItemHourRepository projectItemHourRepository, MemberRepository memberRepository, ReductionRepository reductionRepository, SeasonService seasonService, ProjectItemHourEntityToWorkinghourItemDtoConverter converter, ReductionStatusEntityToSeasonReductionDtoConverter reductionStatusConverter, MemberEntityToMemberDtoConverter memberEntityToMemberDtoConverter) {
+    public MemberService(ProjectItemHourRepository projectItemHourRepository, MemberRepository memberRepository, ReductionRepository reductionRepository, SeasonService seasonService, UserService userService, ProjectItemHourEntityToWorkinghourItemDtoConverter converter, ReductionStatusEntityToSeasonReductionDtoConverter reductionStatusConverter, MemberEntityToMemberDtoConverter memberEntityToMemberDtoConverter) {
         this.projectItemHourRepository = projectItemHourRepository;
         this.memberRepository = memberRepository;
         this.reductionRepository = reductionRepository;
         this.seasonService = seasonService;
+        this.userService = userService;
         this.converter = converter;
         this.reductionStatusConverter = reductionStatusConverter;
         this.memberEntityToMemberDtoConverter = memberEntityToMemberDtoConverter;
@@ -209,6 +211,10 @@ public class MemberService {
 
 
         return membersSummaryDto;
+    }
+
+    public List<MemberDto> getAllTakelMembers() {
+        return userService.getAllTakelMembers().stream().map(memberEntityToMemberDtoConverter::convert).collect(Collectors.toList());
     }
 
     public List<MemberDto> getAllMembers() {

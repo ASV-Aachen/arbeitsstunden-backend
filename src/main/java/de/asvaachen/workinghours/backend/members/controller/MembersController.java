@@ -47,6 +47,12 @@ public class MembersController {
     }
 
     @CrossOrigin
+    @GetMapping("takel") //XXX Secured and used (takel)
+    public ResponseEntity<List<MemberDto>> getAllTakelMembers() {
+        return new ResponseEntity<>(memberService.getAllTakelMembers(), HttpStatus.OK);
+    }
+
+    @CrossOrigin
     @GetMapping("seasons") //XXX Secured and used
     public ResponseEntity<CurrentSeasonsDto> getSeasons() {
         return new ResponseEntity<>(memberService.getSeasons(), HttpStatus.OK);
