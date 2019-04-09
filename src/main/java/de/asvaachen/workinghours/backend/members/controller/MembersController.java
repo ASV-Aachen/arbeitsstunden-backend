@@ -6,6 +6,7 @@ import de.asvaachen.workinghours.backend.members.model.ErrorMessageDto;
 import de.asvaachen.workinghours.backend.members.model.MemberDistributionItemDto;
 import de.asvaachen.workinghours.backend.members.model.MemberListItemDto;
 import de.asvaachen.workinghours.backend.members.model.MembersSummaryDto;
+import de.asvaachen.workinghours.backend.members.model.UpdateMemberDto;
 import de.asvaachen.workinghours.backend.members.service.MemberService;
 import de.asvaachen.workinghours.backend.members.service.ReductionStatusService;
 import de.asvaachen.workinghours.backend.members.service.UserService;
@@ -22,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
+import java.security.Principal;
 import java.util.List;
 
 @RestController
@@ -86,12 +88,12 @@ public class MembersController {
         }
     }
 
-    //@CrossOrigin
-    //@PostMapping("update")
-    //public ResponseEntity editUser(Principal user, @RequestBody UpdateMemberDto updateMemberDto) {
-    //    userService.updatePassword(user.getName(), updateMemberDto.getNewPassword());
-    //    return new ResponseEntity(HttpStatus.OK);
-    //}
+    @CrossOrigin
+    @PostMapping("update")
+    public ResponseEntity editUser(Principal user, @RequestBody UpdateMemberDto updateMemberDto) {
+        userService.updatePassword(user.getName(), updateMemberDto.getNewPassword());
+        return new ResponseEntity(HttpStatus.OK);
+    }
 
     //@CrossOrigin
     //@PostMapping("reduction")
