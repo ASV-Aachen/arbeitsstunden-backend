@@ -85,4 +85,15 @@ public class MemberController {
             return new ResponseEntity(HttpStatus.FORBIDDEN);
         }
     }
+
+    @CrossOrigin
+    @PostMapping("/api/member/{memberId}/passwordReset") //XXX Secured and used (takel)
+    public ResponseEntity<List<SeasonReductionDto>> resetPassword(@PathVariable("memberId") String memberId, Principal principal) {
+        if (securityConfiguration.isTakel(principal)) {
+            userService.resetPassword(memberService.getMember(UUID.fromString(memberId)).getUser());
+            return new ResponseEntity(HttpStatus.OK);
+        } else {
+            return new ResponseEntity(HttpStatus.FORBIDDEN);
+        }
+    }
 }

@@ -30,10 +30,10 @@ import java.util.List;
 @RequestMapping("/api/members")
 public class MembersController {
 
-    private MemberService memberService;
-    private UserService userService;
-    private ReductionStatusService reductionStatusService;
-    private UserCreateDtoToMemberEntityConverter userCreateDtoToMemberEntityConverter;
+    private final MemberService memberService;
+    private final UserService userService;
+    private final ReductionStatusService reductionStatusService;
+    private final UserCreateDtoToMemberEntityConverter userCreateDtoToMemberEntityConverter;
 
     public MembersController(MemberService memberService, UserService userService, ReductionStatusService reductionStatusService, UserCreateDtoToMemberEntityConverter userCreateDtoToMemberEntityConverter) {
         this.memberService = memberService;

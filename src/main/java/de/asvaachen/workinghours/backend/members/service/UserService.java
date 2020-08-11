@@ -1,5 +1,6 @@
 package de.asvaachen.workinghours.backend.members.service;
 
+import de.asvaachen.workinghours.backend.members.converter.UserCreateDtoToMemberEntityConverter;
 import de.asvaachen.workinghours.backend.members.converter.UserEntityToUserDtoConverter;
 import de.asvaachen.workinghours.backend.members.model.AsvStatus;
 import de.asvaachen.workinghours.backend.members.persistence.UserEntity;
@@ -9,20 +10,18 @@ import de.asvaachen.workinghours.backend.project.persistence.MemberRepository;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-
 import java.util.List;
 import java.util.stream.Collectors;
 
 import static de.asvaachen.workinghours.backend.configuration.SecurityConfiguration.PASSWORD_ENCODER;
-import static de.asvaachen.workinghours.backend.configuration.SecurityConfiguration.ROLE_TAKEL;
 
 @Service
 public class UserService {
 
-    private UserRepository userRepository;
-    private MemberRepository memberRepository;
-    private UserEntityToUserDtoConverter converter;
-    private ReductionStatusService reductionStatusService;
+    private final UserRepository userRepository;
+    private final MemberRepository memberRepository;
+    private final UserEntityToUserDtoConverter converter;
+    private final ReductionStatusService reductionStatusService;
 
     public UserService(UserRepository userRepository, MemberRepository memberRepository, UserEntityToUserDtoConverter converter, ReductionStatusService reductionStatusService) {
         this.userRepository = userRepository;
@@ -64,5 +63,10 @@ public class UserService {
                     userRepository.save(userEntity);
                 }
         );
+    }
+
+    public void resetPassword(UserEntity user) {
+        user.setPassword(UserCreateDtoToMemberEntityConverter.ASV_PASSWORD);
+        userRepository.save(user);
     }
 }

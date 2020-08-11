@@ -12,6 +12,9 @@ import static de.asvaachen.workinghours.backend.configuration.SecurityConfigurat
 
 @Component
 public class UserCreateDtoToMemberEntityConverter implements Converter<CreateMemberDto, MemberEntity> {
+
+    public static final String ASV_PASSWORD = "$2a$10$ljHyydV.cFZAZJCsWWbmFOuvjiKnj1lOw.3ynYkl6GOTOF8OTxoaG";
+
     @Override
     public MemberEntity convert(CreateMemberDto source) {
         MemberEntity memberEntity = new MemberEntity();
@@ -31,7 +34,7 @@ public class UserCreateDtoToMemberEntityConverter implements Converter<CreateMem
             userEntity.setMember(memberEntity);
             userEntity.setEmail(email);
             userEntity.setRole(ROLE_USER);
-            userEntity.setPassword("$2a$10$ljHyydV.cFZAZJCsWWbmFOuvjiKnj1lOw.3ynYkl6GOTOF8OTxoaG");
+            userEntity.setPassword(ASV_PASSWORD);
             return userEntity;
         }
     }
