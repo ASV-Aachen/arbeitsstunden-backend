@@ -42,7 +42,7 @@ public class ProjectItemDtoToProjectItemEntityConverter implements Converter<Pro
         entity.setDate(LocalDate.parse(source.getDate(), formatter));
         entity.setTitle(source.getTitle());
         entity.setDescription(source.getDescription());
-        entity.setProject(projectRepository.findOne(UUID.fromString(source.getProjectId())));
+        entity.setProject(projectRepository.findById(UUID.fromString(source.getProjectId())).orElse(null));
 
         entity.setHours(source.getItems().stream()
                 .map(projectItemHourDto -> convertProjectItemHour(projectItemHourDto, entity))
@@ -58,7 +58,7 @@ public class ProjectItemDtoToProjectItemEntityConverter implements Converter<Pro
         ProjectItemHourEntity hourEntity = new ProjectItemHourEntity();
         hourEntity.setId(UUID.fromString(projectItemHourDto.getId()));
         hourEntity.setDuration(projectItemHourDto.getDuration());
-        hourEntity.setMember(memberRepository.findOne(UUID.fromString(projectItemHourDto.getMemberId())));
+        hourEntity.setMember(memberRepository.findById(UUID.fromString(projectItemHourDto.getMemberId())).orElse(null));
         hourEntity.setProjectItem(projectItemEntity);
         return hourEntity;
     }

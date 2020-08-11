@@ -222,7 +222,7 @@ public class MemberService {
     }
 
     public MemberEntity getMember(UUID memberId) {
-        return memberRepository.findOne(memberId);
+        return memberRepository.findById(memberId).orElse(null);
     }
 
     public CurrentSeasonsDto getSeasons() {
@@ -258,6 +258,6 @@ public class MemberService {
                 })
                 .collect(Collectors.toList());
 
-        reductionRepository.save(updatedReductionEntities);
+        reductionRepository.saveAll(updatedReductionEntities);
     }
 }

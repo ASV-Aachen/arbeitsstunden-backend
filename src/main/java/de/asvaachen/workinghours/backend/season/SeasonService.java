@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import java.time.Month;
 import java.time.ZonedDateTime;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -47,7 +48,7 @@ public class SeasonService {
 
             return reductionStatusEntity;
         }).collect(Collectors.toList());
-        reductionRepository.save(newReductions);
+        reductionRepository.saveAll(newReductions);
 
         return seasonEntityConverter.convert(savedSeasonEntity);
     }
@@ -57,11 +58,11 @@ public class SeasonService {
     }
 
     public List<SeasonDto> getSeasonsIn(List<Integer> seasons) {
-        return Lists.newArrayList(seasonRepository.findAll(seasons)).stream().map(seasonEntityConverter::convert).collect(Collectors.toList());
+        return Lists.newArrayList(seasonRepository.findAllById(seasons)).stream().map(seasonEntityConverter::convert).collect(Collectors.toList());
     }
 
     public SeasonDto getSeason(Integer season) {
-        return seasonEntityConverter.convert(seasonRepository.findOne(season));
+        return seasonEntityConverter.convert(Objects.requireNonNull(seasonRepository.findById(season).orElse(null)));
     }
 
     public Integer getObligatoryMinutes(Integer season) {
@@ -96,7 +97,7 @@ public class SeasonService {
 
     public Integer getActiveSeason() {
         ZonedDateTime now = ZonedDateTime.now();
-        Integer currentYear = now.getYear();
+        int currentYear = now.getYear();
 
         ZonedDateTime barrier = ZonedDateTime.now().withDayOfMonth(1).withMonth(Month.NOVEMBER.getValue());
         if (now.isAfter(barrier)) {

@@ -1,18 +1,20 @@
 buildscript {
     ext {
-        springBootVersion = '1.5.7.RELEASE'
+        springBootVersion = '2.3.2.RELEASE'
     }
     repositories {
         mavenCentral()
     }
     dependencies {
         classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+        classpath("io.spring.gradle:dependency-management-plugin:1.0.6.RELEASE")
     }
 }
 
 apply plugin: 'java'
 apply plugin: 'groovy'
 apply plugin: 'org.springframework.boot'
+apply plugin: 'io.spring.dependency-management'
 
 group = 'de.asvaachen.workinghours'
 version = '0.0.1-SNAPSHOT'
@@ -29,10 +31,11 @@ dependencies {
     compile 'org.springframework.boot:spring-boot-starter-data-jpa'
     compile 'org.springframework.boot:spring-boot-starter-security'
 
-    compile 'com.google.guava:guava:23.3-jre'
+    compile 'javax.validation:validation-api:2.0.1.Final'
+    compile 'com.google.guava:guava:29.0-jre'
 
-    compile 'org.liquibase:liquibase-groovy-dsl:1.2.2'
-    compile 'org.liquibase:liquibase-core:3.5.3'
+    compile 'org.liquibase:liquibase-groovy-dsl:2.1.2'
+    compile 'org.liquibase:liquibase-core:3.9.0'
 
     runtime 'org.postgresql:postgresql'
     runtime 'com.h2database:h2'

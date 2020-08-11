@@ -8,7 +8,6 @@ import de.asvaachen.workinghours.backend.project.model.ProjectDto;
 import de.asvaachen.workinghours.backend.project.model.ProjectDurationsForYearsDto;
 import de.asvaachen.workinghours.backend.project.model.ProjectItemEntityToProjectDetailsItemDto;
 import de.asvaachen.workinghours.backend.project.model.ProjectOverviewDto;
-import de.asvaachen.workinghours.backend.project.model.ProjectsTakelSummaryDto;
 import de.asvaachen.workinghours.backend.project.persistence.MemberEntity;
 import de.asvaachen.workinghours.backend.project.persistence.MemberRepository;
 import de.asvaachen.workinghours.backend.project.persistence.ProjectEntity;
@@ -33,15 +32,15 @@ import java.util.stream.Collectors;
 @Service
 public class ProjectService {
 
-    private ProjectRepository projectRepository;
-    private ProjectItemRepository projectItemRepository;
-    private MemberRepository memberRepository;
+    private final ProjectRepository projectRepository;
+    private final ProjectItemRepository projectItemRepository;
+    private final MemberRepository memberRepository;
 
-    private SeasonService seasonService;
+    private final SeasonService seasonService;
 
-    private ProjectEntityToProjectDtoConverter projectEntityToProjectDtoConverter;
-    private ProjectEntityToProjectOverviewDtoConverter projectEntityToProjectOverviewDtoConverter;
-    private ProjectItemEntityToProjectDetailsItemDto projectItemEntityToProjectDetailsItemDto;
+    private final ProjectEntityToProjectDtoConverter projectEntityToProjectDtoConverter;
+    private final ProjectEntityToProjectOverviewDtoConverter projectEntityToProjectOverviewDtoConverter;
+    private final ProjectItemEntityToProjectDetailsItemDto projectItemEntityToProjectDetailsItemDto;
 
     public ProjectService(ProjectRepository projectRepository, ProjectItemRepository projectItemRepository, MemberRepository memberRepository, SeasonService seasonService, ProjectEntityToProjectDtoConverter projectEntityToProjectDtoConverter, ProjectEntityToProjectOverviewDtoConverter projectEntityToProjectOverviewDtoConverter, ProjectItemEntityToProjectDetailsItemDto projectItemEntityToProjectDetailsItemDto) {
         this.projectRepository = projectRepository;
@@ -102,7 +101,7 @@ public class ProjectService {
     public ProjectDetailsDto getProjectSummary(Integer season, UUID projectId) {
 
         ProjectDetailsDto projectDetailsDto = new ProjectDetailsDto();
-        projectDetailsDto.setDescription(projectRepository.findOne(projectId).getDescription());
+        projectDetailsDto.setDescription(projectRepository.findById(projectId).map(ProjectEntity::getDescription).orElse("keine Beschreibung vorhanden"));
 
         Integer minutesProject = (Optional.ofNullable((BigInteger) projectItemRepository.minutesForProjectAndSeason(projectId, season)[0])).map(BigInteger::intValue).orElse(0);
         Integer minutesAllProjects = (Optional.ofNullable((BigInteger) projectItemRepository.minutesForOtherProjectsAndSeason(season)[0])).map(BigInteger::intValue).orElse(0);
@@ -112,24 +111,24 @@ public class ProjectService {
 
         List<Object[]> maxMember = projectItemRepository.minutesForSeasonAndProject(season, projectId);
         if (maxMember.size() > 0) {
-            MemberEntity member = memberRepository.findOne(UUID.fromString((String) maxMember.get(0)[0]));
-            projectDetailsDto.setMaxSeasonMember(member.getFirstName() + " " + member.getLastName());
-            projectDetailsDto.setMaxSeasonMinutes(((BigInteger) maxMember.get(0)[1]).intValue());
+            Optional<MemberEntity> member = memberRepository.findById(UUID.fromString((String) maxMember.get(0)[0]));
+            member.ifPresent(memberEntity -> {
+                projectDetailsDto.setMaxSeasonMember(memberEntity.getFirstName() + " " + memberEntity.getLastName());
+                projectDetailsDto.setMaxSeasonMinutes(((BigInteger) maxMember.get(0)[1]).intValue());
+            });
+
         }
 
         List<Object[]> maxOverall = projectItemRepository.minutesForProject(projectId);
         if (maxOverall.size() > 0) {
-            MemberEntity member = memberRepository.findOne(UUID.fromString((String) maxOverall.get(0)[0]));
-            projectDetailsDto.setMaxOverallMember(member.getFirstName() + " " + member.getLastName());
-            projectDetailsDto.setMaxOverallMinutes(((BigInteger) maxOverall.get(0)[1]).intValue());
+            Optional<MemberEntity> member = memberRepository.findById(UUID.fromString((String) maxOverall.get(0)[0]));
+            member.ifPresent(memberEntity -> {
+                projectDetailsDto.setMaxOverallMember(memberEntity.getFirstName() + " " + memberEntity.getLastName());
+                projectDetailsDto.setMaxOverallMinutes(((BigInteger) maxOverall.get(0)[1]).intValue());
+            });
         }
 
         return projectDetailsDto;
-    }
-
-    public ProjectsTakelSummaryDto getProjectsTakelSummary() {
-
-        return new ProjectsTakelSummaryDto();
     }
 
     public List<ProjectsOverviewDto> getOverview() {
@@ -155,11 +154,10 @@ public class ProjectService {
         Integer seasonForYear = year;
 
         ProjectsDetailDto projectsDetailDto = new ProjectsDetailDto();
-        projectsDetailDto.setNumberProjects(projectRepository.findAllByOrderByNameAsc().stream()
+        projectsDetailDto.setNumberProjects((int) projectRepository.findAllByOrderByNameAsc().stream()
                 .filter(projectEntity -> projectEntity.getFirstSeason() <= seasonForYear)
                 .filter(projectEntity -> projectEntity.getLastSeason() == null || projectEntity.getLastSeason() >= seasonForYear)
-                .collect(Collectors.toList())
-                .size());
+                .count());
 
         List<Object[]> projects = projectItemRepository.minutesForSeasonTop5(year);
         List<ProjectDetailItemDto> projectOverDto = projects.stream().map(row -> {
@@ -170,12 +168,15 @@ public class ProjectService {
             Object[] maxMember = Collections.max(members, Comparator.comparing(o -> (BigInteger) o[1]));
             dto.setNumberMembers(members.size());
 
-            MemberEntity member = memberRepository.findOne(UUID.fromString((String) maxMember[0]));
-            dto.setMaxMember(member.getFirstName() + " " + member.getLastName());
-            dto.setMaxMemberMinutes(((BigInteger) maxMember[1]).intValue());
+            Optional<MemberEntity> member = memberRepository.findById(UUID.fromString((String) maxMember[0]));
+            member.ifPresent(memberEntity -> {
+                dto.setMaxMember(memberEntity.getFirstName() + " " + memberEntity.getLastName());
+                dto.setMaxMemberMinutes(((BigInteger) maxMember[1]).intValue());
+            });
+
 
             dto.setDuration(((BigInteger) row[1]).intValue());
-            dto.setName(projectRepository.findOne(projectId).getName());
+            dto.setName(projectRepository.findById(projectId).map(ProjectEntity::getName).orElse("Kein Projekt gefunden."));
             return dto;
         }).collect(Collectors.toList());
         projectsDetailDto.setProjects(projectOverDto);

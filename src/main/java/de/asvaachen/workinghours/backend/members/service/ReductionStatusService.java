@@ -10,15 +10,16 @@ import de.asvaachen.workinghours.backend.season.SeasonService;
 import org.springframework.stereotype.Service;
 
 import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.IntStream;
 
 @Service
 public class ReductionStatusService {
 
-    private ReductionRepository reductionRepository;
-    private MemberRepository memberRepository;
-    private SeasonService seasonService;
+    private final ReductionRepository reductionRepository;
+    private final MemberRepository memberRepository;
+    private final SeasonService seasonService;
 
     public ReductionStatusService(ReductionRepository reductionRepository, MemberRepository memberRepository, SeasonService seasonService) {
         this.reductionRepository = reductionRepository;
@@ -27,15 +28,14 @@ public class ReductionStatusService {
     }
 
     public void create(String memberId, Map<Integer, ReductionStatusDto> years) {
-
-        MemberEntity memberEntity = memberRepository.findOne(UUID.fromString(memberId));
+        Optional<MemberEntity> memberEntity = memberRepository.findById(UUID.fromString(memberId));
 
         years.keySet().forEach(
                 year -> {
                     ReductionStatusDto reductionStatusDto = years.get(year);
 
                     ReductionStatusEntity reductionStatus = new ReductionStatusEntity();
-                    reductionStatus.setMember(memberEntity);
+                    reductionStatus.setMember(memberEntity.orElse(null));
                     reductionStatus.setReduction(reductionStatusDto.getReduction());
                     reductionStatus.setSeason(year);
                     reductionStatus.setStatus(reductionStatusDto.getStatus());
