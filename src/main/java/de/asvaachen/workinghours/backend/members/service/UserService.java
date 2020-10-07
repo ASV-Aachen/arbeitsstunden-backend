@@ -1,7 +1,6 @@
 package de.asvaachen.workinghours.backend.members.service;
 
 import de.asvaachen.workinghours.backend.members.converter.UserCreateDtoToMemberEntityConverter;
-import de.asvaachen.workinghours.backend.members.converter.UserEntityToUserDtoConverter;
 import de.asvaachen.workinghours.backend.members.model.AsvStatus;
 import de.asvaachen.workinghours.backend.members.persistence.UserEntity;
 import de.asvaachen.workinghours.backend.members.persistence.UserRepository;
@@ -20,13 +19,11 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final MemberRepository memberRepository;
-    private final UserEntityToUserDtoConverter converter;
     private final ReductionStatusService reductionStatusService;
 
-    public UserService(UserRepository userRepository, MemberRepository memberRepository, UserEntityToUserDtoConverter converter, ReductionStatusService reductionStatusService) {
+    public UserService(UserRepository userRepository, MemberRepository memberRepository, ReductionStatusService reductionStatusService) {
         this.userRepository = userRepository;
         this.memberRepository = memberRepository;
-        this.converter = converter;
         this.reductionStatusService = reductionStatusService;
     }
 
