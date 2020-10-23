@@ -53,6 +53,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         http.csrf().disable().cors().and()
                 .authorizeRequests()
                 .antMatchers(HttpMethod.POST, "/api/seasons").hasRole(ROLE_TAKEL)
+                .antMatchers(HttpMethod.GET, "/api/seasons/*/export").hasRole(ROLE_TAKEL)
                 .antMatchers(HttpMethod.POST, "/api/members").hasRole(ROLE_TAKEL)
                 .antMatchers(HttpMethod.GET, "/api/members").hasRole(ROLE_TAKEL)
                 .antMatchers(HttpMethod.GET, "/api/members/takel").hasRole(ROLE_TAKEL)

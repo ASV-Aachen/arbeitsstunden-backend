@@ -6,6 +6,7 @@ import de.asvaachen.workinghours.backend.project.persistence.ReductionRepository
 import de.asvaachen.workinghours.backend.project.persistence.ReductionStatusEntity;
 import de.asvaachen.workinghours.backend.project.persistence.SeasonEntity;
 import de.asvaachen.workinghours.backend.project.persistence.SeasonRepository;
+import de.asvaachen.workinghours.backend.project.service.ProjectService;
 import de.asvaachen.workinghours.backend.season.converter.SeasonEntityToNextSeasonDtoConverter;
 import de.asvaachen.workinghours.backend.season.converter.SeasonEntityToSeasonDtoConverter;
 import de.asvaachen.workinghours.backend.season.model.AvailableSeasonsDto;

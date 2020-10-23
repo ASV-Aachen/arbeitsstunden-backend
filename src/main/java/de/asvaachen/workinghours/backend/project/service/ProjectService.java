@@ -22,12 +22,15 @@ import de.asvaachen.workinghours.backend.season.SeasonService;
 import org.springframework.stereotype.Service;
 
 import java.math.BigInteger;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 public class ProjectService {
@@ -182,6 +185,43 @@ public class ProjectService {
         projectsDetailDto.setProjects(projectOverDto);
 
         return projectsDetailDto;
+    }
+
+    public String escapeSpecialCharacters(String data) {
+        if (data == null) {
+            return "";
+        } else {
+            String escapedData = data.replaceAll("\r\n", " ").replaceAll("\n", " ");
+            if (escapedData.contains(",") || escapedData.contains("\"") || escapedData.contains("'")) {
+                escapedData = escapedData.replaceAll("\"", "\"\"");
+                escapedData = "'" + escapedData + "'";
+            }
+            return escapedData;
+        }
+    }
+
+    public String convertToCSV(String[] data) {
+        return Stream.of(data)
+                .map(this::escapeSpecialCharacters)
+                .collect(Collectors.joining(","));
+    }
+
+    public String exportForSeason(Integer season) {
+        List<String[]> dataLines = new ArrayList<>();
+        dataLines.add(new String[]{"Saison", "Projekt", "Datum", "Titel", "Beschreibung", "Dauer (minuten)", "Vorname", "Nachname"});
+
+        List<ProjectEntity> projects = projectRepository.findAllByOrderByNameAsc().stream()
+                .filter(projectEntity -> projectEntity.getFirstSeason() <= season)
+                .filter(projectEntity -> projectEntity.getLastSeason() == null || projectEntity.getLastSeason() >= season)
+                .collect(Collectors.toList());
+
+        projects.forEach(project -> {
+            List<ProjectItemEntity> allByProjectIdAndSeason = projectItemRepository.findAllByProjectIdAndSeason(project.getId(), season);
+            allByProjectIdAndSeason.forEach(projectItemEntity -> projectItemEntity.getHours().forEach(
+                    projectItemHourEntity -> dataLines.add(new String[]{season.toString(), project.getName(), projectItemEntity.getDate().format(DateTimeFormatter.ISO_DATE), projectItemEntity.getTitle(), projectItemEntity.getDescription(), projectItemHourEntity.getDuration().toString(), projectItemHourEntity.getMember().getFirstName(), projectItemHourEntity.getMember().getLastName()})));
+        });
+
+        return dataLines.stream().map(this::convertToCSV).collect(Collectors.joining("\n"));
     }
 }
 
