@@ -30,25 +30,25 @@ public class ProjectsController {
     }
 
     @CrossOrigin
-    @GetMapping("{season}") //XXX Secured and used
+    @GetMapping("{season}")
     public ResponseEntity<List<ProjectOverviewDto>> getProjects(@PathVariable Integer season) {
         return new ResponseEntity<>(projectService.getSeasons(season), HttpStatus.OK);
     }
 
     @CrossOrigin
-    @GetMapping("seasons") //XXX Secured and used
+    @GetMapping("seasons")
     public ResponseEntity<CurrentSeasonsDto> getSeasons() {
         return new ResponseEntity<>(projectService.getSeasons(), HttpStatus.OK);
     }
 
     @CrossOrigin
-    @GetMapping("overview") //XXX Secured and used
+    @GetMapping("overview")
     public ResponseEntity<List<ProjectsOverviewDto>> getOverview() {
         return new ResponseEntity<>(projectService.getOverview(), HttpStatus.OK);
     }
 
     @CrossOrigin
-    @GetMapping("{season}/detail") //XXX Secured and used
+    @GetMapping("{season}/detail")
     public ResponseEntity<ProjectsDetailDto> getDetail(@PathVariable Integer season) {
         return new ResponseEntity<>(projectService.getDetail(season), HttpStatus.OK);
     }
@@ -58,16 +58,4 @@ public class ProjectsController {
     public ResponseEntity<List<ProjectDto>> getAllProjects() {
         return new ResponseEntity<>(projectService.getAllProjects(), HttpStatus.OK);
     }
-
-    //@CrossOrigin
-    //@PostMapping
-    //public ResponseEntity<ProjectDto> createProject(@RequestBody ProjectDto project) {
-    //    return new ResponseEntity<>(projectService.createProject(converter.convert(project)), HttpStatus.CREATED);
-    //}
-
-    //@CrossOrigin
-    //@GetMapping("/takel/summary")
-    //public ResponseEntity<ProjectsTakelSummaryDto> getProjectsTakelSummary() {
-    //    return new ResponseEntity<>(projectService.getProjectsTakelSummary(), HttpStatus.OK);
-    //}
 }

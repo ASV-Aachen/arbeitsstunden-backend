@@ -32,26 +32,26 @@ public class ProjectController {
     }
 
     @CrossOrigin
-    @PostMapping //XXX Secured and used
+    @PostMapping
     public ResponseEntity<Void> createProjectItem(@RequestBody ProjectItemDto projectItemDto) {
         projectItemService.saveProjectItem(projectItemDto);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @CrossOrigin
-    @GetMapping("{projectId}/{season}")  //XXX Secured and used
+    @GetMapping("{projectId}/{season}")
     public ResponseEntity<List<ProjectDetailsItemDto>> getProject(@PathVariable UUID projectId, @PathVariable Integer season) {
         return new ResponseEntity<>(projectService.getProjectDetails(season, projectId), HttpStatus.OK);
     }
 
     @CrossOrigin
-    @GetMapping("{projectId}/{season}/details")  //XXX Secured and used
+    @GetMapping("{projectId}/{season}/details")
     public ResponseEntity<ProjectDetailsDto> getProjectDetails(@PathVariable UUID projectId, @PathVariable Integer season) {
         return new ResponseEntity<>(projectService.getProjectSummary(season, projectId), HttpStatus.OK);
     }
 
     @CrossOrigin
-    @GetMapping("{projectId}/distribution")  //XXX Secured and used
+    @GetMapping("{projectId}/distribution")
     public ResponseEntity<List<ProjectDurationsForYearsDto>> getProjectYears(@PathVariable UUID projectId) {
         return new ResponseEntity<>(projectService.getProjectForYears(projectId), HttpStatus.OK);
     }

@@ -36,7 +36,7 @@ public class MemberController {
     }
 
     @CrossOrigin
-    @GetMapping("/api/member/{memberId}/detail") //XXX Secured and used
+    @GetMapping("/api/member/{memberId}/detail")
     public ResponseEntity<MemberDetailsDto> getMemberDetails(@PathVariable("memberId") String memberId, Principal principal) {
         if (securityConfiguration.isTakel(principal)) {
             return new ResponseEntity(memberService.getMemberDetails(memberService.getMember(UUID.fromString(memberId))), HttpStatus.OK);
@@ -46,7 +46,7 @@ public class MemberController {
     }
 
     @CrossOrigin
-    @GetMapping("/api/member/{memberId}/overview") //XXX Secured and used
+    @GetMapping("/api/member/{memberId}/overview")
     public ResponseEntity<MemberOverviewDto> getMemberOverview(@PathVariable("memberId") String memberId, Principal principal) {
         if (securityConfiguration.isTakel(principal)) {
             return new ResponseEntity(memberService.getMemberOverview(memberService.getMember(UUID.fromString(memberId))), HttpStatus.OK);
@@ -56,7 +56,7 @@ public class MemberController {
     }
 
     @CrossOrigin
-    @GetMapping("/api/member/{memberId}/season/{season}") //XXX Secured and used
+    @GetMapping("/api/member/{memberId}/season/{season}")
     public ResponseEntity<MemberWorkinghoursDto> getWorkinghours(@PathVariable("memberId") String memberId, @PathVariable("season") Integer season, Principal principal) {
         if (securityConfiguration.isTakel(principal)) {
             return new ResponseEntity(memberService.getMemberWorkinghours(memberService.getMember(UUID.fromString(memberId)), season), HttpStatus.OK);
@@ -66,7 +66,7 @@ public class MemberController {
     }
 
     @CrossOrigin
-    @GetMapping("/api/member/{memberId}/seasons") //XXX Secured and used (takel)
+    @GetMapping("/api/member/{memberId}/seasons")
     public ResponseEntity<List<SeasonReductionDto>> getStatusAndReduction(@PathVariable("memberId") String memberId, Principal principal) {
         if (securityConfiguration.isTakel(principal)) {
             return new ResponseEntity(memberService.getSeasonsAndReductions(memberService.getMember(UUID.fromString(memberId))), HttpStatus.OK);
@@ -76,7 +76,7 @@ public class MemberController {
     }
 
     @CrossOrigin
-    @PostMapping("/api/member/{memberId}/seasons") //XXX Secured and used (takel)
+    @PostMapping("/api/member/{memberId}/seasons")
     public ResponseEntity<List<SeasonReductionDto>> updateStatusAndReduction(@PathVariable("memberId") String memberId, @RequestBody List<SeasonReductionDto> seasonsAndReductions, Principal principal) {
         if (securityConfiguration.isTakel(principal)) {
             memberService.updateSeasonsAndReductions(memberService.getMember(UUID.fromString(memberId)), seasonsAndReductions);
@@ -87,7 +87,7 @@ public class MemberController {
     }
 
     @CrossOrigin
-    @PostMapping("/api/member/{memberId}/passwordReset") //XXX Secured and used (takel)
+    @PostMapping("/api/member/{memberId}/passwordReset")
     public ResponseEntity<List<SeasonReductionDto>> resetPassword(@PathVariable("memberId") String memberId, Principal principal) {
         if (securityConfiguration.isTakel(principal)) {
             userService.resetPassword(memberService.getMember(UUID.fromString(memberId)).getUser());

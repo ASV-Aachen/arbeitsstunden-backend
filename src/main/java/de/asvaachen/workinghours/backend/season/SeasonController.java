@@ -37,25 +37,25 @@ public class SeasonController {
     }
 
     @CrossOrigin
-    @PostMapping  //XXX Secured and used
+    @PostMapping
     public ResponseEntity<SeasonDto> createSeason(@RequestBody @Valid SeasonDto seasonDto) {
         return new ResponseEntity<>(seasonService.createSeason(converter.convert(seasonDto)), HttpStatus.OK);
     }
 
     @CrossOrigin
-    @GetMapping  //XXX Secured and used
+    @GetMapping
     public ResponseEntity<AvailableSeasonsDto> getAvailableSeasons() {
         return new ResponseEntity<>(seasonService.getAvailableSeasons(), HttpStatus.OK);
     }
 
     @CrossOrigin
-    @GetMapping("next") //XXX Secured and used
+    @GetMapping("next")
     public ResponseEntity<NextSeasonDto> getNextSeason() {
         return new ResponseEntity<>(seasonService.getNextSeason(), HttpStatus.OK);
     }
 
     @CrossOrigin
-    @GetMapping("{season}/export")  //XXX Secured and used
+    @GetMapping("{season}/export")
     public ResponseEntity<String> export(Principal principal, @PathVariable Integer season) {
         if (securityConfiguration.isTakel(principal)) {
             return new ResponseEntity<>(projectService.exportForSeason(season), HttpStatus.OK);

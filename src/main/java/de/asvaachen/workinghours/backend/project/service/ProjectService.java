@@ -6,7 +6,7 @@ import de.asvaachen.workinghours.backend.project.model.ProjectDetailsDto;
 import de.asvaachen.workinghours.backend.project.model.ProjectDetailsItemDto;
 import de.asvaachen.workinghours.backend.project.model.ProjectDto;
 import de.asvaachen.workinghours.backend.project.model.ProjectDurationsForYearsDto;
-import de.asvaachen.workinghours.backend.project.model.ProjectItemEntityToProjectDetailsItemDto;
+import de.asvaachen.workinghours.backend.project.converter.ProjectItemEntityToProjectDetailsItemDto;
 import de.asvaachen.workinghours.backend.project.model.ProjectOverviewDto;
 import de.asvaachen.workinghours.backend.project.persistence.MemberEntity;
 import de.asvaachen.workinghours.backend.project.persistence.MemberRepository;
@@ -83,11 +83,6 @@ public class ProjectService {
                 .filter(projectEntity -> projectEntity.getLastSeason() == null || projectEntity.getLastSeason() >= seasonForYear)
                 .map(projectEntity -> projectEntityToProjectOverviewDtoConverter.convert(projectEntity, seasonForYear))
                 .collect(Collectors.toList());
-    }
-
-    public ProjectDto createProject(ProjectEntity projectEntity) {
-        ProjectEntity savedProjectEntity = projectRepository.save(projectEntity);
-        return projectEntityToProjectDtoConverter.convert(savedProjectEntity);
     }
 
     public List<ProjectDetailsItemDto> getProjectDetails(Integer season, UUID projectId) {

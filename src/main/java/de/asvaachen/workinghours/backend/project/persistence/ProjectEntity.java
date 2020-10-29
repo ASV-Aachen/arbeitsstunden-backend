@@ -12,8 +12,6 @@ import java.util.UUID;
 public class ProjectEntity {
 
     @Id
-    //@GeneratedValue(generator = "uuid")
-    //@GenericGenerator(name = "uuid", strategy = "uuid2")
     private UUID id;
 
     private String name;

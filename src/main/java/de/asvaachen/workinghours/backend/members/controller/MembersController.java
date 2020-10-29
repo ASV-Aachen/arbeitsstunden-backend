@@ -32,42 +32,40 @@ public class MembersController {
 
     private final MemberService memberService;
     private final UserService userService;
-    private final ReductionStatusService reductionStatusService;
     private final UserCreateDtoToMemberEntityConverter userCreateDtoToMemberEntityConverter;
 
-    public MembersController(MemberService memberService, UserService userService, ReductionStatusService reductionStatusService, UserCreateDtoToMemberEntityConverter userCreateDtoToMemberEntityConverter) {
+    public MembersController(MemberService memberService, UserService userService, UserCreateDtoToMemberEntityConverter userCreateDtoToMemberEntityConverter) {
         this.memberService = memberService;
         this.userService = userService;
-        this.reductionStatusService = reductionStatusService;
         this.userCreateDtoToMemberEntityConverter = userCreateDtoToMemberEntityConverter;
     }
 
     @CrossOrigin
-    @GetMapping //XXX Secured and used (takel)
+    @GetMapping
     public ResponseEntity<List<MemberDto>> getAllMembers() {
         return new ResponseEntity<>(memberService.getAllMembers(), HttpStatus.OK);
     }
 
     @CrossOrigin
-    @GetMapping("takel") //XXX Secured and used (takel)
+    @GetMapping("takel")
     public ResponseEntity<List<MemberDto>> getAllTakelMembers() {
         return new ResponseEntity<>(memberService.getAllTakelMembers(), HttpStatus.OK);
     }
 
     @CrossOrigin
-    @GetMapping("seasons") //XXX Secured and used
+    @GetMapping("seasons")
     public ResponseEntity<CurrentSeasonsDto> getSeasons() {
         return new ResponseEntity<>(memberService.getSeasons(), HttpStatus.OK);
     }
 
     @CrossOrigin
-    @GetMapping("{season}") //XXX Secured and used
+    @GetMapping("{season}")
     public ResponseEntity<List<MemberListItemDto>> getMembersForSeason(@PathVariable("season") Integer season) {
         return new ResponseEntity(memberService.getMemberList(season), HttpStatus.OK);
     }
 
     @CrossOrigin
-    @GetMapping("{season}/details") //XXX Secured and used
+    @GetMapping("{season}/details")
     public ResponseEntity<MembersSummaryDto> getSummary(@PathVariable("season") Integer season) {
         return new ResponseEntity(memberService.getMembersSummary(season), HttpStatus.OK);
     }
@@ -94,17 +92,4 @@ public class MembersController {
         userService.updatePassword(user.getName(), updateMemberDto.getNewPassword());
         return new ResponseEntity(HttpStatus.OK);
     }
-
-    //@CrossOrigin
-    //@PostMapping("reduction")
-    //public ResponseEntity<Void> createReductionStatus(@RequestBody ReductionStatusCreateDto reductionStatusCreateDto) {
-    //    reductionStatusService.create(reductionStatusCreateDto.getMemberId(), reductionStatusCreateDto.getYears());
-    //    return new ResponseEntity(HttpStatus.OK);
-    //}
-
-    //@CrossOrigin
-    //@GetMapping("list/{season}")
-    //public ResponseEntity<List<MemberListItemDto>> getMemberList(@PathVariable("season") Integer season) {
-    //    return new ResponseEntity(memberService.getMemberList(season), HttpStatus.OK);
-    //}
 }

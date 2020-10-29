@@ -1,6 +1,7 @@
-package de.asvaachen.workinghours.backend.project.model;
+package de.asvaachen.workinghours.backend.project.converter;
 
 import de.asvaachen.workinghours.backend.project.converter.MemberEntityToMemberDtoConverter;
+import de.asvaachen.workinghours.backend.project.model.ItemDetailsMinutesDto;
 import de.asvaachen.workinghours.backend.project.persistence.ProjectItemHourEntity;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;

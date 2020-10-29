@@ -1,6 +1,7 @@
-package de.asvaachen.workinghours.backend.project.model;
+package de.asvaachen.workinghours.backend.project.converter;
 
 import com.google.common.base.Strings;
+import de.asvaachen.workinghours.backend.project.model.ProjectDetailsItemDto;
 import de.asvaachen.workinghours.backend.project.persistence.ProjectItemEntity;
 import de.asvaachen.workinghours.backend.project.persistence.ProjectItemHourEntity;
 import org.springframework.core.convert.converter.Converter;

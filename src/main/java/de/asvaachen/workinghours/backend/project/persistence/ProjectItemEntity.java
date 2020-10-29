@@ -17,8 +17,6 @@ import java.util.UUID;
 public class ProjectItemEntity {
 
     @Id
-    //@GeneratedValue(generator = "uuid")
-    //@GenericGenerator(name = "uuid", strategy = "uuid2")
     private UUID id;
 
     @ManyToOne
