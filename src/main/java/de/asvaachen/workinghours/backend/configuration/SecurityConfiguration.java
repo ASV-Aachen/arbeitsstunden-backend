@@ -21,8 +21,11 @@ import java.util.Collection;
 @EnableWebSecurity
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
-    public static final String ROLE_USER = "USER";
-    public static final String ROLE_TAKEL = "TAKEL";
+    public static final String AUTHORITY_USER = "USER";
+    public static final String AUTHORITY_TAKEL = "TAKEL";
+    public static final String ROLE_USER = "ROLE_" + AUTHORITY_USER;
+    public static final String ROLE_TAKEL = "ROLE_" + AUTHORITY_TAKEL;
+
 
     public static final PasswordEncoder PASSWORD_ENCODER = new BCryptPasswordEncoder();
 
@@ -52,16 +55,16 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable().cors().and()
                 .authorizeRequests()
-                .antMatchers(HttpMethod.POST, "/api/seasons").hasRole(ROLE_TAKEL)
-                .antMatchers(HttpMethod.GET, "/api/seasons/*/export").hasRole(ROLE_TAKEL)
-                .antMatchers(HttpMethod.POST, "/api/members").hasRole(ROLE_TAKEL)
-                .antMatchers(HttpMethod.GET, "/api/members").hasRole(ROLE_TAKEL)
-                .antMatchers(HttpMethod.GET, "/api/members/takel").hasRole(ROLE_TAKEL)
-                .antMatchers(HttpMethod.POST, "/api/member/reduction").hasRole(ROLE_TAKEL)
-                .antMatchers(HttpMethod.POST, "/api/projectItems").hasRole(ROLE_TAKEL)
-                .antMatchers(HttpMethod.POST, "/api/projects").hasRole(ROLE_TAKEL)
-                .antMatchers(HttpMethod.POST, "/api/project").hasRole(ROLE_TAKEL)
-                .antMatchers(HttpMethod.POST, "/api/seasons").hasRole(ROLE_TAKEL)
+                .antMatchers(HttpMethod.POST, "/api/seasons").hasAuthority(ROLE_TAKEL)
+                .antMatchers(HttpMethod.GET, "/api/seasons/*/export").hasAuthority(ROLE_TAKEL)
+                .antMatchers(HttpMethod.POST, "/api/members").hasAuthority(ROLE_TAKEL)
+                .antMatchers(HttpMethod.GET, "/api/members").hasAuthority(ROLE_TAKEL)
+                .antMatchers(HttpMethod.GET, "/api/members/takel").hasAuthority(ROLE_TAKEL)
+                .antMatchers(HttpMethod.POST, "/api/member/reduction").hasAuthority(ROLE_TAKEL)
+                .antMatchers(HttpMethod.POST, "/api/projectItems").hasAuthority(ROLE_TAKEL)
+                .antMatchers(HttpMethod.POST, "/api/projects").hasAuthority(ROLE_TAKEL)
+                .antMatchers(HttpMethod.POST, "/api/project").hasAuthority(ROLE_TAKEL)
+                .antMatchers(HttpMethod.POST, "/api/seasons").hasAuthority(ROLE_TAKEL)
                 .anyRequest().authenticated()
                 .and()
                 .requestCache()
@@ -72,7 +75,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     public boolean isTakel(Principal principal) {
         Collection<SimpleGrantedAuthority> authorities = (Collection<SimpleGrantedAuthority>) SecurityContextHolder.getContext().getAuthentication().getAuthorities();
-        return authorities.stream().findFirst().map(SimpleGrantedAuthority::getAuthority).get().equals("ROLE_" + ROLE_TAKEL);
+        return authorities.stream().findFirst().map(SimpleGrantedAuthority::getAuthority).get().equals(ROLE_TAKEL);
 
     }
 }

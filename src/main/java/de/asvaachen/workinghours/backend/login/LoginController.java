@@ -14,7 +14,7 @@ import java.security.Principal;
 import java.util.Collection;
 import java.util.UUID;
 
-import static de.asvaachen.workinghours.backend.configuration.SecurityConfiguration.ROLE_USER;
+import static de.asvaachen.workinghours.backend.configuration.SecurityConfiguration.AUTHORITY_USER;
 
 @RestController
 @RequestMapping("/api/login")
@@ -27,12 +27,12 @@ public class LoginController {
     }
 
     @CrossOrigin
-    @PostMapping //XXX Secured and used
+    @PostMapping
     public ResponseEntity<LoginDto> createSession(Principal principal) {
         Collection<SimpleGrantedAuthority> authorities = (Collection<SimpleGrantedAuthority>) SecurityContextHolder.getContext().getAuthentication().getAuthorities();
         LoginDto loginDto = new LoginDto();
         loginDto.setToken(UUID.randomUUID());
-        loginDto.setRole(authorities.stream().findFirst().map(SimpleGrantedAuthority::getAuthority).orElse(ROLE_USER));
+        loginDto.setRole(authorities.stream().findFirst().map(SimpleGrantedAuthority::getAuthority).orElse(AUTHORITY_USER));
         loginDto.setMemberId(userService.getUserByEmail(principal.getName()).getMember().getId());
         return new ResponseEntity<>(loginDto, HttpStatus.CREATED);
     }
