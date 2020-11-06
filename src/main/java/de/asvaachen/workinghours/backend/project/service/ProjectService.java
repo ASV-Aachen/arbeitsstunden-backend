@@ -186,9 +186,8 @@ public class ProjectService {
         if (data == null) {
             return "";
         } else {
-            String escapedData = data.replaceAll("\r\n", " ").replaceAll("\n", " ");
+            String escapedData = data.replaceAll("\r\n", " ").replaceAll("\n", " ").replaceAll("\"", "").replaceAll("'","");
             if (escapedData.contains(",") || escapedData.contains("\"") || escapedData.contains("'")) {
-                escapedData = escapedData.replaceAll("\"", "").replaceAll("'","");
                 escapedData = "\"" + escapedData + "\"";
             }
             return escapedData;
