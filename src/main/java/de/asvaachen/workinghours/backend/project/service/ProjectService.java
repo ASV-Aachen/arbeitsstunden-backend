@@ -188,8 +188,8 @@ public class ProjectService {
         } else {
             String escapedData = data.replaceAll("\r\n", " ").replaceAll("\n", " ");
             if (escapedData.contains(",") || escapedData.contains("\"") || escapedData.contains("'")) {
-                escapedData = escapedData.replaceAll("\"", "\"\"");
-                escapedData = "'" + escapedData + "'";
+                escapedData = escapedData.replaceAll("\"", "").replaceAll("'","");
+                escapedData = "\"" + escapedData + "\"";
             }
             return escapedData;
         }
