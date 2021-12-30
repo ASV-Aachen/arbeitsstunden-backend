@@ -20,7 +20,7 @@ import javax.validation.Valid;
 import java.security.Principal;
 
 @RestController
-@RequestMapping("/api/seasons")
+@RequestMapping("/arbeitsstunden/api/seasons")
 public class SeasonController {
 
     private final SeasonService seasonService;

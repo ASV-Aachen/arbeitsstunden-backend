@@ -27,7 +27,7 @@ import java.security.Principal;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/members")
+@RequestMapping("/arbeitsstunden/api/members")
 public class MembersController {
 
     private final MemberService memberService;
