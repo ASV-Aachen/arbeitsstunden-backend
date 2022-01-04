@@ -4,14 +4,15 @@ server.port: 8081
 spring:
   datasource:
     #url: jdbc:h2:mem:test;MODE=PostgreSQL
-    url: "jdbc:postgresql://localhost:5432/workinghours"
-    username: "workinghours"
-    password: "workinghours"
+    # url: "jdbc:postgresql://localhost:5432/workinghours"
+    url: jdbc:mariadb://${DB_HOSTNAME}:${DB_PORT}/${DB_DATABASE}
+    username: ${DB_USER}
+    password: ${DB_PASS}
 
   jpa:
     generate-ddl: false
     hibernate:
-      ddl-auto: none
+      ddl-auto: update
     #show-sql: true
 
   liquibase.change-log: 'classpath:db/changelog-master.groovy'
