@@ -55,22 +55,22 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable().cors().and()
                 .authorizeRequests()
-                .antMatchers(HttpMethod.POST, "/api/seasons").hasAuthority(ROLE_TAKEL)
-                .antMatchers(HttpMethod.GET, "/api/seasons/*/export").hasAuthority(ROLE_TAKEL)
-                .antMatchers(HttpMethod.POST, "/api/members").hasAuthority(ROLE_TAKEL)
-                .antMatchers(HttpMethod.GET, "/api/members").hasAuthority(ROLE_TAKEL)
-                .antMatchers(HttpMethod.GET, "/api/members/takel").hasAuthority(ROLE_TAKEL)
-                .antMatchers(HttpMethod.POST, "/api/member/reduction").hasAuthority(ROLE_TAKEL)
-                .antMatchers(HttpMethod.POST, "/api/projectItems").hasAuthority(ROLE_TAKEL)
-                .antMatchers(HttpMethod.POST, "/api/projects").hasAuthority(ROLE_TAKEL)
-                .antMatchers(HttpMethod.POST, "/api/project").hasAuthority(ROLE_TAKEL)
-                .antMatchers(HttpMethod.POST, "/api/seasons").hasAuthority(ROLE_TAKEL)
-                .anyRequest().authenticated()
+                    .antMatchers(HttpMethod.POST, "/api/seasons").hasAuthority(ROLE_TAKEL)
+                    .antMatchers(HttpMethod.GET, "/api/seasons/*/export").hasAuthority(ROLE_TAKEL)
+                    .antMatchers(HttpMethod.POST, "/api/members").hasAuthority(ROLE_TAKEL)
+                    .antMatchers(HttpMethod.GET, "/api/members").hasAuthority(ROLE_TAKEL)
+                    .antMatchers(HttpMethod.GET, "/api/members/takel").hasAuthority(ROLE_TAKEL)
+                    .antMatchers(HttpMethod.POST, "/api/member/reduction").hasAuthority(ROLE_TAKEL)
+                    .antMatchers(HttpMethod.POST, "/api/projectItems").hasAuthority(ROLE_TAKEL)
+                    .antMatchers(HttpMethod.POST, "/api/projects").hasAuthority(ROLE_TAKEL)
+                    .antMatchers(HttpMethod.POST, "/api/project").hasAuthority(ROLE_TAKEL)
+                    .antMatchers(HttpMethod.POST, "/api/seasons").hasAuthority(ROLE_TAKEL)
+                    .anyRequest().authenticated()
                 .and()
-                .requestCache()
-                .requestCache(new NullRequestCache())
+                    .requestCache()
+                    .requestCache(new NullRequestCache())
                 .and()
-                .httpBasic();
+                    .httpBasic();
     }
 
     public boolean isTakel(Principal principal) {
