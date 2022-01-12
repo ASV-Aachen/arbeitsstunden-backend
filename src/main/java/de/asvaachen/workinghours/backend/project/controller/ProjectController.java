@@ -20,7 +20,7 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/api/project")
+@RequestMapping("/arbeitsstunden/api/project")
 public class ProjectController {
 
     private final ProjectItemService projectItemService;

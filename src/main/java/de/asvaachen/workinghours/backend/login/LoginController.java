@@ -17,7 +17,7 @@ import java.util.UUID;
 import static de.asvaachen.workinghours.backend.configuration.SecurityConfiguration.AUTHORITY_USER;
 
 @RestController
-@RequestMapping("/api/login")
+@RequestMapping("/arbeitsstunden/api/login")
 public class LoginController {
 
     private final UserService userService;
