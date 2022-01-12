@@ -81,15 +81,6 @@ public class SecurityServletFilter extends HttpFilter {
                     System.out.println(Httpresponse);
                     erg.set(false);
                 });
-        /*{
-            "sub": "469131f0-063c-4982-954b-b12f437aed85",
-                "email_verified": true,
-                "name": "test test",
-                "preferred_username": "test",
-                "given_name": "test",
-                "family_name": "test",
-                "email": "test@babab"
-        }*/
 
         return erg.get();
     }
