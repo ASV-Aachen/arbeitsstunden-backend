@@ -12,7 +12,7 @@ spring:
   jpa:
     generate-ddl: false
     hibernate:
-      ddl-auto: none
+      ddl-auto: ${ddl-auto}
     #show-sql: true
 
   liquibase.change-log: 'classpath:db/changelog-master.groovy'
