@@ -31,7 +31,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     public static final PasswordEncoder PASSWORD_ENCODER = new BCryptPasswordEncoder();
 
     private DataSource dataSource;
-    private HttpFilter SecurityServletFilter = new SecurityServletFilter();
 
     public SecurityConfiguration(DataSource dataSource) {
         this.dataSource = dataSource;

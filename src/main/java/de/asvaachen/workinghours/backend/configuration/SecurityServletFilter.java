@@ -13,27 +13,24 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.concurrent.atomic.AtomicReference;
 
-public class SecurityServletFilter extends HttpFilter {
+public class SecurityServletFilter implements Filter {
 
     @Override
-    public void init(FilterConfig filterconfig) throws ServletException {}
-
-    @Override
-    protected void doFilter(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws IOException, ServletException {
-        String Username = extractUsername(request);
-        String token = extractToken(request);  // (1)
+    public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain) throws IOException, ServletException {
+        String Username = extractUsername((HttpServletRequest) req);
+        String token = extractToken((HttpServletRequest) req);  // (1)
         System.out.println("Filtering for: " + token);
 
         if (notAuthenticated(token, Username)) {  // (2)
             // either no or wrong username/password
             // unfortunately the HTTP status code is called "unauthorized", instead of "unauthenticated"
-            response.setStatus(HttpServletResponse.SC_EXPECTATION_FAILED); // HTTP 418.
+            // res.setStatus(HttpServletResponse.SC_EXPECTATION_FAILED); // HTTP 418.
             return;
         }
 
         // allow the HttpRequest to go to Spring's DispatcherServlet
         // and @RestControllers/@Controllers.
-        chain.doFilter(request, response); // (4)
+        chain.doFilter(req, res); // (4)
     }
 
     private String extractUsername(HttpServletRequest request) {
