@@ -70,10 +70,10 @@ public class SecurityServletFilter extends OncePerRequestFilter {
 
         AtomicReference<Boolean> erg = new AtomicReference<>(false);
 
-        System.out.println(token);
+
 
         HttpResponse<JsonNode> response = Unirest.get("http://" + Adresse + ":8080" + "/sso/auth/realms/" + Realm + "/protocol/openid-connect/userinfo")
-                .header("Authorization", "Bearer " + token)
+                .header("authorization", "Bearer " + token)
                 .asJson()
                 .ifSuccess(Httpresponse -> {
                     // Check if mail is Correct
