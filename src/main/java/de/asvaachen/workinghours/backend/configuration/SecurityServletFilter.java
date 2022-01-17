@@ -69,7 +69,7 @@ public class SecurityServletFilter extends OncePerRequestFilter {
 
         AtomicReference<Boolean> erg = new AtomicReference<>(false);
 
-        HttpResponse<JsonNode> response = Unirest.get("http://" + Adresse + "/auth/realms/" + Realm + "/protocol/openid-connect/userinfo")
+        HttpResponse<JsonNode> response = Unirest.get("http://" + Adresse + ":8080" + "/auth/realms/" + Realm + "/protocol/openid-connect/userinfo")
                 .header("Authorization", token)
                 .asJson()
                 .ifSuccess(Httpresponse -> {
