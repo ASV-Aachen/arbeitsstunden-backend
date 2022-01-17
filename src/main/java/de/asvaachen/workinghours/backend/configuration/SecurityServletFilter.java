@@ -16,6 +16,9 @@ import java.util.concurrent.atomic.AtomicReference;
 public class SecurityServletFilter extends HttpFilter {
 
     @Override
+    public void init(FilterConfig filterconfig) throws ServletException {}
+
+    @Override
     protected void doFilter(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws IOException, ServletException {
         String Username = extractUsername(request);
         String token = extractToken(request);  // (1)
