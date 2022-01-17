@@ -24,7 +24,7 @@ public class SecurityServletFilter extends OncePerRequestFilter {
         String token = extractToken(request);  // (1)
         System.out.println("Filtering for: " + token);
 
-        if (notAuthenticated(token, Username)) {  // (2)
+        if (isAuthenticated(token, Username) == false) {  // (2)
             // either no or wrong username/password
             // unfortunately the HTTP status code is called "unauthorized", instead of "unauthenticated"
             response.setStatus(HttpServletResponse.SC_EXPECTATION_FAILED); // HTTP 418.
@@ -62,7 +62,7 @@ public class SecurityServletFilter extends OncePerRequestFilter {
         return "";
     }
 
-    private boolean notAuthenticated(String token, String Username) {
+    private boolean isAuthenticated(String token, String Username) {
         // Check with Keycloak
         String Realm = System.getenv("KEYCLOAK_REALM");
         String Adresse = System.getenv("KEYCLOAK_URL");
