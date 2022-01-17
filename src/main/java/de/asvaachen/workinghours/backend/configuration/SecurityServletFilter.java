@@ -4,6 +4,8 @@ import kong.unirest.HttpResponse;
 import kong.unirest.JsonNode;
 import kong.unirest.Unirest;
 import org.apache.catalina.User;
+import org.springframework.stereotype.Component;
+import org.springframework.web.filter.OncePerRequestFilter;
 
 import javax.servlet.*;
 import javax.servlet.http.Cookie;
@@ -13,25 +15,27 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.concurrent.atomic.AtomicReference;
 
-public class SecurityServletFilter implements Filter {
+@Component
+public class SecurityServletFilter extends OncePerRequestFilter {
 
     @Override
-    public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain) throws IOException, ServletException {
-        String Username = extractUsername((HttpServletRequest) req);
-        String token = extractToken((HttpServletRequest) req);  // (1)
+    public void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+        String Username = extractUsername(request);
+        String token = extractToken(request);  // (1)
         System.out.println("Filtering for: " + token);
 
         if (notAuthenticated(token, Username)) {  // (2)
             // either no or wrong username/password
             // unfortunately the HTTP status code is called "unauthorized", instead of "unauthenticated"
-            // res.setStatus(HttpServletResponse.SC_EXPECTATION_FAILED); // HTTP 418.
+            response.setStatus(HttpServletResponse.SC_EXPECTATION_FAILED); // HTTP 418.
             return;
         }
 
         // allow the HttpRequest to go to Spring's DispatcherServlet
         // and @RestControllers/@Controllers.
-        chain.doFilter(req, res); // (4)
+        filterChain.doFilter(request, response); // (4)
     }
+
 
     private String extractUsername(HttpServletRequest request) {
         // Either try and read in a Basic Auth HTTP Header, which comes in the form of user:password
