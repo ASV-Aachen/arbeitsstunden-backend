@@ -32,9 +32,7 @@ public class SecurityServletFilter extends OncePerRequestFilter {
         if (isAuthenticated(token, Username) == false) {  // (2)
             // either no or wrong username/password
             // unfortunately the HTTP status code is called "unauthorized", instead of "unauthenticated"
-
-            System.out.println("tokens: " + Arrays.toString(request.getCookies()));
-
+            
             response.setStatus(HttpServletResponse.SC_EXPECTATION_FAILED); // HTTP 418.
             return;
         }
@@ -51,7 +49,7 @@ public class SecurityServletFilter extends OncePerRequestFilter {
 
         Cookie[] tokens = request.getCookies();
         for (Cookie i: tokens){
-            if (i.getName() == "username"){
+            if (i.getName().equals("username")){
                 return i.getValue();
             }
         }
@@ -63,7 +61,7 @@ public class SecurityServletFilter extends OncePerRequestFilter {
 
         Cookie[] tokens = request.getCookies();
         for (Cookie i: tokens){
-            if (i.getName() == "token"){
+            if (i.getName().equals("token")){
                 return i.getValue();
             }
         }
