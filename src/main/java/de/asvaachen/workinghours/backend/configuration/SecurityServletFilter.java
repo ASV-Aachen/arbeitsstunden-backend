@@ -13,6 +13,7 @@ import javax.servlet.http.HttpFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.concurrent.atomic.AtomicReference;
 
 @Component
@@ -22,11 +23,14 @@ public class SecurityServletFilter extends OncePerRequestFilter {
     public void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String Username = extractUsername(request);
         String token = extractToken(request);  // (1)
-        System.out.println("Filtering for: " + token);
+        System.out.println("Filtering for: " + token + " and " + Username);
 
         if (isAuthenticated(token, Username) == false) {  // (2)
             // either no or wrong username/password
             // unfortunately the HTTP status code is called "unauthorized", instead of "unauthenticated"
+
+            System.out.println("tokens: " + Arrays.toString(request.getCookies()));
+
             response.setStatus(HttpServletResponse.SC_EXPECTATION_FAILED); // HTTP 418.
             return;
         }
@@ -47,7 +51,7 @@ public class SecurityServletFilter extends OncePerRequestFilter {
                 return i.getValue();
             }
         }
-        return "";
+        return "Missing User";
     }
     private String extractToken(HttpServletRequest request){
         // Either try and read in a Basic Auth HTTP Header, which comes in the form of user:password
@@ -59,7 +63,7 @@ public class SecurityServletFilter extends OncePerRequestFilter {
                 return i.getValue();
             }
         }
-        return "";
+        return "Missing token";
     }
 
     private boolean isAuthenticated(String token, String Username) {
