@@ -13,6 +13,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.savedrequest.NullRequestCache;
 
+import javax.servlet.http.HttpFilter;
 import javax.sql.DataSource;
 import java.security.Principal;
 import java.util.Collection;
@@ -30,6 +31,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     public static final PasswordEncoder PASSWORD_ENCODER = new BCryptPasswordEncoder();
 
     private DataSource dataSource;
+    private HttpFilter SecurityServletFilter = new SecurityServletFilter();
 
     public SecurityConfiguration(DataSource dataSource) {
         this.dataSource = dataSource;
@@ -70,7 +72,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                     .requestCache()
                     .requestCache(new NullRequestCache())
                 .and()
-                    .httpBasic();
+                    .httpBasic()
+                .and()
+                    .addFilter(SecurityServletFilter);
     }
 
     public boolean isTakel(Principal principal) {
