@@ -77,12 +77,15 @@ public class SecurityServletFilter extends OncePerRequestFilter {
                     if (Httpresponse.getBody().getObject().get("email").toString() == Username){
                         erg.set(true);
                     }else{
+                        System.out.println("Couldn't login: " + Username);
+                        System.out.println(Httpresponse.getBody().getObject());
                         erg.set(false);
                     }
                 })
                 .ifFailure(Httpresponse -> {
                     // Status Failure
-                    System.out.println(Httpresponse);
+                    System.out.println("FAILURE IN AUTH");
+                    System.out.println(Httpresponse.getBody().getObject());
                     erg.set(false);
                 });
 
