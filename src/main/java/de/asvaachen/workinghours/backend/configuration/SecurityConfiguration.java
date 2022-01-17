@@ -72,9 +72,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                     .requestCache()
                     .requestCache(new NullRequestCache())
                 .and()
-                    .httpBasic()
-                .and()
-                .addFilterAfter(SecurityServletFilter, de.asvaachen.workinghours.backend.configuration.SecurityServletFilter.class);
+                    .httpBasic();
+        http.addFilterBefore(new SecurityServletFilter(), SecurityServletFilter.class)
+                .authorizeRequests();
     }
 
     public boolean isTakel(Principal principal) {
