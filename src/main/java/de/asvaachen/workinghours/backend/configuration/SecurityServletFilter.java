@@ -24,7 +24,7 @@ public class SecurityServletFilter extends HttpFilter {
         if (notAuthenticated(token, Username)) {  // (2)
             // either no or wrong username/password
             // unfortunately the HTTP status code is called "unauthorized", instead of "unauthenticated"
-            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED); // HTTP 401.
+            response.setStatus(HttpServletResponse.SC_EXPECTATION_FAILED); // HTTP 418.
             return;
         }
 
