@@ -24,7 +24,10 @@ public class SecurityServletFilter extends OncePerRequestFilter {
         String Username = extractUsername(request);
         String token = extractToken(request);  // (1)
         System.out.println("Filtering for: " + token + " and " + Username);
-        System.out.println("tokens: " + Arrays.toString(request.getCookies()));
+
+        for (Cookie i: request.getCookies()){
+            System.out.println("Found token: " + i.getName() + " - " + i.getValue());
+        }
 
         if (isAuthenticated(token, Username) == false) {  // (2)
             // either no or wrong username/password
