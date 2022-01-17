@@ -4,6 +4,8 @@ import kong.unirest.HttpResponse;
 import kong.unirest.JsonNode;
 import kong.unirest.Unirest;
 import org.apache.catalina.User;
+import org.springframework.stereotype.Component;
+import org.springframework.web.filter.OncePerRequestFilter;
 
 import javax.servlet.*;
 import javax.servlet.http.Cookie;
@@ -13,13 +15,11 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.concurrent.atomic.AtomicReference;
 
-public class SecurityServletFilter extends HttpFilter {
+@Component
+public class SecurityServletFilter extends OncePerRequestFilter {
 
     @Override
-    public void init(FilterConfig filterconfig) throws ServletException {}
-
-    @Override
-    protected void doFilter(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws IOException, ServletException {
+    public void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String Username = extractUsername(request);
         String token = extractToken(request);  // (1)
         System.out.println("Filtering for: " + token);
@@ -33,8 +33,9 @@ public class SecurityServletFilter extends HttpFilter {
 
         // allow the HttpRequest to go to Spring's DispatcherServlet
         // and @RestControllers/@Controllers.
-        chain.doFilter(request, response); // (4)
+        filterChain.doFilter(request, response); // (4)
     }
+
 
     private String extractUsername(HttpServletRequest request) {
         // Either try and read in a Basic Auth HTTP Header, which comes in the form of user:password
