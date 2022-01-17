@@ -28,7 +28,7 @@ public class SecurityServletFilter extends OncePerRequestFilter {
             // either no or wrong username/password
             // unfortunately the HTTP status code is called "unauthorized", instead of "unauthenticated"
 
-            response.setStatus(HttpServletResponse.SC_EXPECTATION_FAILED); // HTTP 418.
+            response.setStatus(HttpServletResponse.SC_EXPECTATION_FAILED); // HTTP 417.
             return;
         }
 
@@ -71,7 +71,7 @@ public class SecurityServletFilter extends OncePerRequestFilter {
         AtomicReference<Boolean> erg = new AtomicReference<>(false);
 
         HttpResponse<JsonNode> response = Unirest.get("http://" + Adresse + ":8080" + "/sso/auth/realms/" + Realm + "/protocol/openid-connect/userinfo")
-                .header("Authorization", token)
+                .header("Authorization", "Bearer " + token)
                 .asJson()
                 .ifSuccess(Httpresponse -> {
                     // Check if mail is Correct
