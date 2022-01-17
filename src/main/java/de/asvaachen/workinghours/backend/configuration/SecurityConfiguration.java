@@ -74,7 +74,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .and()
                     .httpBasic()
                 .and()
-                    .addFilter(SecurityServletFilter);
+                .addFilterAfter(SecurityServletFilter, de.asvaachen.workinghours.backend.configuration.SecurityServletFilter.class);
     }
 
     public boolean isTakel(Principal principal) {
