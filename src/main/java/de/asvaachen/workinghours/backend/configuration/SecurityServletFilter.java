@@ -23,16 +23,11 @@ public class SecurityServletFilter extends OncePerRequestFilter {
     public void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String Username = extractUsername(request);
         String token = extractToken(request);  // (1)
-        System.out.println("Filtering for: " + token + " and " + Username);
-
-        for (Cookie i: request.getCookies()){
-            System.out.println("Found token: " + i.getName() + " - " + i.getValue());
-        }
 
         if (isAuthenticated(token, Username) == false) {  // (2)
             // either no or wrong username/password
             // unfortunately the HTTP status code is called "unauthorized", instead of "unauthenticated"
-            
+
             response.setStatus(HttpServletResponse.SC_EXPECTATION_FAILED); // HTTP 418.
             return;
         }
@@ -83,7 +78,6 @@ public class SecurityServletFilter extends OncePerRequestFilter {
                     if (Httpresponse.getBody().getObject().get("email").toString() == Username){
                         erg.set(true);
                     }else{
-                        System.out.println("Couldn't login: " + Username);
                         System.out.println(Httpresponse.getBody().getObject());
                         erg.set(false);
                     }
@@ -91,10 +85,11 @@ public class SecurityServletFilter extends OncePerRequestFilter {
                 .ifFailure(Httpresponse -> {
                     // Status Failure
                     System.out.println("FAILURE IN AUTH");
-                    System.out.println(Httpresponse.getBody().getObject());
+                    System.out.println(Httpresponse.getBody());
                     erg.set(false);
                 });
-
+        System.out.println(response.getStatus());
+        System.out.println(response.getBody());
         return erg.get();
     }
 
