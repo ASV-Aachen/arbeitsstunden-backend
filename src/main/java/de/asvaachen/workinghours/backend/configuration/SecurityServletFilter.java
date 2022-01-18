@@ -14,6 +14,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
 
 @Component
@@ -70,26 +72,31 @@ public class SecurityServletFilter extends OncePerRequestFilter {
 
         AtomicReference<Boolean> erg = new AtomicReference<>(false);
 
-        HttpResponse<JsonNode> response = Unirest.get("http://" + Adresse + ":8080" + "/sso/auth/realms/" + Realm + "/protocol/openid-connect/userinfo")
-                .header("authorization", "Bearer " + token)
+        Map<String, String> headers = new HashMap<>();
+        headers.put("accept", "application/json");
+        headers.put("Authorization", "Bearer " + token);
+
+
+        HttpResponse<JsonNode> response = Unirest
+                .get("http://" + Adresse + ":8080" + "/sso/auth/realms/" + Realm + "/protocol/openid-connect/userinfo")
+                .headers(headers)
                 .asJson()
                 .ifSuccess(Httpresponse -> {
                     // Check if mail is Correct
                     if (Httpresponse.getBody().getObject().get("email").toString().equals(Username)){
                         erg.set(true);
                     }else{
-                        System.out.println(Httpresponse.getBody().getObject());
+                        System.out.println("error in Else");
+                        System.out.println(Httpresponse.getBody());
                         erg.set(false);
                     }
                 })
                 .ifFailure(Httpresponse -> {
                     // Status Failure
-                    System.out.println("FAILURE IN AUTH");
+                    System.out.println("Error in failure");
                     System.out.println(Httpresponse.getBody());
                     erg.set(false);
                 });
-        System.out.println(response.getStatus());
-        System.out.println(response.getBody());
         return erg.get();
     }
 
