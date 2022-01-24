@@ -87,14 +87,14 @@ public class SecurityServletFilter extends OncePerRequestFilter {
                         erg.set(true);
                     }else{
                         System.out.println("error in Else");
-                        System.out.println(Httpresponse.getBody());
+                        System.out.println(Httpresponse);
                         erg.set(false);
                     }
                 })
                 .ifFailure(Httpresponse -> {
                     // Status Failure
                     System.out.println("Error in failure");
-                    System.out.println(Httpresponse.getBody());
+                    System.out.println(Httpresponse);
                     erg.set(false);
                 });
         return erg.get();
