@@ -16,6 +16,7 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.atomic.AtomicReference;
 
 @Component
@@ -69,6 +70,7 @@ public class SecurityServletFilter extends OncePerRequestFilter {
         // Check with Keycloak
         String Realm = System.getenv("KEYCLOAK_REALM");
         String Adresse = System.getenv("KEYCLOAK_URL");
+        Boolean checkSSL = Objects.equals(System.getenv("CHECK_SSL"), "True");
 
         AtomicReference<Boolean> erg = new AtomicReference<>(false);
 
@@ -76,9 +78,10 @@ public class SecurityServletFilter extends OncePerRequestFilter {
         headers.put("accept", "application/json");
         headers.put("Authorization", "Bearer " + token);
 
+        Unirest.config().verifySsl(checkSSL);
 
         HttpResponse<JsonNode> response = Unirest
-                .get("http://" + Adresse  + "/sso/auth/realms/" + Realm + "/protocol/openid-connect/userinfo")
+                .get( Adresse  + "/sso/auth/realms/" + Realm + "/protocol/openid-connect/userinfo")
                 .headers(headers)
                 .asJson()
                 .ifSuccess(Httpresponse -> {
