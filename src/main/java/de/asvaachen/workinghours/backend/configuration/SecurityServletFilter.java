@@ -78,7 +78,7 @@ public class SecurityServletFilter extends OncePerRequestFilter {
 
 
         HttpResponse<JsonNode> response = Unirest
-                .get("https://" + Adresse + ":8080" + "/sso/auth/realms/" + Realm + "/protocol/openid-connect/userinfo")
+                .get("http://" + Adresse  + "/sso/auth/realms/" + Realm + "/protocol/openid-connect/userinfo")
                 .headers(headers)
                 .asJson()
                 .ifSuccess(Httpresponse -> {
