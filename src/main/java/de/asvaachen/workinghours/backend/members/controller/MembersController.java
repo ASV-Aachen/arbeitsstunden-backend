@@ -89,7 +89,7 @@ public class MembersController {
     @CrossOrigin
     @PostMapping("update")
     public ResponseEntity editUser(Principal user, @RequestBody UpdateMemberDto updateMemberDto) {
-        userService.updatePassword(user.getName(), updateMemberDto.getNewPassword());
+        // userService.updatePassword(user.getName(), updateMemberDto.getNewPassword());
         return new ResponseEntity(HttpStatus.OK);
     }
 }

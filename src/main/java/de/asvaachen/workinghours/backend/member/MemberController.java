@@ -86,14 +86,14 @@ public class MemberController {
         }
     }
 
-    @CrossOrigin
-    @PostMapping("/arbeitsstunden/api/member/{memberId}/passwordReset")
-    public ResponseEntity<List<SeasonReductionDto>> resetPassword(@PathVariable("memberId") String memberId, Principal principal) {
-        if (securityConfiguration.isTakel(principal)) {
-            userService.resetPassword(memberService.getMember(UUID.fromString(memberId)).getUser());
-            return new ResponseEntity(HttpStatus.OK);
-        } else {
-            return new ResponseEntity(HttpStatus.FORBIDDEN);
-        }
-    }
+    // @CrossOrigin
+    // @PostMapping("/arbeitsstunden/api/member/{memberId}/passwordReset")
+    // public ResponseEntity<List<SeasonReductionDto>> resetPassword(@PathVariable("memberId") String memberId, Principal principal) {
+    //     if (securityConfiguration.isTakel(principal)) {
+    //         userService.resetPassword(memberService.getMember(UUID.fromString(memberId)).getUser());
+    //         return new ResponseEntity(HttpStatus.OK);
+    //     } else {
+    //         return new ResponseEntity(HttpStatus.FORBIDDEN);
+    //     }
+    // }
 }
