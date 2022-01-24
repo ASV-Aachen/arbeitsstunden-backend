@@ -48,6 +48,8 @@ public class SecurityServletFilter extends OncePerRequestFilter {
         Cookie[] tokens = request.getCookies();
         for (Cookie i: tokens){
             if (i.getName().equals("username")){
+                String name = i.getValue();
+                name.replace("%40", "@");
                 return i.getValue();
             }
         }
