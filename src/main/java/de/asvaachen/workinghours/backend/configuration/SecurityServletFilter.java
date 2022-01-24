@@ -13,6 +13,7 @@ import javax.servlet.http.HttpFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
@@ -49,8 +50,11 @@ public class SecurityServletFilter extends OncePerRequestFilter {
         for (Cookie i: tokens){
             if (i.getName().equals("username")){
                 String name = i.getValue();
-                name.replace("%40", "@");
-                return i.getValue();
+
+                byte[] bytes = name.getBytes(StandardCharsets.ISO_8859_1);
+                name = new String(bytes, StandardCharsets.UTF_8);
+
+                return name;
             }
         }
         return "Missing User";
